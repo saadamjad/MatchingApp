@@ -1,23 +1,35 @@
-import React from "react";
-import { View, Dimensions, Text, Image, TouchableOpacity, Animated, Easing, Alert, Platform , ImageBackground, StatusBar } from "react-native";
+import React from 'react';
+import {
+  View,
+  Dimensions,
+  Text,
+  Image,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  Alert,
+  Platform,
+  ImageBackground,
+  StatusBar,
+} from 'react-native';
 
-import { EventRegister } from 'react-native-event-listeners';
+import {EventRegister} from 'react-native-event-listeners';
 
-import { colors, images } from '../constants/theme';
+import {colors, images} from '../constants/theme';
 
-const {height:deviceHeight, width:deviceWidth} = Dimensions.get('screen');
+const {height: deviceHeight, width: deviceWidth} = Dimensions.get('screen');
 
 class Splash extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text:false,
-      inputStart:'-30deg',
-      inputEnd:'20deg',
+      text: false,
+      inputStart: '-30deg',
+      inputEnd: '20deg',
       loggedIn: null,
       rotateValue: new Animated.Value(0),
       isEnable: false,
-      timeout:null,
+      timeout: null,
       showBtn: false,
     };
     this.rotateAnimation();
@@ -26,17 +38,18 @@ class Splash extends React.Component {
   performTimeConsumingTask = async () => {
     return new Promise(resolve =>
       setTimeout(() => {
-        resolve("result");
-      }, 5000)
+        resolve('result');
+      }, 5000),
     );
   };
 
   async componentDidMount() {
     const data = await this.performTimeConsumingTask();
 
-    setTimeout(()=> {
-      EventRegister.emit('isLoggedIn', 'Login')
-    }, 3000)
+    setTimeout(() => {
+      // EventRegister.emit('isLoggedIn', 'Login')
+      EventRegister.emit('isLoggedIn', 'Main');
+    }, 3000);
   }
 
   componentWillUnmount() {
@@ -55,15 +68,15 @@ class Splash extends React.Component {
         toValue: 0,
         duration: 0,
         useNativeDriver: true,
-      })
+      }),
     ]).start(() => {
       this.setState({
-        text:true,
-        inputStart:'20deg',
-        inputEnd:'20deg'
-      })
-    })
-  }
+        text: true,
+        inputStart: '20deg',
+        inputEnd: '20deg',
+      });
+    });
+  };
 
   render() {
     return (
@@ -72,12 +85,14 @@ class Splash extends React.Component {
           source={images.splashBackground}
           // resizeMode="contain"
           resizeMode="cover"
-          style={styles.imageView}
-        >  
-        <View style={styles.splashLogostyle}>
-          <Image style={{ width:270,  height:130 }} source={images.splashLogo} />
-        </View>
-        </ImageBackground> 
+          style={styles.imageView}>
+          <View style={styles.splashLogostyle}>
+            <Image
+              style={{width: 270, height: 130}}
+              source={images.splashLogo}
+            />
+          </View>
+        </ImageBackground>
         <StatusBar translucent backgroundColor="transparent" />
       </View>
     );
@@ -87,28 +102,28 @@ const styles = {
   bgContainer: {
     width: null,
     height: null,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  splashLogostyle:{ 
-    flex:1, 
-    justifyContent:'center', 
-    alignItems:'center', 
-    backgroundColor:'rgba(0,0,0,0.4)'
+  splashLogostyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   viewStyles: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor:'#c3e0e3'
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#c3e0e3',
   },
   imageView: {
-    height:deviceHeight,
-    width:deviceWidth, 
+    height: deviceHeight,
+    width: deviceWidth,
   },
-  animatedBox:{
-    width : 200,
+  animatedBox: {
+    width: 200,
     height: 200,
-    backgroundColor : '#fff'
+    backgroundColor: '#fff',
   },
 };
 

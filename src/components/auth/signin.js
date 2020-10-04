@@ -28,8 +28,8 @@ export default class SigninCmp extends Component {
       isEmaiForm: true,
       cca2: 'PK',
       phone: '',
-      email: '',
-      password: '',
+      email: 'saad@gmail.com',
+      password: '12345678',
       type: 'email',
       showSpinner: false,
       showAlert: false,
@@ -109,7 +109,7 @@ export default class SigninCmp extends Component {
       };
       axios
         .post('http://dev2.thebetatest.com/api/login-post', data)
-        .then(async res => {
+        .then(async (res) => {
           this.setState({showSpinner: false});
           console.log(res.data);
           if (res.data.status) {
@@ -129,7 +129,7 @@ export default class SigninCmp extends Component {
               errorTitle: 'Error!!',
             });
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState({showSpinner: false});
           console.log('error', error);
           this.setState({
@@ -165,7 +165,7 @@ export default class SigninCmp extends Component {
                     placeholderTextColor="#fff"
                     keyboardType="email-address"
                     style={styles.inputFld}
-                    onChangeText={text =>
+                    onChangeText={(text) =>
                       this.setState({email: text}, console.log('email', text))
                     }
                   />
@@ -177,7 +177,7 @@ export default class SigninCmp extends Component {
                     withCallingCode={true}
                     withFilter={true}
                     countryCode={this.state.cca2}
-                    onSelect={value => {
+                    onSelect={(value) => {
                       this.setState({
                         cca2: value.cca2,
                       });
@@ -191,7 +191,7 @@ export default class SigninCmp extends Component {
                     value={this.state.phone}
                     placeholderTextColor="#fff"
                     style={styles.inputFld}
-                    onChangeText={text =>
+                    onChangeText={(text) =>
                       this.setState({phone: text}, console.log('phone', text))
                     }
                   />
@@ -205,7 +205,7 @@ export default class SigninCmp extends Component {
                   value={this.state.password}
                   placeholderTextColor="#fff"
                   style={styles.inputFld}
-                  onChangeText={text =>
+                  onChangeText={(text) =>
                     this.setState(
                       {password: text},
 
@@ -287,7 +287,7 @@ export default class SigninCmp extends Component {
           />
         </Dialog.Container>
 
-        <Toast ref={ref => Toast.setRef(ref)} />
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </View>
     );
   }

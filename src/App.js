@@ -231,47 +231,49 @@ function TabNavigator() {
           //   iconName = focused ? faUser : faUser;
           // }
           // return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
-          if (route.name === 'Home') {
-            return (
-              <Image
-                source={require('./assets/icons/menu/home-icon.png')}
-                style={{width: 30, height: 25}}
-                // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-              />
-            );
-          } else if (route.name === 'FindMatch') {
-            return (
-              <Image
-                source={require('./assets/icons/menu/find-match-icon.png')}
-                style={{width: 26, height: 22}}
-                // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-              />
-            );
-          } else if (route.name === 'Chat') {
-            return (
-              <Image
-                source={require('./assets/icons/menu/chat.png')}
-                style={{width: 26, height: 22}}
-                // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-              />
-            );
-          } else if (route.name === 'Matches') {
-            return (
-              <Image
-                source={require('./assets/icons/menu/chat-filled-icon.png')}
-                style={{width: 26, height: 25}}
-                // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-              />
-            );
-          } else if (route.name === 'Profile') {
-            return (
-              <Image
-                source={require('./assets/icons/menu/profile-icon.png')}
-                style={{width: 20, height: 25}}
-                // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-              />
-            );
-          }
+          // if (route.name === 'Home') {
+          //   console.log('route name', route);
+          //   return (
+          //     <Image
+          //       // source={require('./assets/icons/menu/home-icon.png')}
+          //       style={{width: 30, height: 25}}
+          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+          //     />
+          //   );
+          // } else if (route.name === 'FindMatch') {
+          //   console.log('route name', route);
+          //   return (
+          //     <Image
+          //       source={require('./assets/icons/menu/find-match-icon.png')}
+          //       style={{width: 26, height: 22}}
+          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+          //     />
+          //   );
+          // } else if (route.name === 'Chat') {
+          //   return (
+          //     <Image
+          //       source={require('./assets/icons/menu/chat.png')}
+          //       style={{width: 26, height: 22}}
+          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+          //     />
+          //   );
+          // } else if (route.name === 'Matches') {
+          //   return (
+          //     <Image
+          //       source={require('./assets/icons/menu/chat-filled-icon.png')}
+          //       style={{width: 26, height: 25}}
+          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+          //     />
+          //   );
+          // } else if (route.name === 'Profile') {
+          //   return (
+          //     <Image
+          //       source={require('./assets/icons/menu/profile-icon.png')}
+          //       style={{width: 20, height: 25}}
+          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+          //     />
+          //   );
+          // }
         },
       })}
       tabBarOptions={{
@@ -283,11 +285,71 @@ function TabNavigator() {
           paddingBottom: 5,
         },
       }}>
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="FindMatch" component={MatchesStack} />
-      <Tab.Screen name="Chat" component={ChatStack} />
-      <Tab.Screen name="Matches" component={MatchesStack} />
-      <Tab.Screen name="Profile" component={ProfileStack} />
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/home-icon.png')}
+              style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="FindMatch"
+        component={MatchesStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/find-match-icon.png')}
+              style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={ChatStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/chat.png')}
+              style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Matches"
+        component={MatchesStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/chat-filled-icon.png')}
+              style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/profile-icon.png')}
+              style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
