@@ -59,6 +59,7 @@ export default class ProfileCmp extends Component {
       this.state.data.pic2,
     ];
     const user_type = await AsyncStorage.getItem('user_type');
+    console.log('usertype', user_type);
     this.setState({user_type: user_type});
 
     this.setState({images: images});
@@ -402,7 +403,6 @@ export default class ProfileCmp extends Component {
   desiredPartner() {
     if (this.state.step == 2) {
       return (
-        // , padding:10, flexDirection:'row', backgroundColor:'#fff', margin:10, marginTop:0, shadowColor: "#000", shadowOffset: { width: 0, height: 1, }, shadowOpacity: 0.22, shadowRadius: 2.22, elevation: 3,
         <View
           style={{
             flex: 6,

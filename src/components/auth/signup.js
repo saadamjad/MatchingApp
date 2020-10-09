@@ -42,13 +42,13 @@ export default class SignupCmp extends Component {
     this.handleBackButton = this.handleBackButton.bind(this);
   }
 
-  updateCountry = (country) => {
+  updateCountry = country => {
     this.setState({country});
   };
-  updateState = (state) => {
+  updateState = state => {
     this.setState({state});
   };
-  updateCity = (city) => {
+  updateCity = city => {
     this.setState({city});
   };
 
@@ -82,7 +82,7 @@ export default class SignupCmp extends Component {
     };
     axios
       .post('http://dev2.thebetatest.com/api/checkemail', data)
-      .then(async (res) => {
+      .then(async res => {
         this.setState({showSpinner: false});
         console.log('res', res.data);
         if (res.data.status) {
@@ -94,7 +94,7 @@ export default class SignupCmp extends Component {
             errorTitle: 'Error!!',
           });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({showSpinner: false});
         console.log('error', error);
         this.setState({
@@ -194,7 +194,7 @@ export default class SignupCmp extends Component {
                   placeholderTextColor="#000"
                   keyboardType="email-address"
                   style={styles.inputFld}
-                  onChangeText={(text) =>
+                  onChangeText={text =>
                     this.setState({email: text}, console.log('email', text))
                   }
                 />
@@ -236,7 +236,7 @@ export default class SignupCmp extends Component {
                   withCallingCode={true}
                   withFilter={true}
                   countryCode={this.state.cca2}
-                  onSelect={(value) => {
+                  onSelect={value => {
                     this.setState({
                       cca2: value.cca2,
                     });
@@ -301,7 +301,7 @@ export default class SignupCmp extends Component {
                 autoFocusOnLoad
                 codeInputFieldStyle={styles.underlineStyleBase}
                 codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                onCodeFilled={(code) => {
+                onCodeFilled={code => {
                   console.log(`Code is ${code}, you are good to go!`);
                 }}
               />
@@ -343,7 +343,7 @@ export default class SignupCmp extends Component {
                 placeholder="First Name"
                 placeholderTextColor="#000"
                 style={styles.inputFld}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   this.setState(
                     {
                       firstName: text,
@@ -400,7 +400,7 @@ export default class SignupCmp extends Component {
                 keyboardType="phone-pad"
                 placeholderTextColor="#000"
                 style={styles.inputFld}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   this.setState(
                     {
                       age: text,
@@ -416,7 +416,7 @@ export default class SignupCmp extends Component {
                 placeholderTextColor="#000"
                 keyboardType="email-address"
                 style={styles.inputFld}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   this.setState(
                     {
                       email: text,
@@ -462,7 +462,7 @@ export default class SignupCmp extends Component {
                 placeholder="Password"
                 placeholderTextColor="#000"
                 style={styles.inputFld}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   this.setState(
                     {
                       password: text,
@@ -479,7 +479,7 @@ export default class SignupCmp extends Component {
                 placeholder="Confirm Password"
                 placeholderTextColor="#000"
                 style={styles.inputFld}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   this.setState(
                     {
                       confirmPassword: text,
@@ -538,7 +538,7 @@ export default class SignupCmp extends Component {
           />
         </Dialog.Container>
 
-        <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Toast ref={ref => Toast.setRef(ref)} />
       </View>
     );
   }

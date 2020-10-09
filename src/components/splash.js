@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import {EventRegister} from 'react-native-event-listeners';
-
+import {AsyncStorage} from 'react-native';
 import {colors, images} from '../constants/theme';
 
 const {height: deviceHeight, width: deviceWidth} = Dimensions.get('screen');
@@ -43,14 +43,29 @@ class Splash extends React.Component {
     );
   };
 
-  async componentDidMount() {
+  _retrieveData = async () => {
+    AsyncStorage.getItem('checkUserLoggedin').then(res => {
+      console.log('check user', res);
+
+      if (res == 'login') {
+        setTimeout(() => {
+          EventRegister.emit('isLoggedIn', 'Main');
+          // EventRegister.emit('isLoggedIn', 'Main');
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          EventRegister.emit('isLoggedIn', 'Login');
+          // EventRegister.emit('isLoggedIn', 'Main');
+        }, 3000);
+      }
+    });
+  };
+
+  componentDidMount = async () => {
     const data = await this.performTimeConsumingTask();
 
-    setTimeout(() => {
-      // EventRegister.emit('isLoggedIn', 'Login')
-      EventRegister.emit('isLoggedIn', 'Main');
-    }, 3000);
-  }
+    this._retrieveData();
+  };
 
   componentWillUnmount() {
     clearTimeout(this.state.timeout);

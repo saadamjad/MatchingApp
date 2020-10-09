@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Text, View, SafeAreaView, ScrollView, Image} from 'react-native';
+import {
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  AsyncStorage,
+} from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -84,6 +91,17 @@ function CustomDrawerContent(props) {
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
         </DrawerContentScrollView>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('helo');
+            AsyncStorage.removeItem('checkUserLoggedin').then(res => {
+              console.log('remove item done', res);
+              props.navigation.navigate('Logout');
+            });
+          }}
+          style={styles.profileBtn}>
+          <Text style={styles.profileTxt}>Logout</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -354,6 +372,13 @@ function TabNavigator() {
   );
 }
 
+// const Logout = async () => {
+//   console.log('helo');
+//   await AsyncStorage.removeItem('checkUserLoggedin').then(res => {
+//     console.log('remove item done', res);
+//     return AuthStack;
+//   });
+// };
 const Drawer = createDrawerNavigator();
 function SideMenuNavigator() {
   return (
@@ -568,11 +593,11 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Logout"
-        component={AuthStack}
+        component={Logout}
         options={{
-          title: 'Logout',
+          title: 'Logoutt',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/log-out.png')}
@@ -583,7 +608,7 @@ function SideMenuNavigator() {
             />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="EditProfile"
         component={EditProfileCmp}
@@ -592,6 +617,15 @@ function SideMenuNavigator() {
           drawerIcon: ({focused, size}) => null,
         }}
       />
+      <Drawer.Screen
+        name="Logout"
+        component={AuthStack}
+        options={{
+          title: '',
+          drawerIcon: ({focused, size}) => null,
+        }}
+      />
+
       {/* <Drawer.Screen name="Subscribe Plan" component={SubscriptionPlansCmp} /> */}
       {/* <Drawer.Screen name="Wishlist" component={WishlistCmp} /> */}
       {/* <Drawer.Screen name="Faq" component={FaqCmp} />
@@ -623,7 +657,7 @@ export default class App extends React.Component {
           isLoggedIn: data,
         },
         () => {
-          console.log('state: ', this.state.isLoggedIn);
+          console.log('state:', this.state.isLoggedIn);
         },
       );
     });
