@@ -36,9 +36,11 @@ export default class ProfileCmp extends Component {
     super(props);
     this.state = {
       step: 0,
+      userDataShow: false,
+      profiePicShow: false,
       cca2: 'US',
       reportBlock: false,
-      data: 'saad',
+      data: {},
       user_type: '',
       images: [],
       showSpinner: false,
@@ -49,15 +51,33 @@ export default class ProfileCmp extends Component {
       isFriend: false,
       isWishlist: false,
       confirmAction: '',
+      // userData: {}
+      profileImage: '',
+      imagetest: [
+        'https://source.unsplash.com/1024x768/?water',
+        'http://dev2.thebetatest.com/uploads/woman.png',
+        'https://source.unsplash.com/1024x768/?water',
+        'http://dev2.thebetatest.com/uploads/woman.png',
+      ],
     };
   }
 
   async componentDidMount() {
-    const images = [
-      this.state.data.profile_pic,
-      this.state.data.pic1,
-      this.state.data.pic2,
-    ];
+    let getUserDataFromParams = this.props.route.params.data
+      ? this.props.route.params.data
+      : null;
+    let profilePic = this.props.route.params.profilePic
+      ? this.props.route.params.profilePic
+      : null;
+    let pic1 = getUserDataFromParams.pic1;
+    let pic2 = getUserDataFromParams.pic2;
+
+    // console.log('profilePic', profilePic, 'pic1', pic1, 'pic2', pic2);
+    // console.log('get data', getUserDataFromParams.data);
+    this._ProfilePics(profilePic, pic1, pic2);
+
+    this.setState({data: getUserDataFromParams, userDataShow: true});
+
     const user_type = await AsyncStorage.getItem('user_type');
     console.log('usertype', user_type);
     this.setState({user_type: user_type});
@@ -65,6 +85,23 @@ export default class ProfileCmp extends Component {
     this.setState({images: images});
     this.checkIfAlreadyFriend();
   }
+  _ProfilePics = async (profilePic, pic1, pic2) => {
+    const images = [
+      profilePic,
+      // 'https://source.unsplash.com/1024x768/?nature',
+      // 'https://source.unsplash.com/1024x768/?water',
+      pic1,
+      pic2,
+    ];
+
+    this.setState(
+      {
+        images: images,
+        profiePicShow: true,
+      },
+      () => console.log('this==', this.state.images),
+    );
+  };
 
   async checkIfAlreadyFriend() {
     const user = await AsyncStorage.getItem('userData');
@@ -807,7 +844,11 @@ export default class ProfileCmp extends Component {
             topOffset: 30,
             bottomOffset: 40,
           });
-          this.setState({isFriend: true});
+          this.setState(
+            {isFriend: true},
+            //   ,()=>
+            // this.removeFromWishlist()
+          );
         }
       },
       error => {
@@ -815,6 +856,57 @@ export default class ProfileCmp extends Component {
         console.log(error);
       },
     );
+  };
+  _RemoveFriend = async () => {
+    // this.setState({showSpinner: true});
+    alert('api not ready yet');
+    // const user = await AsyncStorage.getItem('userData');
+    // const userData = JSON.parse(user);
+    // let headers = {
+    //   headers: {
+    //     Authorization: userData.access_token,
+    //   },
+    // };
+    // const data = {
+    //   to: this.state.data.id,
+    //   from: userData.user.id,
+    //   status: 'sent',
+    // };
+    // const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    // axios.post(URL, data, headers).then(
+    //   resposne => {
+    //     this.setState({showSpinner: false});
+    //     console.log(resposne.data);
+    //     if (!resposne.data.status)
+    //       Toast.show({
+    //         type: 'error',
+    //         position: 'top',
+    //         text1: 'Error',
+    //         text2: resposne.data.message,
+    //         visibilityTime: 4000,
+    //         autoHide: true,
+    //         topOffset: 30,
+    //         bottomOffset: 40,
+    //       });
+    //     else {
+    //       Toast.show({
+    //         type: 'success',
+    //         position: 'top',
+    //         text1: 'Success',
+    //         text2: 'Successfuly sent friend request.',
+    //         visibilityTime: 4000,
+    //         autoHide: true,
+    //         topOffset: 30,
+    //         bottomOffset: 40,
+    //       });
+    //       this.setState({isFriend: true});
+    //     }
+    //   },
+    //   error => {
+    //     this.setState({showSpinner: false});
+    //     console.log(error);
+    //   },
+    // );
   };
 
   whatsApp() {
@@ -833,31 +925,41 @@ export default class ProfileCmp extends Component {
   }
 
   addUser() {
-    return this.state.data.user_type == 'v' &&
-      this.state.user_type == 'n' ? null : this.state.isFriend ? (
-      <View
-        style={{
-          padding: 8,
-          backgroundColor: '#ed145b',
-          borderRadius: 30,
-          justifyContent: 'center',
-          marginRight: 10,
-        }}>
-        <FontAwesomeIcon icon={faUserMinus} color="#fff" size={24} />
+    return (
+      <View>
+        {/* // this.state.data.user_type == 'v' &&
+    //   this.state.user_type == 'n' ? null :  */}
+        {this.state.isFriend ? (
+          <View
+            style={{
+              padding: 8,
+              backgroundColor: '#ed145b',
+              borderRadius: 30,
+              justifyContent: 'center',
+              marginRight: 10,
+            }}>
+            <FontAwesomeIcon
+              icon={faUserMinus}
+              color="#fff"
+              size={24}
+              onPress={this._RemoveFriend}
+            />
+          </View>
+        ) : (
+          <TouchableOpacity activeOpacity={0.8} onPress={this.addFriend}>
+            <View
+              style={{
+                padding: 8,
+                backgroundColor: '#ed145b',
+                borderRadius: 30,
+                justifyContent: 'center',
+                marginRight: 10,
+              }}>
+              <FontAwesomeIcon icon={faUserPlus} color="#fff" size={24} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
-    ) : (
-      <TouchableOpacity activeOpacity={0.8} onPress={this.addFriend}>
-        <View
-          style={{
-            padding: 8,
-            backgroundColor: '#ed145b',
-            borderRadius: 30,
-            justifyContent: 'center',
-            marginRight: 10,
-          }}>
-          <FontAwesomeIcon icon={faUserPlus} color="#fff" size={24} />
-        </View>
-      </TouchableOpacity>
     );
   }
 
@@ -923,197 +1025,241 @@ export default class ProfileCmp extends Component {
     else if (this.state.confirmAction == 'removeWishlist')
       this.setState({showAlert: false}, () => this.removeFromWishlist());
   };
-  // reportBlock
   render() {
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView>
-          <View style={{height: 250}}>
-            <SliderBox
-              images={this.state.images}
-              sliderBoxHeight={250}
-              inactiveDotColor="#ffffff"
-              dotStyle={{
-                marginTop: -220,
-                width: 10,
-                height: 10,
-                borderRadius: 10,
-                margin: -50,
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({reportBlock: !this.state.reportBlock});
-              }}
-              style={{
-                position: 'absolute',
-                top: 20,
-                right: 0,
-                zIndex: 999,
-                width: '10%',
-              }}>
-              <FontAwesomeIcon icon={faEllipsisV} color="#fff" size={24} />
-            </TouchableOpacity>
-            {this.state.reportBlock == true ? (
-              <View
+    if (this.state.profiePicShow == true && this.state.userDataShow == true) {
+      return (
+        <View style={{flex: 1}}>
+          <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={{height: 250}}>
+              <SliderBox
+                images={this.state.imagetest}
+                sliderBoxHeight={250}
+                inactiveDotColor="#ffffff"
+                dotStyle={{
+                  marginTop: -220,
+                  width: 10,
+                  height: 10,
+                  borderRadius: 10,
+                  margin: -50,
+                  backgroundColor: 'red',
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({reportBlock: !this.state.reportBlock});
+                }}
                 style={{
                   position: 'absolute',
-                  backgroundColor: '#fff',
-                  paddingHorizontal: 15,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  right: 25,
-                  top: 50,
+                  top: 20,
+                  right: 0,
+                  zIndex: 999,
+                  width: '10%',
                 }}>
-                <Text style={{marginBottom: 10}}>Report</Text>
-                <Text>Block</Text>
-              </View>
-            ) : null}
-            <View
-              style={{
-                flexDirection: 'row',
-                position: 'absolute',
-                bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.47)',
-                width: '100%',
-                paddingHorizontal: 15,
-                paddingTop: 10,
-                paddingBottom: 10,
-              }}>
-              <View style={{flex: 3}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 18,
-                      fontFamily: 'Poppins-Reglar',
-                      marginBottom: 5,
-                    }}>
-                    {this.state.data.UserName}
-                  </Text>
-                  {this.state.data.Gender == 'on' ? (
-                    <FontAwesomeIcon icon={faMale} color="blue" size={18} />
-                  ) : (
-                    <FontAwesomeIcon icon={faFemale} color="red" size={18} />
-                  )}
-                </View>
-                <Text
+                <FontAwesomeIcon icon={faEllipsisV} color="#fff" size={24} />
+              </TouchableOpacity>
+              {this.state.reportBlock == true ? (
+                <View
                   style={{
-                    color: '#fff',
-                    fontSize: 13,
-                    fontFamily: 'Poppins-Reglar',
-                    marginBottom: 5,
+                    position: 'absolute',
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    borderRadius: 5,
+                    right: 25,
+                    top: 50,
                   }}>
-                  {this.state.data.Age} years
-                </Text>
-                <View style={{flexDirection: 'row'}}>
+                  <Text style={{marginBottom: 10}}>Report</Text>
+                  <Text>Block</Text>
+                </View>
+              ) : null}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  bottom: 0,
+                  backgroundColor: 'rgba(0,0,0,0.47)',
+                  width: '100%',
+                  paddingHorizontal: 15,
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                }}>
+                <View style={{flex: 3}}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontSize: 18,
+                        fontFamily: 'Poppins-Reglar',
+                        marginBottom: 5,
+                      }}>
+                      {this.state.data.UserName}
+                    </Text>
+                    {this.state.data.Gender == 'on' ? (
+                      <FontAwesomeIcon icon={faMale} color="blue" size={18} />
+                    ) : (
+                      <FontAwesomeIcon icon={faFemale} color="red" size={18} />
+                    )}
+                  </View>
                   <Text
                     style={{
                       color: '#fff',
                       fontSize: 13,
                       fontFamily: 'Poppins-Reglar',
+                      marginBottom: 5,
                     }}>
-                    {this.state.data.city}, {this.state.data.country}
+                    {this.state.data.Age} years
                   </Text>
-                  <View style={{marginTop: -5, marginLeft: 5}}>
-                    <CountryPicker
-                      withAlphaFilter={true}
-                      withCallingCode={true}
-                      withFilter={true}
-                      countryCode={this.state.cca2}
-                      onSelect={value => {
-                        this.setState({
-                          cca2: value.cca2,
-                        });
-                      }}
-                      cca2={this.state.cca2}
-                      translation="eng"
-                    />
-                  </View>
-                </View>
-              </View>
-              <View style={{paddingRight: 15}}>
-                {this.state.data.user_type == 'n' ? (
-                  <View
-                    style={{
-                      backgroundColor: '#00bff3',
-                      padding: 7,
-                      borderRadius: 10,
-                    }}>
+                  <View style={{flexDirection: 'row'}}>
                     <Text
                       style={{
-                        fontSize: 10,
-                        fontFamily: 'Poppins-Medium',
                         color: '#fff',
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Reglar',
                       }}>
-                      REGULAR MEMBERR
+                      {this.state.data.city}, {this.state.data.country}
                     </Text>
+                    <View style={{marginTop: -5, marginLeft: 5}}>
+                      <CountryPicker
+                        withAlphaFilter={true}
+                        withCallingCode={true}
+                        withFilter={true}
+                        countryCode={this.state.cca2}
+                        onSelect={value => {
+                          this.setState({
+                            cca2: value.cca2,
+                          });
+                        }}
+                        cca2={this.state.cca2}
+                        translation="eng"
+                      />
+                    </View>
                   </View>
-                ) : (
-                  <Image
-                    style={{
-                      position: 'relative',
-                      top: -16,
-                      width: 90,
-                      height: 38,
-                    }}
-                    source={images.vipIcon}
-                  />
-                )}
+                </View>
+                <View style={{paddingRight: 15}}>
+                  {this.state.data.user_type == 'n' ? (
+                    <View
+                      style={{
+                        backgroundColor: '#00bff3',
+                        padding: 7,
+                        borderRadius: 10,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          fontFamily: 'Poppins-Medium',
+                          color: '#fff',
+                        }}>
+                        REGULAR MEMBERR
+                      </Text>
+                    </View>
+                  ) : (
+                    <Image
+                      style={{
+                        position: 'relative',
+                        top: -16,
+                        width: 90,
+                        height: 38,
+                      }}
+                      source={images.vipIcon}
+                    />
+                  )}
+                </View>
               </View>
             </View>
-          </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              paddingRight: 10,
-              position: 'relative',
-              top: -20,
-            }}>
-            {this.addUser()}
-            {this.heartIcon()}
-            {this.whatsApp()}
-          </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                paddingRight: 10,
+                position: 'relative',
+                top: -20,
+              }}>
+              {this.addUser()}
+              {this.state.isFriend ? null : this.heartIcon()}
+              {this.whatsApp()}
+            </View>
 
-          {this.header()}
-          {this.bio()}
-          {this.personalDetail()}
-          {this.desiredPartner()}
-        </ScrollView>
+            {this.header()}
+            {this.bio()}
+            {this.personalDetail()}
+            {this.desiredPartner()}
+          </ScrollView>
 
-        <View style={styles.horizontal}>
-          <Spinner
-            textContent={'Loading...'}
-            animation="fade"
-            textStyle={styles.spinnerTextStyle}
-            visible={this.state.showSpinner}
-          />
-        </View>
+          <Toast ref={ref => Toast.setRef(ref)} />
 
-        <Toast ref={ref => Toast.setRef(ref)} />
-
-        <Dialog.Container visible={this.state.showAlert}>
-          <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
-          <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
-          <Dialog.Button
-            color="#58c4b7"
-            bold
-            label="Cancel"
-            onPress={this.handleCancel}
-          />
-          {this.state.isConfirmation ? (
-            <Dialog.Button
-              color="#58c4b7"
-              bold
-              label="Okay"
-              onPress={this.handleConfirmation}
-            />
+          {this.state.showSpinner ? (
+            <View style={styles.horizontal}>
+              <Spinner
+                textContent={'Loading...'}
+                animation="fade"
+                textStyle={styles.spinnerTextStyle}
+                visible={this.state.showSpinner}
+              />
+            </View>
           ) : null}
-        </Dialog.Container>
-      </SafeAreaView>
-    );
+          {this.state.showAlert ? (
+            <Dialog.Container visible={this.state.showAlert}>
+              <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
+              <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
+              <Dialog.Button
+                color="#58c4b7"
+                bold
+                label="Cancel"
+                onPress={this.handleCancel}
+              />
+              {this.state.isConfirmation ? (
+                <Dialog.Button
+                  color="#58c4b7"
+                  bold
+                  label="Okay"
+                  onPress={this.handleConfirmation}
+                />
+              ) : null}
+            </Dialog.Container>
+          ) : null}
+        </View>
+      );
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={{height: 250}}>
+              <Spinner
+                textContent={'Loading...'}
+                animation="fade"
+                textStyle={styles.spinnerTextStyle}
+                visible={true}
+              />
+            </View>
+
+            {/* <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                paddingRight: 10,
+                position: 'relative',
+                top: -20,
+              }}>
+              {this.addUser()}
+              {this.heartIcon()}
+              {this.whatsApp()}
+            </View> */}
+
+            {this.header()}
+            <Spinner
+              textContent={'Loading...'}
+              animation="fade"
+              textStyle={styles.spinnerTextStyle}
+              visible={true}
+            />
+            {/* {this.bio()}
+            {this.personalDetail()}
+            {this.desiredPartner()} */}
+          </ScrollView>
+        </View>
+      );
+    }
   }
 }
 const styles = {
