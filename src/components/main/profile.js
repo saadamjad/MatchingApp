@@ -12,6 +12,7 @@ import {
 import CountryPicker from 'react-native-country-picker-modal';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Modal from 'react-native-modal';
 
 import Toast from 'react-native-toast-message';
 import Dialog from 'react-native-dialog';
@@ -36,6 +37,7 @@ export default class ProfileCmp extends Component {
     super(props);
     this.state = {
       step: 0,
+      blockUser: false,
       userDataShow: false,
       profiePicShow: false,
       cca2: 'US',
@@ -50,6 +52,7 @@ export default class ProfileCmp extends Component {
       errorTitle: '',
       isFriend: false,
       isWishlist: false,
+      reports: [],
       confirmAction: '',
       // userData: {}
       profileImage: '',
@@ -63,27 +66,18 @@ export default class ProfileCmp extends Component {
   }
 
   async componentDidMount() {
-    let getUserDataFromParams = this.props.route.params.data
+    let getVipUserDataFromParams = this.props.route.params.data
       ? this.props.route.params.data
       : null;
     let profilePic = this.props.route.params.profilePic
       ? this.props.route.params.profilePic
       : null;
-    let pic1 = getUserDataFromParams.pic1;
-    let pic2 = getUserDataFromParams.pic2;
-
-    // console.log('profilePic', profilePic, 'pic1', pic1, 'pic2', pic2);
-    // console.log('get data', getUserDataFromParams.data);
-    this._ProfilePics(profilePic, pic1, pic2);
-
-    this.setState({data: getUserDataFromParams, userDataShow: true});
-
-    const user_type = await AsyncStorage.getItem('user_type');
-    console.log('usertype', user_type);
-    this.setState({user_type: user_type});
-
-    this.setState({images: images});
-    this.checkIfAlreadyFriend();
+    let pic1 = getVipUserDataFromParams.pic1;
+    let pic2 = getVipUserDataFromParams.pic2;
+    console.log('getVipUserDataFromParams', getVipUserDataFromParams.user_type);
+    // this._ProfilePics(profilePic, pic1, pic2);
+    this.setState({data: getVipUserDataFromParams, userDataShow: true});
+    this._GetLoggedInValue(getVipUserDataFromParams);
   }
   _ProfilePics = async (profilePic, pic1, pic2) => {
     const images = [
@@ -103,15 +97,35 @@ export default class ProfileCmp extends Component {
     );
   };
 
-  async checkIfAlreadyFriend() {
-    const user = await AsyncStorage.getItem('userData');
-    const access_token = JSON.parse(user).access_token;
+  _GetLoggedInValue = async getVipUserDataFromParams => {
+    console.log('loggedin user', getVipUserDataFromParams);
+    const data = await AsyncStorage.getItem('userData');
+    let access_token = JSON.parse(data).access_token;
+    let loggedInUser = JSON.parse(data).user.id;
+    let vipUserId = getVipUserDataFromParams.id;
+    this.setState({
+      loggedInUser: loggedInUser,
+      vipUserId: vipUserId,
+      access_token: access_token,
+    });
+    console.log(
+      'v',
+      vipUserId,
+      'loggedInUser',
+      loggedInUser,
+      'access_token',
+      access_token,
+    );
+    this.checkIfAlreadyFriend(access_token, vipUserId, loggedInUser);
+  };
+
+  async checkIfAlreadyFriend(access_token, vipUserId, loggedInUser) {
     let headers = {
       headers: {
         Authorization: access_token,
       },
     };
-    const data = {from: JSON.parse(user).user.id, to: this.state.data.id};
+    const data = {from: loggedInUser, to: vipUserId};
     console.log(data);
 
     const URL = 'http://dev2.thebetatest.com/api/fav-int';
@@ -927,8 +941,6 @@ export default class ProfileCmp extends Component {
   addUser() {
     return (
       <View>
-        {/* // this.state.data.user_type == 'v' &&
-    //   this.state.user_type == 'n' ? null :  */}
         {this.state.isFriend ? (
           <View
             style={{
@@ -1025,8 +1037,157 @@ export default class ProfileCmp extends Component {
     else if (this.state.confirmAction == 'removeWishlist')
       this.setState({showAlert: false}, () => this.removeFromWishlist());
   };
+
+  _BlockUser = () => {
+    console.log('block user');
+    this.setState({showSpinner: true});
+    let access_token = this.state.access_token;
+    let loggedInUser = this.state.loggedInUser;
+    let vipUserId = this.state.vipUserId;
+    console.log('loggedInUser', loggedInUser, 'vipUserId', vipUserId);
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    const data = {
+      block_by: loggedInUser,
+      block_to: vipUserId,
+    };
+    const URL = 'http://dev2.thebetatest.com/api/block-user';
+    axios.post(URL, data, headers).then(
+      resposne => {
+        let status = resposne.data.status;
+        if (status) {
+          this.setState({showSpinner: false, blockUser: true});
+        } else {
+          console.log('already block');
+          this.setState({
+            blockUser: true,
+            showSpinner: false,
+          });
+        }
+
+        console.log(resposne.data);
+      },
+      error => {
+        this.setState({showSpinner: false});
+        console.log(error);
+      },
+    );
+  };
+  _UnBlockUser = () => {
+    console.log('block user');
+    this.setState({showSpinner: true});
+    let access_token = this.state.access_token;
+    let loggedInUser = this.state.loggedInUser;
+    let vipUserId = this.state.vipUserId;
+    console.log('loggedInUser', loggedInUser, 'vipUserId', vipUserId);
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    const data = {
+      block_by: loggedInUser,
+      block_to: vipUserId,
+    };
+    const URL = 'http://dev2.thebetatest.com/api/unblock-user';
+    axios.post(URL, data, headers).then(
+      resposne => {
+        let status = resposne.data.status;
+        if (status) {
+          this.setState({showSpinner: false, blockUser: false});
+        } else {
+          console.log('already block');
+          this.setState({
+            blockUser: false,
+            showSpinner: false,
+          });
+        }
+
+        console.log(resposne.data);
+      },
+      error => {
+        this.setState({showSpinner: false});
+        console.log(error);
+      },
+    );
+  };
+  _ReportUser = () => {
+    console.log('report user');
+    let access_token = this.state.access_token;
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+
+    const URL = 'http://dev2.thebetatest.com/api/report-reasons';
+    var array = [];
+    axios.get(URL, headers).then(
+      response => {
+        console.log(response.data.reasons);
+        array.push(response.data.reasons);
+        this.setState(
+          {
+            reportModal: true,
+            reports: response.data.reasons,
+          },
+          () => console.log('response.data', this.state.reports),
+        );
+      },
+      error => {
+        console.log(error);
+      },
+    );
+  };
+  ReportedUser = (reason, reportId) => {
+    console.log('ReportedUser');
+    this.setState({showSpinner: true});
+    let access_token = this.state.access_token;
+    let loggedInUser = this.state.loggedInUser;
+    let vipUserId = this.state.vipUserId;
+    console.log('loggedInUser', loggedInUser, 'vipUserId', vipUserId);
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    const data = {
+      message: reason,
+      report_reason_id: reportId,
+      send_by: loggedInUser,
+      suspect_id: vipUserId,
+    };
+    const URL = 'http://dev2.thebetatest.com/api/send-report';
+    axios.post(URL, data, headers).then(
+      resposne => {
+        let status = resposne.data.status;
+        console.log('Status', status);
+        if (status) {
+          alert('Reported');
+          this.setState({
+            showSpinner: false,
+            reportModal: false,
+            reported: true,
+          });
+        }
+
+        console.log(resposne.data);
+      },
+      error => {
+        this.setState({showSpinner: false});
+        console.log(error);
+      },
+    );
+  };
+
   render() {
-    if (this.state.profiePicShow == true && this.state.userDataShow == true) {
+    if (this.state.userDataShow == true) {
       return (
         <View style={{flex: 1}}>
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -1062,14 +1223,47 @@ export default class ProfileCmp extends Component {
                   style={{
                     position: 'absolute',
                     backgroundColor: '#fff',
-                    paddingHorizontal: 15,
-                    paddingVertical: 10,
+                    paddingHorizontal: 5,
+                    paddingVertical: 5,
                     borderRadius: 5,
                     right: 25,
                     top: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  <Text style={{marginBottom: 10}}>Report</Text>
-                  <Text>Block</Text>
+                  {this.state.blockUser ? (
+                    <TouchableOpacity
+                      style={{
+                        marginVertical: 5,
+                        borderBottomWidth: 0.5,
+                      }}
+                      onPress={() => this._UnBlockUser()}>
+                      <Text>UnBlock</Text>
+                    </TouchableOpacity>
+                  ) : this.state.blockUser == false ? (
+                    <View>
+                      <TouchableOpacity
+                        style={{
+                          // position: 'absolute',
+                          // backgroundColor: '#fff',
+                          // paddingHorizontal: 15,
+                          // paddingVertical: 10,
+                          // borderRadius: 5,
+                          // right: 25,
+                          // top: 50,
+                          marginVertical: 5,
+                          borderBottomWidth: 0.5,
+                        }}
+                        onPress={() => this._BlockUser()}>
+                        <Text>Block</Text>
+                      </TouchableOpacity>
+                      {this.state.reported ? null : (
+                        <TouchableOpacity onPress={() => this._ReportUser()}>
+                          <Text style={{marginBottom: 10}}>Report</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  ) : null}
                 </View>
               ) : null}
               <View
@@ -1092,7 +1286,7 @@ export default class ProfileCmp extends Component {
                         fontFamily: 'Poppins-Reglar',
                         marginBottom: 5,
                       }}>
-                      {this.state.data.UserName}
+                      {this.state.data.FirstName}
                     </Text>
                     {this.state.data.Gender == 'on' ? (
                       <FontAwesomeIcon icon={faMale} color="blue" size={18} />
@@ -1166,19 +1360,21 @@ export default class ProfileCmp extends Component {
                 </View>
               </View>
             </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                paddingRight: 10,
-                position: 'relative',
-                top: -20,
-              }}>
-              {this.addUser()}
-              {this.state.isFriend ? null : this.heartIcon()}
-              {this.whatsApp()}
-            </View>
+            {this.state.blockUser ? null : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  paddingRight: 10,
+                  position: 'relative',
+                  top: -20,
+                }}>
+                {this.addUser()}
+                {this.heartIcon()}
+                {/* {this.state.isFriend ? null : this.heartIcon()} */}
+                {this.whatsApp()}
+              </View>
+            )}
 
             {this.header()}
             {this.bio()}
@@ -1218,6 +1414,55 @@ export default class ProfileCmp extends Component {
               ) : null}
             </Dialog.Container>
           ) : null}
+
+          <Modal
+            isVisible={this.state.reportModal}
+            // isVisible={true}
+            animationInTiming={10}
+            backdropOpacity={0.1}
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              justifyContent: 'flex-end',
+              margin: 0,
+              backgroundColor: 'black',
+              // opacity: 0.6,
+              flex: 1,
+            }}>
+            <View
+              style={{
+                height: '100%',
+                width: '100%',
+                borderColor: 'white',
+                backgroundColor: 'white',
+              }}>
+              {console.log('==', this.state.reports.length)}
+              {this.state.reports.length > 0
+                ? this.state.reports.map((item, i) => {
+                    return (
+                      <TouchableOpacity
+                        style={{
+                          height: 50,
+                          width: '100%',
+                          borderBottomWidth: 0.5,
+                          backgroundColor: 'white',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                        onPress={
+                          () => this.ReportedUser(item.reason, item.id)
+
+                          //   this.setState({
+                          //      reportModal:false
+                          // }
+                        }>
+                        <Text> {item.reason} </Text>
+                      </TouchableOpacity>
+                    );
+                  })
+                : null}
+            </View>
+          </Modal>
         </View>
       );
     } else {

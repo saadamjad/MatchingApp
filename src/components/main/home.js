@@ -40,7 +40,7 @@ export default class HomeCmp extends PureComponent {
       cca23: 'PK',
       cca24: 'PK',
       usersData: '',
-      vipUserData: '',
+      vipUserData: [],
       collection: [],
       isLoading: false,
       errorMsg: 'a',
@@ -96,30 +96,28 @@ export default class HomeCmp extends PureComponent {
   async getVipData() {
     const URL = 'http://dev2.thebetatest.com//api/all-vip';
     const user = await AsyncStorage.getItem('userData');
-    console.log('userdata', user);
-    const access_token = JSON.parse(user).access_token;
-    // console.log(access_token);
+    const userData = JSON.parse(user);
+    // console.log('userdata', userData);
+    const loggedInUserID = userData.user.id;
+    // console.log('loggedin', loggedInUserID);
+    const access_token = userData.access_token;
+    console.log(loggedInUserID);
     let headers = {
       headers: {
         Authorization: access_token,
       },
     };
-
     axios
       .get(URL, headers)
       .then(async res => {
-        this.setState({vipUserData: res.data});
-
         let responseArray = res.data.collection.data;
-        var i;
-        for (i = 0; i < responseArray.length; i++) {
-          console.log(
-            'Vip user Data===>',
-            res.data.collection.data[i].user_type + ' loop ',
-            i,
-          );
-        }
-        // console.log(res.data.collection.data);
+        let mySendData = await responseArray.filter(
+          val => Number(val.id) !== Number(loggedInUserID),
+        );
+
+        this.setState({
+          vipUserData: mySendData,
+        });
       })
       .catch(error => {
         console.log('error', error);
@@ -358,9 +356,9 @@ export default class HomeCmp extends PureComponent {
               </Text>
             }
             height={170}>
-            {this.state.vipUserData != '' ? (
-              this.state.vipUserData.collection.data.map((el, index) => {
-                console.log('el', el);
+            {this.state.vipUserData.length > 0 ? (
+              this.state.vipUserData.map((el, index) => {
+                // console.log('el', el);
                 let profilePic =
                   'http://dev2.thebetatest.com/' + el.profile_pic;
                 // console.log('profilepic', profilePic);
@@ -398,7 +396,7 @@ export default class HomeCmp extends PureComponent {
                       </TouchableOpacity>
                       <View style={[styles.vipContentView, styles.pt10]}>
                         <View style={styles.nameView}>
-                          <Text style={styles.vipName}>{el.UserName}</Text>
+                          <Text style={styles.vipName}>{el.FirstName}</Text>
                           <FontAwesomeIcon
                             icon={faFemale}
                             color="red"
