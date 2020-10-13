@@ -61,6 +61,9 @@ export default class ProfileCmp extends Component {
         'http://dev2.thebetatest.com/uploads/woman.png',
         'https://source.unsplash.com/1024x768/?water',
         'http://dev2.thebetatest.com/uploads/woman.png',
+        // 'https://source.unsplash.com/1024x768/?water',
+        // 'http://dev2.thebetatest.com/uploads/woman.png',
+        // 'http://dev2.thebetatest.com/uploads/woman.png',
       ],
     };
   }
@@ -1060,7 +1063,9 @@ export default class ProfileCmp extends Component {
       resposne => {
         let status = resposne.data.status;
         if (status) {
-          this.setState({showSpinner: false, blockUser: true});
+          this.setState({showSpinner: false, blockUser: true}, () =>
+            this.props.navigation.navigate('Home'),
+          );
         } else {
           console.log('already block');
           this.setState({
@@ -1201,8 +1206,9 @@ export default class ProfileCmp extends Component {
                   width: 10,
                   height: 10,
                   borderRadius: 10,
-                  margin: -50,
-                  backgroundColor: 'red',
+                  margin: 0,
+                  padding: 0,
+                  // backgroundColor: 'red',
                 }}
               />
               <TouchableOpacity

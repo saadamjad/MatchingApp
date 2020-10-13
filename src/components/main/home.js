@@ -49,7 +49,7 @@ export default class HomeCmp extends PureComponent {
   }
 
   componentDidMount() {
-    // this.getData();
+    this.getData();
     this.getVipData();
   }
 
@@ -131,7 +131,6 @@ export default class HomeCmp extends PureComponent {
 
   onEndReached = async () => {
     console.log('onEndReached');
-    // console.log(this.state.usersData);
     const URL = this.state.usersData.collection.next_page_url;
 
     console.log(
@@ -477,78 +476,7 @@ export default class HomeCmp extends PureComponent {
                 );
               })
             ) : (
-              <View style={styles.vipUserInner}>
-                <View
-                  style={{
-                    flex: 1,
-                    padding: 10,
-                    paddingRight: 0,
-                    flexDirection: 'row',
-                    borderRadius: 10,
-                    backgroundColor: '#f6f6f6',
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 1},
-                    shadowOpacity: 0.22,
-                    shadowRadius: 2.22,
-                    elevation: 2,
-                  }}>
-                  <View style={styles.vipImageView}>
-                    <Image
-                      source={images.vipUserIcon}
-                      style={styles.vipImageDimension}
-                    />
-                  </View>
-                  <View style={[styles.vipContentView, styles.pt10]}>
-                    <View style={styles.nameView}>
-                      <Text style={styles.vipName}>@elena45</Text>
-                      <FontAwesomeIcon icon={faFemale} color="red" size={18} />
-                    </View>
-                    <View>
-                      <Text style={styles.vipAge}>28 years</Text>
-                    </View>
-                    <View style={{flexDirection: 'row'}}>
-                      <Image
-                        style={{marginRight: 5, width: 11, height: 16}}
-                        source={images.locationIcon}
-                      />
-                      <Text style={styles.vipLighTxt}>New York, USA </Text>
-                      {/* <Image style={{ marginLeft:5, width:30, height:16 }} source={images.flagIcon} /> */}
-                      <View
-                        style={{
-                          position: 'relative',
-                          bottom: 5,
-                          marginBottom: -10,
-                        }}>
-                        <CountryPicker
-                          withAlphaFilter={true}
-                          withCallingCode={true}
-                          withFilter={true}
-                          countryCode={this.state.cca2}
-                          onSelect={value => {
-                            this.setState({
-                              cca2: value.cca2,
-                            });
-                          }}
-                          cca2={this.state.cca2}
-                          translation="eng"
-                        />
-                      </View>
-                    </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Education: </Text>
-                      <Text style={styles.vipLighTxt}>Masters </Text>
-                    </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Sect: </Text>
-                      <Text style={styles.vipLighTxt}>Shia </Text>
-                    </View>
-                    <View style={[styles.socialView, styles.pos]}>
-                      {this.addUser()}
-                      {this.whatsApp()}
-                    </View>
-                  </View>
-                </View>
-              </View>
+              <ActivityIndicator size="large" color="red" />
             )}
           </Swiper>
         </View>
@@ -866,7 +794,7 @@ const styles = {
     shadowRadius: 2.22,
     elevation: 2,
   },
-  vipImageView: {flex: 1, backgroundColor: 'red'},
+  vipImageView: {flex: 1},
   vipImageDimension: {width: 120, height: 150, borderRadius: 10},
   regularImageDimension: {
     width: 120,

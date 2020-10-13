@@ -355,7 +355,7 @@ function TabNavigator() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={ProfileStack}
         options={{
@@ -367,7 +367,7 @@ function TabNavigator() {
             />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
