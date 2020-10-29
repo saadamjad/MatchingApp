@@ -49,10 +49,78 @@ export default class HomeCmp extends PureComponent {
   }
 
   componentDidMount() {
+    this._UserStatistic();
     this.getData();
     this.getVipData();
   }
 
+  _UserStatistic = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    console.log('userdata', userData);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    console.log('access_token', access_token),
+      console.log('loggedInUserID', loggedInUserID);
+    let URL = 'https://dev2.thebetatest.com/api/your-statistic';
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    let data = {
+      id: loggedInUserID,
+    };
+    axios.post(URL, data, headers).then(
+      response => {
+        console.log('API RESPONSE', response.data);
+        let people_inerested_in_you = response.data.people_inerested_in_you;
+        let userSendInterestInPeople =
+          response.data.people_you_showed_inerest_in;
+        let wish_list = response.data.wish_list;
+        this.setState({
+          people_inerested_in_you: people_inerested_in_you,
+          userSendInterestInPeople: userSendInterestInPeople,
+          wish_list: wish_list,
+        });
+      },
+      error => {
+        console.log('e', error);
+      },
+    );
+  };
+  _SendInterest = async (toID, fromID) => {
+    console.log('_SendInterest', 'toId', toID, 'fromId', fromID);
+    const URL = 'https://dev2.thebetatest.com/api/your-statistic';
+    let access_token = this.state.userData.access_token;
+    console.log('access_token', access_token);
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    let data = {
+      to: toID,
+      from: fromID,
+      status: 'sent',
+    };
+    axios.post(URL, data, headers).then(
+      response => {
+        console.log(response.data);
+        let status = response.data.status;
+        if (status) {
+          this.setState({
+            requestSent: status,
+          });
+          alert('sent');
+        }
+      },
+      error => {
+        console.log('e', error);
+      },
+    );
+  };
   async getData(i) {
     console.log('getData index: ', i);
     this.setState({showSpinner: true});
@@ -239,7 +307,11 @@ export default class HomeCmp extends PureComponent {
                       </Text>
                     </View>
                     <View style={{flex: 2}}>
-                      <Text style={styles.statsLabel}>003</Text>
+                      <Text style={styles.statsLabel}>
+                        {this.state.people_inerested_in_you
+                          ? this.state.people_inerested_in_you
+                          : ''}
+                      </Text>
                       <View
                         style={{
                           backgroundColor: '#b3070d',
@@ -271,7 +343,7 @@ export default class HomeCmp extends PureComponent {
                     </View>
                     <View style={{flex: 2}}>
                       <Text style={[styles.statsLabel, {marginTop: 10}]}>
-                        002
+                        {this.state.wish_list ? this.state.wish_list : ''}
                       </Text>
                       <View
                         style={{
@@ -309,7 +381,11 @@ export default class HomeCmp extends PureComponent {
                       </Text>
                     </View>
                     <View style={{flex: 2}}>
-                      <Text style={styles.statsLabel}>005</Text>
+                      <Text style={styles.statsLabel}>
+                        {this.state.userSendInterestInPeople
+                          ? this.state.userSendInterestInPeople
+                          : ''}
+                      </Text>
                       <View
                         style={{
                           backgroundColor: '#b3070d',

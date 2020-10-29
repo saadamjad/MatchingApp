@@ -229,71 +229,7 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          // let iconName;
-          // if (route.name === 'Home') {
-          //   iconName = focused
-          //     ? faHome
-          //     : faHome;
-          // }
-          // else if (route.name === 'FindMatch') {
-          //   iconName = focused ? faSearch : faSearch;
-          // } else if (route.name === 'Chat') {
-          //   iconName = focused ? faComments : faComments;
-          // }
-          // else if (route.name === 'Matches') {
-          //   iconName = focused ? faSearch : faSearch;
-          // }
-          // else if (route.name === 'Profile') {
-          //   iconName = focused ? faUser : faUser;
-          // }
-          // return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
-          // if (route.name === 'Home') {
-          //   console.log('route name', route);
-          //   return (
-          //     <Image
-          //       // source={require('./assets/icons/menu/home-icon.png')}
-          //       style={{width: 30, height: 25}}
-          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-          //     />
-          //   );
-          // } else if (route.name === 'FindMatch') {
-          //   console.log('route name', route);
-          //   return (
-          //     <Image
-          //       source={require('./assets/icons/menu/find-match-icon.png')}
-          //       style={{width: 26, height: 22}}
-          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-          //     />
-          //   );
-          // } else if (route.name === 'Chat') {
-          //   return (
-          //     <Image
-          //       source={require('./assets/icons/menu/chat.png')}
-          //       style={{width: 26, height: 22}}
-          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-          //     />
-          //   );
-          // } else if (route.name === 'Matches') {
-          //   return (
-          //     <Image
-          //       source={require('./assets/icons/menu/chat-filled-icon.png')}
-          //       style={{width: 26, height: 25}}
-          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-          //     />
-          //   );
-          // } else if (route.name === 'Profile') {
-          //   return (
-          //     <Image
-          //       source={require('./assets/icons/menu/profile-icon.png')}
-          //       style={{width: 20, height: 25}}
-          //       // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
-          //     />
-          //   );
-          // }
-        },
-      })}
+      screenOptions={({route}) => ({})}
       tabBarOptions={{
         activeTintColor: '#fff',
         inactiveTintColor: '#ccc',
@@ -402,26 +338,26 @@ function SideMenuNavigator() {
         }}
       />
       <Drawer.Screen
-        name="Profile"
-        component={ProfileCmp}
+        name="Filter"
+        component={FilterCmp}
         options={{
-          title: 'Profile',
-          drawerIcon: ({focused, size}) => (
-            <Image
-              source={require('./assets/icons/menu/profile.png')}
-              style={[
-                focused ? styles.drawerActive : styles.drawerInActive,
-                {height: 19, width: 20},
-              ]}
-            />
-          ),
+          title: '',
+          // drawerIcon: ({focused, size}) => (
+          //   <Image
+          //     source={require('./assets/icons/menu/profile.png')}
+          //     style={[
+          //       focused ? styles.drawerActive : styles.drawerInActive,
+          //       {height: 19, width: 20},
+          //     ]}
+          //   />
+          // ),
         }}
       />
       <Drawer.Screen
         name="Find Match"
         component={MatchesCmp}
         options={{
-          title: 'Find Match',
+          title: 'Find Matches',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/find-match.png')}
