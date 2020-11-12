@@ -17,7 +17,7 @@ export default class subscriptionplans extends Component {
 					<View style={styles.txtView}>
 						<Text style={styles.price}>$29</Text>
 						<Text style={styles.sub}>3 Months Introductory Offer </Text>
-						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Signup')} style={styles.btn}>
+						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Home')} style={styles.btn}>
 							<Text style={styles.btnTxt}>SELECT</Text>
 						</TouchableOpacity>
 						<Text style={styles.readdMore}>Read More</Text>
@@ -27,7 +27,7 @@ export default class subscriptionplans extends Component {
 					<View style={styles.txtView1}>
 						<Text style={styles.price}>$79</Text>
 						<Text style={styles.sub}>6 Months VIP Professional User</Text>
-						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Signup')} style={styles.btn}>
+						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Home')} style={styles.btn}>
 							<Text style={styles.btnTxt}>SELECT</Text>
 						</TouchableOpacity>
 						<Text style={styles.readdMore}>Read More</Text>
@@ -38,7 +38,7 @@ export default class subscriptionplans extends Component {
 					<View style={styles.txtView2}>
 						<Text style={styles.price}>$149</Text>
 						<Text style={styles.sub}>12 Months VIP Professional User</Text>
-						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Signup')} style={styles.btn}>
+						<TouchableOpacity onPress={()=> this.props.navigation.navigate('Home')} style={styles.btn}>
 							<Text style={styles.btnTxt}>SELECT</Text>
 						</TouchableOpacity>
 						<Text style={styles.readdMore}>Read More</Text>

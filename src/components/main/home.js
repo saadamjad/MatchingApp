@@ -296,7 +296,7 @@ export default class HomeCmp extends PureComponent {
           </View>
           <View style={styles.statsCardsView}>
             <View style={styles.statsCardView}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Interest')}>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>
@@ -336,7 +336,7 @@ export default class HomeCmp extends PureComponent {
               <ImageBackground
                 style={styles.statsImg}
                 source={images.statsDesignIcon}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Wishlist')}>
                   <View style={styles.statsCardTxt}>
                     <View style={{flex: 1}}>
                       <Text style={styles.statsHeading}>WishList count</Text>
@@ -370,7 +370,7 @@ export default class HomeCmp extends PureComponent {
               </ImageBackground>
             </View>
             <View style={styles.statsCardView}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Wishlist')}>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>

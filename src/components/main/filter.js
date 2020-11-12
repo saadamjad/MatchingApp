@@ -30,6 +30,7 @@ import {
   faArrowLeft,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
+import Toast from 'react-native-toast-message';
 
 import Axios from 'axios';
 
@@ -139,7 +140,7 @@ export default class SignupCmp extends Component {
     );
   }
   handleBackButtonClick = () => {
-    this.props.navigation.navigate('Matches');
+    this.props?.navigation?.navigate('Matches');
   };
 
   updateCountry = country => {
@@ -350,7 +351,7 @@ export default class SignupCmp extends Component {
         <SafeAreaView style={{flex: 1}}>
           <Header
             name={'Filter'}
-            // navigation={this.props.navigation}
+            navigation={this.props.navigation}
             backBtn={true}
           />
           {this.state.loader ? (
@@ -576,7 +577,16 @@ export default class SignupCmp extends Component {
                     <View style={{paddingHorizontal: 10}}>
                       <View style={[styles.vipUserInner1, styles.mb]}>
                         <View style={styles.vipImageView}>
-                          <TouchableOpacity style={{overflow: 'hidden'}}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              this.props?.navigation?.navigate('Profile1', {
+                                data: item,
+                                profilePic:
+                                  'http://dev2.thebetatest.com/' +
+                                  item.profile_pic,
+                              })
+                            }
+                            style={{overflow: 'hidden'}}>
                             <Image
                               source={{
                                 uri:
@@ -654,7 +664,10 @@ export default class SignupCmp extends Component {
                                 />
                                 {/* )} */}
                               </TouchableOpacity>
-                              <View
+                              <TouchableOpacity
+                                onPress={() =>
+                                  this.props?.navigation?.navigate('innerChat')
+                                }
                                 style={{
                                   padding: 7,
                                   backgroundColor: '#49c858',
@@ -665,7 +678,7 @@ export default class SignupCmp extends Component {
                                   color="#fff"
                                   size={20}
                                 />
-                              </View>
+                              </TouchableOpacity>
                             </View>
                           </View>
                         </View>

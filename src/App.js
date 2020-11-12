@@ -206,6 +206,240 @@ function ProfileStack() {
     </StackProfile.Navigator>
   );
 }
+function WishlistStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="Wishlist">
+      <StackProfile.Screen
+        name="Wishlist"
+        component={WishlistCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function InviteFriendsStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="Invite Friends">
+      <StackProfile.Screen
+        name="Invite Friends"
+        component={InviteFriendsCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function SubscribePlanStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="subscribePlan">
+      <StackProfile.Screen
+        name="subscribePlan"
+        component={SubscriptionPlansCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function FaqStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="faq">
+      <StackProfile.Screen
+        name="faq"
+        component={FaqCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function AboutStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="About">
+      <StackProfile.Screen
+        name="About"
+        component={AboutCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function WhyUsStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="WhyUsCmp">
+      <StackProfile.Screen
+        name="WhyUsCmp"
+        component={WhyUsCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function SuccessStoriesStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="SuccessStoriesCmp">
+      <StackProfile.Screen
+        name="SuccessStoriesCmp"
+        component={SuccessStoriesCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function YoutubeStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="YoutubeCmp">
+      <StackProfile.Screen
+        name="YoutubeCmp"
+        component={YoutubeCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
+function matchesSuggestionStack() {
+  return (
+    <StackProfile.Navigator initialRouteName="matchesSuggestionCmp">
+      <StackProfile.Screen
+        name="matchesSuggestionCmp"
+        component={matchesSuggestionCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="Filter"
+        component={FilterCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackProfile.Navigator>
+  );
+}
 
 const StackMatches = createStackNavigator();
 function MatchesStack() {
@@ -219,6 +453,16 @@ function MatchesStack() {
       <StackMatches.Screen
         name="Filter"
         component={FilterCmp}
+        options={navOptionHandler}
+      />
+        <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+       <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
         options={navOptionHandler}
       />
     </StackMatches.Navigator>
@@ -280,12 +524,25 @@ function TabNavigator() {
       />
       <Tab.Screen
         name="Matches"
-        component={MatchesStack}
+        component={matchesSuggestionStack}
         options={{
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('./assets/icons/menu/chat-filled-icon.png')}
               style={{width: 30, height: 25}}
+              // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={EditProfileCmp}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Image
+              source={require('./assets/icons/menu/profile-icon.png')}
+              style={{width: 20, height: 20}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -337,14 +594,14 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Filter"
         component={FilterCmp}
         options={{
           title: '',
           // drawerIcon: ({focused, size}) => (
           //   <Image
-          //     source={require('./assets/icons/menu/profile.png')}
+          //     sourc  e={require('./assets/icons/menu/profile.png')}
           //     style={[
           //       focused ? styles.drawerActive : styles.drawerInActive,
           //       {height: 19, width: 20},
@@ -352,10 +609,26 @@ function SideMenuNavigator() {
           //   />
           // ),
         }}
+      /> */}
+      <Drawer.Screen
+        name="EditProfile"
+        component={EditProfileCmp}
+        options={{
+          title: 'Profile',
+          drawerIcon: ({focused, size}) => (
+            <Image
+              source={require('./assets/icons/menu/profile.png')}
+              style={[
+                focused ? styles.drawerActive : styles.drawerInActive,
+                {height: 25, width: 25},
+              ]}
+            />
+          ),
+        }}
       />
       <Drawer.Screen
         name="Find Match"
-        component={MatchesCmp}
+        component={MatchesStack}
         options={{
           title: 'Find Matches',
           drawerIcon: ({focused, size}) => (
@@ -371,7 +644,7 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Wishlist"
-        component={WishlistCmp}
+        component={WishlistStack}
         options={{
           title: 'Wishlist',
           drawerIcon: ({focused, size}) => (
@@ -387,12 +660,12 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Interest"
-        component={FaqCmp}
+        component={WishlistStack}
         options={{
           title: 'Interest',
           drawerIcon: ({focused, size}) => (
             <Image
-              source={require('./assets/icons/menu/faqs-icon.png')}
+              source={require('./assets/icons/menu/interest-icon.png')}
               style={[
                 focused ? styles.drawerActive : styles.drawerInActive,
                 {height: 21, width: 20},
@@ -401,9 +674,9 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Invite Friends"
-        component={InviteFriendsCmp}
+        component={InviteFriendsStack}
         options={{
           title: 'Invite Friends',
           drawerIcon: ({focused, size}) => (
@@ -416,10 +689,10 @@ function SideMenuNavigator() {
             />
           ),
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="Subscribe Plan"
-        component={SubscriptionPlansCmp}
+        component={SubscribePlanStack}
         options={{
           title: 'Subscribe Plan',
           drawerIcon: ({focused, size}) => (
@@ -435,7 +708,7 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Faq"
-        component={FaqCmp}
+        component={FaqStack}
         options={{
           title: 'Faq',
           drawerIcon: ({focused, size}) => (
@@ -451,9 +724,9 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="About"
-        component={AboutCmp}
+        component={AboutStack}
         options={{
-          title: 'About',
+          title: 'Contact Us',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/contact-us.png')}
@@ -465,9 +738,9 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Why us"
-        component={WhyUsCmp}
+        component={WhyUsStack}
         options={{
           title: 'Why us',
           drawerIcon: ({focused, size}) => (
@@ -483,7 +756,7 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Success Stories"
-        component={SuccessStoriesCmp}
+        component={SuccessStoriesStack}
         options={{
           title: 'Success Stories',
           drawerIcon: ({focused, size}) => (
@@ -499,7 +772,7 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Youtube"
-        component={YoutubeCmp}
+        component={YoutubeStack}
         options={{
           title: 'Youtube',
           drawerIcon: ({focused, size}) => (
@@ -515,7 +788,7 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Matches Suggestion"
-        component={matchesSuggestionCmp}
+        component={matchesSuggestionStack}
         options={{
           title: 'Matches Suggestion',
           drawerIcon: ({focused, size}) => (
@@ -528,7 +801,7 @@ function SideMenuNavigator() {
             />
           ),
         }}
-      />
+      /> */}
       {/* <Drawer.Screen
         name="Logout"
         component={Logout}
@@ -545,14 +818,7 @@ function SideMenuNavigator() {
           ),
         }}
       /> */}
-      <Drawer.Screen
-        name="EditProfile"
-        component={EditProfileCmp}
-        options={{
-          title: '',
-          drawerIcon: ({focused, size}) => null,
-        }}
-      />
+    
       <Drawer.Screen
         name="Logout"
         component={AuthStack}

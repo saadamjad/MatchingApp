@@ -27,7 +27,7 @@ const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
             activeOpacity={0.5}
             onPress={() => {
               // EventRegister.emit('isLoggedIn', 'ChatScreen');
-              navigation.goBack();
+              navigation?.goBack();
             }}>
             <FontAwesomeIcon
               icon={faArrowLeft}
@@ -60,7 +60,12 @@ const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
           </TouchableOpacity>
         ) : null}
         {search == true ? (
+           <TouchableOpacity
+           onPress={() => {
+             navigation.navigate('Filter');
+           }}>
           <FontAwesomeIcon icon={faSearch} size={24} color="#fff" />
+          </TouchableOpacity>
         ) : null}
       </View>
     </View>

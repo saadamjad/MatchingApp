@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ImageBackground,
   Image,
+  TouchableOpacity,
   AsyncStorage,
   ActivityIndicator,
 } from 'react-native';
@@ -22,7 +23,6 @@ import {
 import {colors, images} from '../../constants/theme';
 import CountryPicker from 'react-native-country-picker-modal';
 import Swiper from 'react-native-swiper';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class HomeCmp extends PureComponent {
   constructor(props) {
@@ -83,165 +83,92 @@ export default class HomeCmp extends PureComponent {
                 ›
               </Text>
             }>
-            <View style={styles.vipUserInner}>
-              <View
-                style={{
-                  flex: 1,
-                  paddingRight: 0,
-                  borderRadius: 10,
-                  backgroundColor: '#f6f6f6',
-                  shadowColor: '#000',
-                  shadowOffset: {width: 0, height: 1},
-                  shadowOpacity: 0.22,
-                  shadowRadius: 2.22,
-                  elevation: 2,
-                }}>
-                <View style={styles.vipImageView}>
-                  <Image
-                    source={images.vipUserIcon}
-                    style={styles.vipImageDimension}
-                  />
-                </View>
-                <View style={[styles.vipContentView, styles.pt10]}>
-                  <View style={{flex: 1}}>
-                    <View style={styles.nameView}>
-                      <Text style={styles.vipName}>@elena45</Text>
-                      <FontAwesomeIcon icon={faFemale} color="red" size={18} />
-                    </View>
-
-                    <View style={{flexDirection: 'row'}}>
-                      <Image
-                        style={{marginRight: 5, width: 11, height: 16}}
-                        source={images.locationIcon}
-                      />
-                      <Text style={styles.vipLighTxt}>New York, USA </Text>
-                      {/* <Image style={{ marginLeft:5, width:30, height:16 }} source={images.flagIcon} /> */}
-                      <View
-                        style={{
-                          position: 'relative',
-                          bottom: 5,
-                          marginBottom: -10,
-                        }}>
-                        <CountryPicker
-                          withAlphaFilter={true}
-                          withCallingCode={true}
-                          withFilter={true}
-                          countryCode={this.state.cca2}
-                          onSelect={value => {
-                            this.setState({
-                              cca2: value.cca2,
-                              app,
-                            });
-                          }}
-                          cca2={this.state.cca2}
-                          translation="eng"
+            {[0, 1, 2].map(val => (
+              <View style={styles.vipUserInner}>
+                <View
+                  style={{
+                    flex: 1,
+                    paddingRight: 0,
+                    borderRadius: 10,
+                    backgroundColor: '#f6f6f6',
+                    shadowColor: '#000',
+                    shadowOffset: {width: 0, height: 1},
+                    shadowOpacity: 0.22,
+                    shadowRadius: 2.22,
+                    elevation: 2,
+                  }}>
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile1')} style={styles.vipImageView}>
+                    <Image
+                      source={images.vipUserIcon}
+                      style={styles.vipImageDimension}
+                    />
+                  </TouchableOpacity>
+                  <View style={[styles.vipContentView, styles.pt10]}>
+                    <View style={{flex: 1}}>
+                      <View style={styles.nameView}>
+                        <Text style={styles.vipName}>@elena45</Text>
+                        <FontAwesomeIcon
+                          icon={faFemale}
+                          color="red"
+                          size={18}
                         />
                       </View>
+
+                      <View style={{flexDirection: 'row'}}>
+                        <Image
+                          style={{marginRight: 5, width: 11, height: 16}}
+                          source={images.locationIcon}
+                        />
+                        <Text style={styles.vipLighTxt}>New York, USA </Text>
+                        {/* <Image style={{ marginLeft:5, width:30, height:16 }} source={images.flagIcon} /> */}
+                        <View
+                          style={{
+                            position: 'relative',
+                            bottom: 5,
+                            marginBottom: -10,
+                          }}>
+                          <CountryPicker
+                            withAlphaFilter={true}
+                            withCallingCode={true}
+                            withFilter={true}
+                            countryCode={this.state.cca2}
+                            onSelect={value => {
+                              this.setState({
+                                cca2: value.cca2,
+                                app,
+                              });
+                            }}
+                            cca2={this.state.cca2}
+                            translation="eng"
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.vipEduView}>
+                        <Text style={styles.vipDrakTxt}>Education: </Text>
+                        <Text style={styles.vipLighTxt}>Masters </Text>
+                      </View>
+                      <View style={styles.vipEduView}>
+                        <Text style={styles.vipDrakTxt}>Sect: </Text>
+                        <Text style={styles.vipLighTxt}>Shia </Text>
+                      </View>
                     </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Education: </Text>
-                      <Text style={styles.vipLighTxt}>Masters </Text>
-                    </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Sect: </Text>
-                      <Text style={styles.vipLighTxt}>Shia </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-end',
-                    }}>
-                    <View>
-                      <Text style={styles.vipAge}>28 yrs</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.vipLighTxt}>Single</Text>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                      }}>
+                      <View>
+                        <Text style={styles.vipAge}>28 yrs</Text>
+                      </View>
+                      <View>
+                        <Text style={styles.vipLighTxt}>Single</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.vipUserInner}>
-              <View
-                style={{
-                  flex: 1,
-                  paddingRight: 0,
-                  borderRadius: 10,
-                  backgroundColor: '#f6f6f6',
-                  shadowColor: '#000',
-                  shadowOffset: {width: 0, height: 1},
-                  shadowOpacity: 0.22,
-                  shadowRadius: 2.22,
-                  elevation: 2,
-                }}>
-                <View style={styles.vipImageView}>
-                  <Image
-                    source={images.vipUserIcon}
-                    style={styles.vipImageDimension}
-                  />
-                </View>
-                <View style={[styles.vipContentView, styles.pt10]}>
-                  <View style={{flex: 1}}>
-                    <View style={styles.nameView}>
-                      <Text style={styles.vipName}>@elena45</Text>
-                      <FontAwesomeIcon icon={faFemale} color="red" size={18} />
-                    </View>
-
-                    <View style={{flexDirection: 'row'}}>
-                      <Image
-                        style={{marginRight: 5, width: 11, height: 16}}
-                        source={images.locationIcon}
-                      />
-                      <Text style={styles.vipLighTxt}>New York, USA </Text>
-                      {/* <Image style={{ marginLeft:5, width:30, height:16 }} source={images.flagIcon} /> */}
-                      <View
-                        style={{
-                          position: 'relative',
-                          bottom: 5,
-                          marginBottom: -10,
-                        }}>
-                        <CountryPicker
-                          withAlphaFilter={true}
-                          withCallingCode={true}
-                          withFilter={true}
-                          countryCode={this.state.cca2}
-                          onSelect={value => {
-                            this.setState({
-                              cca2: value.cca2,
-                            });
-                          }}
-                          cca2={this.state.cca2}
-                          translation="eng"
-                        />
-                      </View>
-                    </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Education: </Text>
-                      <Text style={styles.vipLighTxt}>Masters </Text>
-                    </View>
-                    <View style={styles.vipEduView}>
-                      <Text style={styles.vipDrakTxt}>Sect: </Text>
-                      <Text style={styles.vipLighTxt}>Shia </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-end',
-                    }}>
-                    <View>
-                      <Text style={styles.vipAge}>28 yrs</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.vipLighTxt}>Single</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
+            ))}
           </Swiper>
         </View>
         <View

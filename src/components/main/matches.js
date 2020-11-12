@@ -265,7 +265,8 @@ export default class MatchesCmp extends Component {
                     <FontAwesomeIcon icon={faUserPlus} color="#fff" size={20} />
                   </View>
                   {/* { this.whatsApp() } */}
-                  <View
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('innerChat')}
                     style={{
                       padding: 7,
                       backgroundColor: '#49c858',
@@ -276,7 +277,7 @@ export default class MatchesCmp extends Component {
                       color="#fff"
                       size={20}
                     />
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -414,6 +415,7 @@ export default class MatchesCmp extends Component {
             keyExtractor={(item, index) => item.toString()}
             renderItem={({item, index, separators}) => (
               console.log('item', item),
+            
               (
                 <View
                   key={item.key}
@@ -424,7 +426,13 @@ export default class MatchesCmp extends Component {
                     <View style={{paddingHorizontal: 10}}>
                       <View style={[styles.vipUserInner1, styles.mb]}>
                         <View style={styles.vipImageView}>
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() =>
+                              this.props.navigation.navigate('Profile1', {
+                                data: item,
+                                profilePic:  'http://dev2.thebetatest.com/' + item.profile_pic,
+                              })
+                            }>
                             <Image
                               source={{
                                 uri:
@@ -500,7 +508,10 @@ export default class MatchesCmp extends Component {
                                 />
                                 {/* )} */}
                               </TouchableOpacity>
-                              <View
+                              <TouchableOpacity
+                                onPress={() =>
+                                  this.props.navigation.navigate('innerChat')
+                                }
                                 style={{
                                   padding: 7,
                                   backgroundColor: '#49c858',
@@ -511,7 +522,7 @@ export default class MatchesCmp extends Component {
                                   color="#fff"
                                   size={20}
                                 />
-                              </View>
+                              </TouchableOpacity>
                             </View>
                           </View>
                         </View>
