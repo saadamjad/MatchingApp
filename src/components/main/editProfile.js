@@ -8,7 +8,9 @@ import {
   SafeAreaView,
   TextInput,
   Picker,
+  AsyncStorage,
 } from 'react-native';
+import axios from 'axios';
 import {images} from '../../constants/theme';
 import {Header} from '../common';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -53,15 +55,15 @@ export default class ProfileCmp extends Component {
       heightDP: '',
       seeking: '',
       qualities: [
-        {id: 0, name: 'Adaptable', selected: 0},
-        {id: 1, name: 'Creative', selected: 0},
-        {id: 2, name: 'Adaptable1', selected: 0},
-        {id: 3, name: 'Adaptable', selected: 0},
-        {id: 4, name: 'Creative', selected: 0},
-        {id: 5, name: 'Adaptable1', selected: 0},
-        {id: 6, name: 'Adaptable', selected: 0},
-        {id: 7, name: 'Creative', selected: 0},
-        {id: 8, name: 'Adaptable1', selected: 0},
+        // {id: 0, name: 'Adaptable', selected: 0},
+        // {id: 1, name: 'Creative', selected: 0},
+        // {id: 2, name: 'Adaptable1', selected: 0},
+        // {id: 3, name: 'Adaptable', selected: 0},
+        // {id: 4, name: 'Creative', selected: 0},
+        // {id: 5, name: 'Adaptable1', selected: 0},
+        // {id: 6, name: 'Adaptable', selected: 0},
+        // {id: 7, name: 'Creative', selected: 0},
+        // {id: 8, name: 'Adaptable1', selected: 0},
       ],
       hobbies: [
         {id: 0, name: 'Adaptable', selected: 0},
@@ -223,24 +225,24 @@ export default class ProfileCmp extends Component {
           <View style={{marginTop: 10}}>
             <Text style={styles.txtHeading}>Qualities</Text>
           </View>
-          {this.state.qualities.map((val, i) =>
-            i % 3 == 0 ? (
-              <View style={{flexDirection: 'row', width: '100%'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i, 'qualities');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.qualities[i].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.qualities[i].name}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+          <View style={{flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
+            {this.state.qualities.map((val, i) => (
+              <TouchableOpacity
+                onPress={() => {
+                  this.updateArry(i, 'qualities');
+                }}
+                style={{width: '33%'}}>
+                <Text
+                  style={
+                    val.selected == i
+                      ? styles.tags
+                      : styles.tagsSelected
+                  }>
+                  {val.quality}
+                </Text>
+              </TouchableOpacity>
+            ))}
+                      {/* <TouchableOpacity
                   onPress={() => {
                     this.updateArry(i + 1, 'qualities');
                   }}
@@ -253,8 +255,8 @@ export default class ProfileCmp extends Component {
                     }>
                     {this.state.qualities[i + 1].name}
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+                </TouchableOpacity> */}
+                {/* <TouchableOpacity
                   onPress={() => {
                     this.updateArry(i + 2, 'qualities');
                   }}
@@ -267,10 +269,8 @@ export default class ProfileCmp extends Component {
                     }>
                     {this.state.qualities[i + 2].name}
                   </Text>
-                </TouchableOpacity>
-              </View>
-            ) : null,
-          )}
+                </TouchableOpacity> */}
+          </View>
           <View style={{marginTop: 10}}>
             <Text style={styles.txtHeading}>Hobbies:</Text>
           </View>
@@ -737,6 +737,51 @@ export default class ProfileCmp extends Component {
       );
     }
   }
+
+  componentWillMount() {
+    this._getData();
+  }
+
+  _getData = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    axios
+      .get('http://dev2.thebetatest.com/api/qualities', {
+        headers: {Authorization: access_token},
+      })
+      .then(async res => {
+        this.setState({showSpinner: false});
+        console.log('res', res.data);
+        if (res.data.status) {
+          // this.setState({step: 1});
+          let newQuality =
+            (await res.data?.qualities?.length) > 0 &&
+            res.data.qualities.map(val => {
+              return {...val, selected: 0};
+            });
+          console.log('BHAI JAN KIA HAL HY TUMHARA', newQuality);
+          this.setState({
+            qualities: newQuality,
+          });
+        } else
+          this.setState({
+            showAlert: true,
+            errorMsg: res.data.message,
+            errorTitle: 'Error!!',
+          });
+      })
+      .catch(error => {
+        this.setState({showSpinner: false});
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  };
 
   render() {
     return (
