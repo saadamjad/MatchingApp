@@ -42,6 +42,7 @@ export default class HomeCmp extends PureComponent {
       usersData: '',
       vipUserData: [],
       collection: [],
+      blockUserData: [],
       isLoading: false,
       errorMsg: 'a',
       errorTitle: '',
@@ -52,6 +53,7 @@ export default class HomeCmp extends PureComponent {
     this._UserStatistic();
     this.getData();
     this.getVipData();
+    this.getBlockData();
   }
 
   _UserStatistic = async () => {
@@ -161,6 +163,41 @@ export default class HomeCmp extends PureComponent {
       });
   }
 
+  async getBlockData() {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    // console.log('userdata', userData);
+    const loggedInUserID = userData.user.id;
+    const URL = `http://dev2.thebetatest.com/api/get-block-users/${loggedInUserID}`;
+    // console.log('loggedin', loggedInUserID);
+    const access_token = userData.access_token;
+    console.log(loggedInUserID);
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    axios
+      .get(URL, headers)
+      .then(async res => {
+        let responseArray = Object.keys(res?.data?.collection);
+        let mySendData = await responseArray.map(val => {
+          return {...res?.data?.collection[val]};
+        });
+        console.log("CHECKUP", mySendData)
+        this.setState({
+          blockUserData: mySendData,
+        });
+      })
+      .catch(error => {
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  }
   async getVipData() {
     const URL = 'http://dev2.thebetatest.com//api/all-vip';
     const user = await AsyncStorage.getItem('userData');
@@ -296,7 +333,8 @@ export default class HomeCmp extends PureComponent {
           </View>
           <View style={styles.statsCardsView}>
             <View style={styles.statsCardView}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Interest')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Interest')}>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>
@@ -336,7 +374,8 @@ export default class HomeCmp extends PureComponent {
               <ImageBackground
                 style={styles.statsImg}
                 source={images.statsDesignIcon}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Wishlist')}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Wishlist')}>
                   <View style={styles.statsCardTxt}>
                     <View style={{flex: 1}}>
                       <Text style={styles.statsHeading}>WishList count</Text>
@@ -370,7 +409,8 @@ export default class HomeCmp extends PureComponent {
               </ImageBackground>
             </View>
             <View style={styles.statsCardView}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Wishlist')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Wishlist')}>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>
@@ -434,122 +474,127 @@ export default class HomeCmp extends PureComponent {
             {this.state.vipUserData.length > 0 ? (
               this.state.vipUserData.map((el, index) => {
                 // console.log('el', el);
-                let profilePic =
-                  'http://dev2.thebetatest.com/' + el.profile_pic;
-                // console.log('profilepic', profilePic);
+                let isData = this.state.blockUserData.filter(
+                  val => val.block_to == el.id,
+                );
+                if (!isData.length > 0) {
+                  let profilePic =
+                    'http://dev2.thebetatest.com/' + el.profile_pic;
+                  // console.log('profilepic', profilePic);
 
-                return (
-                  <View style={styles.vipUserInner} key={index}>
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 10,
-                        paddingRight: 0,
-                        flexDirection: 'row',
-                        borderRadius: 10,
-                        backgroundColor: '#f6f6f6',
-                        shadowColor: '#000',
-                        shadowOffset: {width: 0, height: 1},
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 2,
-                      }}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.props.navigation.navigate('Profile1', {
-                            data: el,
-                            profilePic: profilePic,
-                          })
-                        }>
-                        <Image
-                          resizeMode="contain"
-                          source={{
-                            uri: profilePic,
-                          }}
-                          style={styles.vipImageDimension}
-                        />
-                      </TouchableOpacity>
-                      <View style={[styles.vipContentView, styles.pt10]}>
-                        <View style={styles.nameView}>
-                          <Text style={styles.vipName}>{el.FirstName}</Text>
-                          <FontAwesomeIcon
-                            icon={faFemale}
-                            color="red"
-                            size={18}
-                          />
-                        </View>
-                        <View>
-                          <Text style={styles.vipAge}>{el.Age} years</Text>
-                        </View>
-                        <View style={{flexDirection: 'row'}}>
-                          <Image
-                            style={{marginRight: 5, width: 11, height: 16}}
-                            source={images.locationIcon}
-                          />
-                          <Text style={styles.vipLighTxt}>
-                            {el.city}, {el.country}
-                          </Text>
+                  return (
+                    <View style={styles.vipUserInner} key={index}>
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 10,
+                          paddingRight: 0,
+                          flexDirection: 'row',
+                          borderRadius: 10,
+                          backgroundColor: '#f6f6f6',
+                          shadowColor: '#000',
+                          shadowOffset: {width: 0, height: 1},
+                          shadowOpacity: 0.22,
+                          shadowRadius: 2.22,
+                          elevation: 2,
+                        }}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate('Profile1', {
+                              data: el,
+                              profilePic: profilePic,
+                            })
+                          }>
                           <Image
                             resizeMode="contain"
                             source={{
-                              uri: el.flag,
+                              uri: profilePic,
                             }}
-                            style={{width: 20, height: 16}}
+                            style={styles.vipImageDimension}
                           />
-                          {/* <View
+                        </TouchableOpacity>
+                        <View style={[styles.vipContentView, styles.pt10]}>
+                          <View style={styles.nameView}>
+                            <Text style={styles.vipName}>{el.FirstName}</Text>
+                            <FontAwesomeIcon
+                              icon={faFemale}
+                              color="red"
+                              size={18}
+                            />
+                          </View>
+                          <View>
+                            <Text style={styles.vipAge}>{el.Age} years</Text>
+                          </View>
+                          <View style={{flexDirection: 'row'}}>
+                            <Image
+                              style={{marginRight: 5, width: 11, height: 16}}
+                              source={images.locationIcon}
+                            />
+                            <Text style={styles.vipLighTxt}>
+                              {el.city}, {el.country}
+                            </Text>
+                            <Image
+                              resizeMode="contain"
+                              source={{
+                                uri: el.flag,
+                              }}
+                              style={{width: 20, height: 16}}
+                            />
+                            {/* <View
                             style={{
                               position: 'relative',
                               bottom: 5,
                               marginBottom: -10,
                             }}>
                             <CountryPicker
-                              withAlphaFilter={true}
-                              withCallingCode={true}
-                              withFilter={true}
-                              countryCode={this.state.cca2}
-                              onSelect={value => {
+                            withAlphaFilter={true}
+                            withCallingCode={true}
+                            withFilter={true}
+                            countryCode={this.state.cca2}
+                            onSelect={value => {
                                 this.setState({
                                   cca2: value.cca2,
                                 });
                               }}
                               cca2={this.state.cca2}
                               translation="eng"
-                            />
+                              />
                           </View> */}
-                        </View>
-                        {el.education ? (
-                          <View style={styles.vipEduView}>
-                            <Text style={styles.vipDrakTxt}>Education: </Text>
-                            <Text style={styles.vipLighTxt}>
-                              {el.education}{' '}
-                            </Text>
                           </View>
-                        ) : null}
+                          {el.education ? (
+                            <View style={styles.vipEduView}>
+                              <Text style={styles.vipDrakTxt}>Education: </Text>
+                              <Text style={styles.vipLighTxt}>
+                                {el.education}{' '}
+                              </Text>
+                            </View>
+                          ) : null}
 
-                        {el.religious ? (
-                          <View style={styles.vipEduView}>
-                            <Text style={styles.vipDrakTxt}>Sect: </Text>
-                            <Text style={styles.vipLighTxt}>
-                              {el.religious}{' '}
-                            </Text>
+                          {el.religious ? (
+                            <View style={styles.vipEduView}>
+                              <Text style={styles.vipDrakTxt}>Sect: </Text>
+                              <Text style={styles.vipLighTxt}>
+                                {el.religious}{' '}
+                              </Text>
+                            </View>
+                          ) : null}
+
+                          <View
+                            style={{
+                              // borderWidth: 1,
+                              flex: 1,
+                              flexDirection: 'row',
+                              justifyContent: 'flex-end',
+                              alignItems: 'flex-end',
+                            }}>
+                            {this.addUser()}
+                            {this.whatsApp()}
                           </View>
-                        ) : null}
-
-                        <View
-                          style={{
-                            // borderWidth: 1,
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'flex-end',
-                            alignItems: 'flex-end',
-                          }}>
-                          {this.addUser()}
-                          {this.whatsApp()}
                         </View>
                       </View>
                     </View>
-                  </View>
-                );
+                  );
+                }
               })
             ) : (
               <ActivityIndicator size="large" color="red" />
@@ -558,7 +603,7 @@ export default class HomeCmp extends PureComponent {
         </View>
 
         {/* <YouTube
-          apiKey="app key here"
+                  apiKey="app key here"
           // playlistId="PL5nl7U11kP5pVOMByiMAfSUWfF-NDFtcJ"
           videoId="6zTWmkfPrlE"
           // videoIds={["6zTWmkfPrlE" , "uTTJ1QKLi48" , "33SNNv9tJaQ"]}
@@ -785,7 +830,14 @@ export default class HomeCmp extends PureComponent {
           ListHeaderComponent={this.renderFlatListHeader}
           ListFooterComponent={this.renderFlatListFooter}
           showsVerticalScrollIndicator={false}
-          data={this.state.collection}
+          data={this.state.collection.filter((el) => {
+            let isData = this.state.blockUserData.filter(
+              val => val.block_to == el.id,
+            );
+            if (!isData.length > 0) {
+              return {...el}
+            }
+          })}
           renderItem={this.renderFlatListData}
           keyExtractor={(item, index) => index.toString()}
           // onEndReached={this.onEndReached}

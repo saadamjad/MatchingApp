@@ -9,11 +9,14 @@ import {
   TextInput,
   Picker,
   AsyncStorage,
+  ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 import {images} from '../../constants/theme';
 import {Header} from '../common';
 import {ScrollView} from 'react-native-gesture-handler';
+import {min} from 'react-native-reanimated';
 export default class ProfileCmp extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +57,7 @@ export default class ProfileCmp extends Component {
       tounge: '',
       heightDP: '',
       seeking: '',
+      userDetail: {},
       qualities: [
         // {id: 0, name: 'Adaptable', selected: 0},
         // {id: 1, name: 'Creative', selected: 0},
@@ -66,18 +70,201 @@ export default class ProfileCmp extends Component {
         // {id: 8, name: 'Adaptable1', selected: 0},
       ],
       hobbies: [
-        {id: 0, name: 'Adaptable', selected: 0},
-        {id: 1, name: 'Creative', selected: 0},
-        {id: 2, name: 'Adaptable1', selected: 0},
-        {id: 3, name: 'Adaptable', selected: 0},
-        {id: 4, name: 'Creative', selected: 0},
-        {id: 5, name: 'Adaptable1', selected: 0},
-        {id: 6, name: 'Adaptable', selected: 0},
-        {id: 7, name: 'Creative', selected: 0},
-        {id: 8, name: 'Adaptable1', selected: 0},
+        {id: 0, name: 'Adaptable', selected: true},
+        {id: 1, name: 'Creative', selected: false},
+        {id: 2, name: 'Adaptable1', selected: false},
+        {id: 3, name: 'Adaptable', selected: false},
+        {id: 4, name: 'Creative', selected: false},
+        {id: 5, name: 'Adaptable1', selected: false},
+        {id: 6, name: 'Adaptable', selected: false},
+        {id: 7, name: 'Creative', selected: false},
+        {id: 8, name: 'Adaptable1', selected: false},
       ],
     };
   }
+
+  updatePersonalDetail = async () => {
+    const {
+      education,
+      income,
+      skin,
+      body,
+      employee,
+      pet,
+      disablity,
+      occpation,
+      drink,
+      religious,
+      eye,
+      height,
+      kid,
+      marital,
+    } = this.state;
+    if (
+      education !== '' ||
+      income !== '' ||
+      skin !== '' ||
+      body !== '' ||
+      disablity !== '' ||
+      pet !== '' ||
+      employee !== '' ||
+      marital !== '' ||
+      kid !== '' ||
+      height !== '' ||
+      eye !== '' ||
+      religious !== '' ||
+      drink !== '' ||
+      occpation !== ''
+    ) {
+      const user = await AsyncStorage.getItem('userData');
+      const userData = JSON.parse(user);
+      const access_token = userData.access_token;
+      const id = userData.user.id;
+      this.setState({showSpinner: true});
+      axios
+        .post(
+          `http://dev2.thebetatest.com/api/update/personal/details`,
+          {
+            id,
+            education,
+            income,
+            skin,
+            body,
+            employee,
+            pet,
+            disablity,
+            occpation,
+            drink,
+            religious,
+            eye,
+            height,
+            kid,
+            marital,
+          },
+          {
+            headers: {Authorization: access_token},
+          },
+        )
+        .then(async res => {
+          this.setState({showSpinner: false});
+          console.log('res', res.data);
+          if (res.data.status) {
+            alert('UPDATED');
+            console.log('DONE HoGYA BHAI KIA HY BE!!', res.data);
+          }
+        })
+        .catch(error => {
+          this.setState({showSpinner: false});
+          console.log('error', error);
+          this.setState({
+            showAlert: true,
+            errorMsg: 'Something went wrong. ' + error,
+            errorTitle: 'Error!!',
+          });
+        });
+    } else {
+      this.setState({showSpinner: false});
+      alert('There is some error occured');
+    }
+  };
+  updateDesiredPartner = async () => {
+    const {
+      seeking,
+      age,
+      heightDP,
+      bodyDP,
+      maritalDp,
+      children,
+      tounge,
+      drink,
+      nationality,
+      country,
+      religiousDP,
+      educationDP,
+      profession,
+      incomeDP,
+      tone,
+      eyeDP,
+      smoke,
+      Cooking,
+    } = this.state;
+    if (
+      seeking !== '' ||
+      age !== '' ||
+      heightDP !== '' ||
+      bodyDP !== '' ||
+      maritalDp !== '' ||
+      children !== '' ||
+      tounge !== '' ||
+      drink !== '' ||
+      nationality !== '' ||
+      country !== '' ||
+      religiousDP !== '' ||
+      educationDP !== '' ||
+      profession !== '' ||
+      incomeDP !== '' ||
+      tone !== '' ||
+      eyeDP !== '' ||
+      smoke !== '' ||
+      Cooking !== ''
+    ) {
+      const user = await AsyncStorage.getItem('userData');
+      const userData = JSON.parse(user);
+      const access_token = userData.access_token;
+      const id = userData.user.id;
+      this.setState({showSpinner: true});
+      axios
+        .post(
+          `http://dev2.thebetatest.com/api/update/partner/detail`,
+          {
+            id,
+            seeking_a: seeking,
+            age_from: age,
+            age_to: age,
+            height_from: heightDP,
+            height_to: heightDP,
+            marital_status: maritalDp,
+            mother_tounge: tounge,
+            children: children,
+            nationality: nationality,
+            country_live_in: country,
+            religious: religiousDP,
+            min_education: educationDP,
+            profession: profession,
+            annual_income: incomeDP,
+            body_type: bodyDP,
+            skin_tone: tone,
+            eye_color: eyeDP,
+            smoke: smoke,
+            drink: drink,
+            cooking: Cooking,
+          },
+          {
+            headers: {Authorization: access_token},
+          },
+        )
+        .then(async res => {
+          this.setState({showSpinner: false});
+          console.log('res', res.data);
+          if (res.data.status) {
+            alert('UPDATED');
+            console.log('DONE HoGYA BHAI KIA HY BE!!', res.data);
+          }
+        })
+        .catch(error => {
+          this.setState({showSpinner: false});
+          console.log('error', error);
+          this.setState({
+            showAlert: true,
+            errorMsg: 'Something went wrong. ' + error,
+            errorTitle: 'Error!!',
+          });
+        });
+    } else {
+      this.setState({showSpinner: false});
+      alert('There is some error occured');
+    }
+  };
 
   header() {
     return (
@@ -156,19 +343,11 @@ export default class ProfileCmp extends Component {
       var updatedArry = [];
       for (var i = 0; i < states.length; i++) {
         if (i == ind) {
-          if (states[i].selected == 1) {
-            updatedArry.push({
-              id: states[i].id,
-              name: states[i].name,
-              selected: 0,
-            });
-          } else {
-            updatedArry.push({
-              id: states[i].id,
-              name: states[i].name,
-              selected: 1,
-            });
-          }
+          console.log('LO BHAI', !states[i].selected);
+          updatedArry.push({
+            ...states[i],
+            selected: !states[i].selected,
+          });
         } else {
           updatedArry.push(states[i]);
         }
@@ -183,19 +362,10 @@ export default class ProfileCmp extends Component {
       var updatedArry = [];
       for (var i = 0; i < states.length; i++) {
         if (i == ind) {
-          if (states[i].selected == 1) {
-            updatedArry.push({
-              id: states[i].id,
-              name: states[i].name,
-              selected: 0,
-            });
-          } else {
-            updatedArry.push({
-              id: states[i].id,
-              name: states[i].name,
-              selected: 1,
-            });
-          }
+          updatedArry.push({
+            ...states[i],
+            selected: !states[i].selected,
+          });
         } else {
           updatedArry.push(states[i]);
         }
@@ -211,7 +381,7 @@ export default class ProfileCmp extends Component {
   bio() {
     if (this.state.step == 0) {
       return (
-        <View style={styles.getStarted}>
+        <ScrollView style={styles.getStarted}>
           <View>
             <TextInput
               placeholder="Enter Bio"
@@ -232,17 +402,12 @@ export default class ProfileCmp extends Component {
                   this.updateArry(i, 'qualities');
                 }}
                 style={{width: '33%'}}>
-                <Text
-                  style={
-                    val.selected == i
-                      ? styles.tags
-                      : styles.tagsSelected
-                  }>
+                <Text style={!val.selected ? styles.tags : styles.tagsSelected}>
                   {val.quality}
                 </Text>
               </TouchableOpacity>
             ))}
-                      {/* <TouchableOpacity
+            {/* <TouchableOpacity
                   onPress={() => {
                     this.updateArry(i + 1, 'qualities');
                   }}
@@ -256,7 +421,7 @@ export default class ProfileCmp extends Component {
                     {this.state.qualities[i + 1].name}
                   </Text>
                 </TouchableOpacity> */}
-                {/* <TouchableOpacity
+            {/* <TouchableOpacity
                   onPress={() => {
                     this.updateArry(i + 2, 'qualities');
                   }}
@@ -275,63 +440,29 @@ export default class ProfileCmp extends Component {
             <Text style={styles.txtHeading}>Hobbies:</Text>
           </View>
 
-          {this.state.hobbies.map((val, i) =>
-            i % 3 == 0 ? (
-              <View style={{flexDirection: 'row', width: '100%'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i, 'hobbies');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.hobbies[i].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.hobbies[i].name}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i + 1, 'hobbies');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.hobbies[i + 1].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.hobbies[i + 1].name}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i + 2, 'hobbies');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.hobbies[i + 2].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.hobbies[i + 2].name}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ) : null,
-          )}
-
-          <TouchableOpacity
-            style={styles.signUpBtn}
-            onPress={() => {
-              this.setState({step: 1});
-            }}>
-            <Text style={styles.signUpBtnTxt}>Save Changes</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap'}}>
+            {this.state.hobbies.map((val, i) => (
+              <TouchableOpacity
+                onPress={() => {
+                  this.updateArry(i, 'hobbies');
+                }}
+                style={{width: '33%'}}>
+                <Text style={!val.selected ? styles.tags : styles.tagsSelected}>
+                  {val.hobby}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={{height: 120, justifyContent: 'center'}}>
+            <TouchableOpacity
+              style={styles.signUpBtn}
+              onPress={() => {
+                this.setState({step: 1});
+              }}>
+              <Text style={styles.signUpBtnTxt}>Save Changes</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       );
     }
   }
@@ -361,7 +492,7 @@ export default class ProfileCmp extends Component {
                   this.setState({income: val});
                 }}>
                 <Picker.Item label="Annual Income" value="Annual Income" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="12000" value="12000" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -373,7 +504,8 @@ export default class ProfileCmp extends Component {
                   this.setState({skin: val});
                 }}>
                 <Picker.Item label="Skin Tone" value="Skin Tone" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="white" value="white" />
+                <Picker.Item label="black" value="black" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -385,7 +517,8 @@ export default class ProfileCmp extends Component {
                   this.setState({body: val});
                 }}>
                 <Picker.Item label="Body Type" value="Body Type" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Fat" value="Fat" />
+                <Picker.Item label="Thick" value="Thick" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -397,7 +530,7 @@ export default class ProfileCmp extends Component {
                   this.setState({disablity: val});
                 }}>
                 <Picker.Item label="Disablity" value="Disablity" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="London" value="Jaffry" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -409,7 +542,8 @@ export default class ProfileCmp extends Component {
                   this.setState({pet: val});
                 }}>
                 <Picker.Item label="Pets" value="Pets" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="cat" value="cat" />
+                <Picker.Item label="dog" value="dog" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -421,7 +555,8 @@ export default class ProfileCmp extends Component {
                   this.setState({employee: val});
                 }}>
                 <Picker.Item label="Employee Status" value="Employee Status" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Onlive" value="Onlive" />
+                <Picker.Item label="Offline" value="Offline" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -433,7 +568,8 @@ export default class ProfileCmp extends Component {
                   this.setState({marital: val});
                 }}>
                 <Picker.Item label="Marital Status" value="Marital Status" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Laal" value="Laal" />
+                <Picker.Item label="Qalandar" value="Qalandar" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -444,7 +580,8 @@ export default class ProfileCmp extends Component {
                   this.setState({kid: val});
                 }}>
                 <Picker.Item label="Kids" value="Kids" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="1" value="1" />
+                <Picker.Item label="2" value="2" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -455,7 +592,8 @@ export default class ProfileCmp extends Component {
                   this.setState({height: val});
                 }}>
                 <Picker.Item label="Height" value="Height" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="5" value="0" />
+                <Picker.Item label="5" value="5" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -466,7 +604,8 @@ export default class ProfileCmp extends Component {
                   this.setState({eye: val});
                 }}>
                 <Picker.Item label="Eye Colour" value="Eye Colour" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Brown" value="Brown" />
+                <Picker.Item label="Black" value="Black" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -477,7 +616,8 @@ export default class ProfileCmp extends Component {
                   this.setState({religious: val});
                 }}>
                 <Picker.Item label="Religious" value="Religious" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Islam" value="Islam" />
+                <Picker.Item label="Hindi" value="Hindi" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -488,7 +628,8 @@ export default class ProfileCmp extends Component {
                   this.setState({drink: val});
                 }}>
                 <Picker.Item label="Drink" value="Drink" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Cold" value="Cold" />
+                <Picker.Item label="Hot" value="Hot" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -499,13 +640,15 @@ export default class ProfileCmp extends Component {
                   this.setState({occpation: val});
                 }}>
                 <Picker.Item label="Occupation" value="Occupation" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="YAR" value="YAR" />
+                <Picker.Item label="Lalukhait" value="Lalukhait" />
               </Picker>
             </View>
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
                 this.setState({step: 1});
+                this.updatePersonalDetail();
               }}>
               <Text style={styles.signUpBtnTxt}>Save Changes</Text>
             </TouchableOpacity>
@@ -528,7 +671,8 @@ export default class ProfileCmp extends Component {
                   this.setState({seeking: val});
                 }}>
                 <Picker.Item label="I am Seeking" value="I am Seeking" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Female" value="Female" />
+                <Picker.Item label="Male" value="Male" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -540,7 +684,8 @@ export default class ProfileCmp extends Component {
                   this.setState({heightDP: val});
                 }}>
                 <Picker.Item label="Height" value="Height" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="46" value="46" />
+                <Picker.Item label="59" value="59" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -552,7 +697,7 @@ export default class ProfileCmp extends Component {
                   this.setState({tounge: val});
                 }}>
                 <Picker.Item label="Mother Tongue" value="Mother Tongue" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Dont Care" value="Dont Care" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -576,7 +721,7 @@ export default class ProfileCmp extends Component {
                   this.setState({religiousDP: val});
                 }}>
                 <Picker.Item label="Religious" value="Religious" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Islam" value="Islam" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -588,7 +733,7 @@ export default class ProfileCmp extends Component {
                   this.setState({profession: val});
                 }}>
                 <Picker.Item label="Profession" value="Profession" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Retired" value="Retired" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -600,7 +745,7 @@ export default class ProfileCmp extends Component {
                   this.setState({bodyDP: val});
                 }}>
                 <Picker.Item label="Body Type" value="Body Type" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Slim" value="Slim" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -612,7 +757,7 @@ export default class ProfileCmp extends Component {
                   this.setState({eyeDP: val});
                 }}>
                 <Picker.Item label="Eye Colour" value="Eye Colour" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="black" value="black" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -623,7 +768,7 @@ export default class ProfileCmp extends Component {
                   this.setState({drink: val});
                 }}>
                 <Picker.Item label="Drink" value="Drink" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Do Drink" value="Do Drink" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -634,7 +779,8 @@ export default class ProfileCmp extends Component {
                   this.setState({age: val});
                 }}>
                 <Picker.Item label="Age" value="Age" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="25" value="25" />
+                <Picker.Item label="21" value="21" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -645,7 +791,7 @@ export default class ProfileCmp extends Component {
                   this.setState({maritalDp: val});
                 }}>
                 <Picker.Item label="Marital status" value="Marital status" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Single" value="Single" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -656,7 +802,7 @@ export default class ProfileCmp extends Component {
                   this.setState({children: val});
                 }}>
                 <Picker.Item label="Children" value="Children" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="2" value="2" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -678,7 +824,7 @@ export default class ProfileCmp extends Component {
                   this.setState({educationDP: val});
                 }}>
                 <Picker.Item label="Min Education" value="Min Education" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Phd or Docorate" value="Phd or Docorate" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -700,7 +846,7 @@ export default class ProfileCmp extends Component {
                   this.setState({tone: val});
                 }}>
                 <Picker.Item label="Skin Tone" value="Skin Tone" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Fair" value="Fair" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -711,7 +857,7 @@ export default class ProfileCmp extends Component {
                   this.setState({smoke: val});
                 }}>
                 <Picker.Item label="Smoke" value="Smoke" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Dont Smoke" value="Dont Smoke" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -722,15 +868,19 @@ export default class ProfileCmp extends Component {
                   this.setState({cooking: val});
                 }}>
                 <Picker.Item label="Cooking" value="Cooking" />
-                <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="Yes" value="Yes" />
+                <Picker.Item label="No" value="No" />
               </Picker>
             </View>
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
+                this.updateDesiredPartner();
                 this.setState({step: 1});
               }}>
-              <Text style={styles.signUpBtnTxt}>Save Changes</Text>
+             {this.state.showSpinner ?
+             <ActivityIndicator color="white" size="large" />
+             : <Text style={styles.signUpBtnTxt}>Save Changes</Text>}
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -740,8 +890,153 @@ export default class ProfileCmp extends Component {
 
   componentWillMount() {
     this._getData();
+    this._getHobbiesData();
+    this.setState({
+      loader: true,
+    });
+    setTimeout(() => {
+      this._GetUserDetail();
+      this.setState({
+        loader: false,
+      });
+    }, 2000);
   }
 
+  _GetUserDetail = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    axios
+      .get(`http://dev2.thebetatest.com/api/singleuser/${loggedInUserID}`, {
+        headers: {Authorization: access_token},
+      })
+      .then(async res => {
+        this.setState({showSpinner: false});
+        console.log('res', res.data);
+        if (res.data.status) {
+          // this.setState({step: 1});
+          let newQuality = res.data?.user;
+          const checkOut = async (name, secName) => {
+            let setup = [];
+            if (newQuality[name]) {
+              let checkThisBoy = newQuality[name].split(' ');
+              await this.state[name].map(async (val, i) => {
+                checkThisBoy.map(async value => {
+                  console.log('YAR MERE BHAI JAN ', val[secName].split(' ')[0]);
+                  if (val[secName].split(' ')[0] == value) {
+                    if (setup.length > 0) {
+                      let found = false;
+                      setup.map(item => {
+                        if (item.id == val.id) {
+                          found = true;
+                        }
+                      });
+                      if (found) {
+                        setup[i] = {
+                          ...val,
+                          selected: true,
+                        };
+                      } else {
+                        setup.push({
+                          ...val,
+                          selected: true,
+                        });
+                      }
+                    } else {
+                      setup.push({
+                        ...val,
+                        selected: true,
+                      });
+                    }
+                  } else {
+                    let is = false;
+                    if (setup.length > 0) {
+                      setup.map(item => {
+                        if (item.id == val.id) {
+                          is = true;
+                        }
+                      });
+                      if (!is) {
+                        setup.push(val);
+                      }
+                    }
+                  }
+                });
+              });
+            }
+
+            this.setState({
+              [name]: setup,
+            });
+          };
+          console.log('BHAI JAN KIA HAL HY TUMHARA', newQuality);
+          this.setState(
+            {
+              userDetail: newQuality,
+            },
+            () => {
+              checkOut('qualities', 'quality');
+              checkOut('hobbies', 'hobby');
+            },
+          );
+        } else
+          this.setState({
+            showAlert: true,
+            errorMsg: res.data.message,
+            errorTitle: 'Error!!',
+          });
+      })
+      .catch(error => {
+        this.setState({showSpinner: false});
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  };
+  _getHobbiesData = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    axios
+      .get('http://dev2.thebetatest.com/api/hobbies', {
+        headers: {Authorization: access_token},
+      })
+      .then(async res => {
+        this.setState({showSpinner: false});
+        console.log('res', res.data);
+        if (res.data.status) {
+          // this.setState({step: 1});
+          let newQuality =
+            (await res.data?.hobbies?.length) > 0 &&
+            res.data.hobbies.map((val, i) => {
+              return {...val, selected: false};
+            });
+          console.log('BHAI JAN KIA HAL HY TUMHARA', newQuality);
+          this.setState({
+            hobbies: newQuality,
+          });
+        } else
+          this.setState({
+            showAlert: true,
+            errorMsg: res.data.message,
+            errorTitle: 'Error!!',
+          });
+      })
+      .catch(error => {
+        this.setState({showSpinner: false});
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  };
   _getData = async () => {
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
@@ -758,10 +1053,9 @@ export default class ProfileCmp extends Component {
           // this.setState({step: 1});
           let newQuality =
             (await res.data?.qualities?.length) > 0 &&
-            res.data.qualities.map(val => {
-              return {...val, selected: 0};
+            res.data.qualities.map((val, i) => {
+              return {...val, selected: false};
             });
-          console.log('BHAI JAN KIA HAL HY TUMHARA', newQuality);
           this.setState({
             qualities: newQuality,
           });
