@@ -221,7 +221,7 @@ export default class MatchesCmp extends Component {
             </View>
             <View style={[styles.vipContentView, styles.pt10]}>
               <View style={styles.nameView}>
-                <Text style={styles.vipName}>{item.item.UserName}</Text>
+                <Text style={styles.vipName}>{item.item.FirstName}</Text>
                 {item.item.Gender == 'off' ? (
                   <FontAwesomeIcon icon={faFemale} color="red" size={18} />
                 ) : (
@@ -415,7 +415,6 @@ export default class MatchesCmp extends Component {
             keyExtractor={(item, index) => item.toString()}
             renderItem={({item, index, separators}) => (
               console.log('item', item),
-            
               (
                 <View
                   key={item.key}
@@ -430,7 +429,9 @@ export default class MatchesCmp extends Component {
                             onPress={() =>
                               this.props.navigation.navigate('Profile1', {
                                 data: item,
-                                profilePic:  'http://dev2.thebetatest.com/' + item.profile_pic,
+                                profilePic:
+                                  'http://dev2.thebetatest.com/' +
+                                  item.profile_pic,
                               })
                             }>
                             <Image
@@ -446,7 +447,7 @@ export default class MatchesCmp extends Component {
                         </View>
                         <View style={[styles.vipContentView, styles.pt10]}>
                           <View style={styles.nameView}>
-                            <Text style={styles.vipName}>{item.UserName}</Text>
+                            <Text style={styles.vipName}>{item.FirstName}</Text>
                             {item.Gender == 'off' ? (
                               <FontAwesomeIcon
                                 icon={faFemale}
@@ -560,7 +561,7 @@ export default class MatchesCmp extends Component {
       return (
         <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
           {/* <Text> hello</Text> */}
-          <Filter />
+          <Filter {...this.props} />
         </SafeAreaView>
       );
     }

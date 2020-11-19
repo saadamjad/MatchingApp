@@ -504,10 +504,10 @@ function TabNavigator() {
         name="Home"
         component={HomeStack}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({color, size, tintColor}) => (
             <Image
               source={require('./assets/icons/menu/home-icon.png')}
-              style={{width: 30, height: 25}}
+              style={{width: 30, height: 25, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -520,7 +520,7 @@ function TabNavigator() {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('./assets/icons/menu/find-match-icon.png')}
-              style={{width: 30, height: 25}}
+              style={{width: 30, height: 25, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -533,7 +533,7 @@ function TabNavigator() {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('./assets/icons/menu/chat.png')}
-              style={{width: 30, height: 25}}
+              style={{width: 30, height: 25, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -545,8 +545,8 @@ function TabNavigator() {
         options={{
           tabBarIcon: ({color, size}) => (
             <Image
-              source={require('./assets/icons/menu/chat-filled-icon.png')}
-              style={{width: 30, height: 25}}
+              source={require('./assets/icons/menu/matches-icon.png')}
+              style={{width: 35, height: 25, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -559,7 +559,7 @@ function TabNavigator() {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('./assets/icons/menu/profile-icon.png')}
-              style={{width: 20, height: 20}}
+              style={{width: 20, height: 20, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),
@@ -572,7 +572,7 @@ function TabNavigator() {
           tabBarIcon: ({color, size}) => (
             <Image
               source={require('./assets/icons/menu/profile-icon.png')}
-              style={{width: 30, height: 25}}
+              style={{width: 30, height: 25, tintColor: color}}
               // style={[focused ? styles.drawerActive : styles.drawerInActive, { height: 25, width: 20 }]}
             />
           ),

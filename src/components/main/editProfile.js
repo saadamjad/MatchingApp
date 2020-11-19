@@ -58,6 +58,10 @@ export default class ProfileCmp extends Component {
       heightDP: '',
       seeking: '',
       userDetail: {},
+      isEdit: false,
+      isEdit1: false,
+      isEdit2: false,
+      text: '',
       qualities: [
         // {id: 0, name: 'Adaptable', selected: 0},
         // {id: 1, name: 'Creative', selected: 0},
@@ -83,6 +87,66 @@ export default class ProfileCmp extends Component {
     };
   }
 
+  updateBio = async () => {
+    console.log('CLICK HY BE!!');
+    const {text, qualities, hobbies} = this.state;
+    if (text == '' || qualities == '' || hobbies == '') {
+      this.setState({showSpinner: false});
+      alert('Please fill bio');
+    } else {
+      const user = await AsyncStorage.getItem('userData');
+      const userData = JSON.parse(user);
+      const access_token = userData.access_token;
+      const id = userData.user.id;
+      let qualitiesToSend = '';
+      let hobbiesToSend = '';
+      qualities.map(val => {
+        if (val.selected) {
+          qualitiesToSend =
+            qualitiesToSend.length > 0
+              ? qualitiesToSend + ' ' + val.quality
+              : '';
+        }
+      });
+      hobbies.map(val => {
+        if (val.selected) {
+          hobbiesToSend =
+            hobbiesToSend.length > 0 ? hobbiesToSend + ' ' + val.hobby : '';
+        }
+      });
+      this.setState({showSpinner: true});
+      axios
+        .post(
+          `http://dev2.thebetatest.com/api/update/personal/details`,
+          {
+            id,
+            your_self: text,
+            qualities: qualitiesToSend,
+            hobbies: hobbiesToSend,
+          },
+          {
+            headers: {Authorization: access_token},
+          },
+        )
+        .then(async res => {
+          this.setState({showSpinner: false});
+          console.log('res BIO BOY', res.data);
+          if (res.data.status) {
+            alert('UPDATED');
+            console.log('DONE HoGYA BHAI KIA HY BE!!', res.data);
+          }
+        })
+        .catch(error => {
+          this.setState({showSpinner: false});
+          console.log('error', error);
+          this.setState({
+            showAlert: true,
+            errorMsg: 'Something went wrong. ' + error,
+            errorTitle: 'Error!!',
+          });
+        });
+    }
+  };
   updatePersonalDetail = async () => {
     const {
       education,
@@ -164,7 +228,7 @@ export default class ProfileCmp extends Component {
         });
     } else {
       this.setState({showSpinner: false});
-      alert('There is some error occured');
+      alert('Kindly Select some details');
     }
   };
   updateDesiredPartner = async () => {
@@ -384,10 +448,12 @@ export default class ProfileCmp extends Component {
         <ScrollView style={styles.getStarted}>
           <View>
             <TextInput
+              disabled={!this.state.isEdit}
               placeholder="Enter Bio"
               placeholderTextColor="#ccc"
               keyboardType="email-address"
               style={styles.inputFld}
+              onChangeText={text => this.setState({text})}
               numberOfLines={8}
               multiline={true}
             />
@@ -398,6 +464,7 @@ export default class ProfileCmp extends Component {
           <View style={{flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
             {this.state.qualities.map((val, i) => (
               <TouchableOpacity
+                disabled={!this.state.isEdit}
                 onPress={() => {
                   this.updateArry(i, 'qualities');
                 }}
@@ -443,6 +510,7 @@ export default class ProfileCmp extends Component {
           <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap'}}>
             {this.state.hobbies.map((val, i) => (
               <TouchableOpacity
+                disabled={!this.state.isEdit}
                 onPress={() => {
                   this.updateArry(i, 'hobbies');
                 }}
@@ -457,9 +525,16 @@ export default class ProfileCmp extends Component {
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
-                this.setState({step: 1});
+                if (this.state.isEdit) {
+                  this.updateBio();
+                  this.setState({isEdit: !this.state.isEdit});
+                } else {
+                  this.setState({isEdit: !this.state.isEdit});
+                }
               }}>
-              <Text style={styles.signUpBtnTxt}>Save Changes</Text>
+              <Text style={styles.signUpBtnTxt}>
+                {this.state.isEdit ? 'Save Changes' : 'Edit Bio'}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -475,6 +550,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.education}
                 onValueChange={val => {
                   this.setState({education: val});
@@ -487,6 +563,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.income}
                 onValueChange={val => {
                   this.setState({income: val});
@@ -499,6 +576,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.skin}
                 onValueChange={val => {
                   this.setState({skin: val});
@@ -512,6 +590,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.body}
                 onValueChange={val => {
                   this.setState({body: val});
@@ -525,6 +604,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.disablity}
                 onValueChange={val => {
                   this.setState({disablity: val});
@@ -537,6 +617,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.pet}
                 onValueChange={val => {
                   this.setState({pet: val});
@@ -550,6 +631,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.employee}
                 onValueChange={val => {
                   this.setState({employee: val});
@@ -563,6 +645,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.marital}
                 onValueChange={val => {
                   this.setState({marital: val});
@@ -575,6 +658,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.kid}
                 onValueChange={val => {
                   this.setState({kid: val});
@@ -587,6 +671,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.height}
                 onValueChange={val => {
                   this.setState({height: val});
@@ -599,6 +684,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.eye}
                 onValueChange={val => {
                   this.setState({eye: val});
@@ -611,6 +697,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.religious}
                 onValueChange={val => {
                   this.setState({religious: val});
@@ -623,6 +710,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.drink}
                 onValueChange={val => {
                   this.setState({drink: val});
@@ -635,6 +723,7 @@ export default class ProfileCmp extends Component {
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
                 style={{height: 50, width: 280}}
+                enabled={this.state.isEdit1}
                 selectedValue={this.state.occpation}
                 onValueChange={val => {
                   this.setState({occpation: val});
@@ -647,10 +736,16 @@ export default class ProfileCmp extends Component {
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
-                this.setState({step: 1});
-                this.updatePersonalDetail();
+                if (this.state.isEdit1) {
+                  this.updatePersonalDetail();
+                  this.setState({step: 1, isEdit1: !this.state.isEdit1});
+                }
+                this.setState({isEdit1: !this.state.isEdit1});
               }}>
-              <Text style={styles.signUpBtnTxt}>Save Changes</Text>
+              <Text style={styles.signUpBtnTxt}>
+                {' '}
+                {this.state.isEdit1 ? 'Save Changes' : 'Edit Personal Detail'}
+              </Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -665,6 +760,7 @@ export default class ProfileCmp extends Component {
           <ScrollView>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.seeking}
                 onValueChange={val => {
@@ -678,6 +774,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.heightDP}
                 onValueChange={val => {
@@ -691,6 +788,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.tounge}
                 onValueChange={val => {
@@ -703,6 +801,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.nationality}
                 onValueChange={val => {
@@ -715,6 +814,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.religiousDP}
                 onValueChange={val => {
@@ -727,6 +827,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.profession}
                 onValueChange={val => {
@@ -739,6 +840,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.bodyDP}
                 onValueChange={val => {
@@ -751,6 +853,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.eyeDP}
                 onValueChange={val => {
@@ -762,6 +865,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.drink}
                 onValueChange={val => {
@@ -773,6 +877,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.age}
                 onValueChange={val => {
@@ -785,6 +890,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.maritalDp}
                 onValueChange={val => {
@@ -796,6 +902,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.children}
                 onValueChange={val => {
@@ -807,6 +914,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.country}
                 onValueChange={val => {
@@ -818,6 +926,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.educationDP}
                 onValueChange={val => {
@@ -829,6 +938,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.incomeDP}
                 onValueChange={val => {
@@ -840,6 +950,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.tone}
                 onValueChange={val => {
@@ -851,6 +962,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.smoke}
                 onValueChange={val => {
@@ -862,6 +974,7 @@ export default class ProfileCmp extends Component {
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
               <Picker
+                enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.cooking}
                 onValueChange={val => {
@@ -875,12 +988,19 @@ export default class ProfileCmp extends Component {
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
-                this.updateDesiredPartner();
-                this.setState({step: 1});
+                if (this.state.isEdit2) {
+                  this.updateDesiredPartner();
+                  this.setState({step: 1, isEdit2: !this.state.isEdit2});
+                }
+                this.setState({isEdit2: !this.state.isEdit2});
               }}>
-             {this.state.showSpinner ?
-             <ActivityIndicator color="white" size="large" />
-             : <Text style={styles.signUpBtnTxt}>Save Changes</Text>}
+              {this.state.showSpinner ? (
+                <ActivityIndicator color="white" size="large" />
+              ) : (
+                <Text style={styles.signUpBtnTxt}>
+                  {this.state.isEdit2 ? 'Save Changes' : 'Edit Partner Detail'}
+                </Text>
+              )}
             </TouchableOpacity>
           </ScrollView>
         </View>

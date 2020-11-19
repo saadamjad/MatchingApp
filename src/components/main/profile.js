@@ -48,6 +48,7 @@ export default class ProfileCmp extends Component {
       showSpinner: false,
       showAlert: false,
       isConfirmation: false,
+
       errorMsg: '',
       errorTitle: '',
       isFriend: false,
@@ -137,8 +138,8 @@ export default class ProfileCmp extends Component {
       response => {
         console.log(response.data);
         this.setState({
-          isFriend: response.data.collection.interest,
-          isWishlist: response.data.collection.favourite,
+          isFriend: response?.data?.collection?.interest,
+          isWishlist: response?.data?.collection?.favourite,
         });
       },
       error => {

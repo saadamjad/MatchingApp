@@ -190,7 +190,7 @@ export default class HomeCmp extends PureComponent {
         });
       })
       .catch(error => {
-        console.log('error', error);
+        console.log('error meri taraf se', error);
         this.setState({
           showAlert: true,
           errorMsg: 'Something went wrong. ' + error,
@@ -199,12 +199,11 @@ export default class HomeCmp extends PureComponent {
       });
   }
   async getVipData() {
-    const URL = 'http://dev2.thebetatest.com//api/all-vip';
+    const URL = 'https://dev2.thebetatest.com/api/all-vip';
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
     // console.log('userdata', userData);
     const loggedInUserID = userData.user.id;
-    // console.log('loggedin', loggedInUserID);
     const access_token = userData.access_token;
     console.log(loggedInUserID);
     let headers = {
@@ -215,6 +214,7 @@ export default class HomeCmp extends PureComponent {
     axios
       .get(URL, headers)
       .then(async res => {
+        console.log('lo check karo', res);
         let responseArray = res.data.collection.data;
         let mySendData = await responseArray.filter(
           val => Number(val.id) !== Number(loggedInUserID),
@@ -225,7 +225,8 @@ export default class HomeCmp extends PureComponent {
         });
       })
       .catch(error => {
-        console.log('error', error);
+        console.log('error meri taraf se', error);
+        this.props.navigation.navigate('Auth');
         this.setState({
           showAlert: true,
           errorMsg: 'Something went wrong. ' + error,
@@ -747,7 +748,7 @@ export default class HomeCmp extends PureComponent {
             </View>
             <View style={[styles.vipContentView, styles.pt10]}>
               <View style={styles.nameView}>
-                <Text style={styles.vipName}>{item.item.UserName}</Text>
+                <Text style={styles.vipName}>{item.item.FirstName}</Text>
                 {item.item.Gender == 'off' ? (
                   <FontAwesomeIcon icon={faFemale} color="red" size={18} />
                 ) : (

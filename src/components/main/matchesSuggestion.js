@@ -97,7 +97,11 @@ export default class HomeCmp extends PureComponent {
                     shadowRadius: 2.22,
                     elevation: 2,
                   }}>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile1')} style={styles.vipImageView}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('Profile1', {data: {}})
+                    }
+                    style={styles.vipImageView}>
                     <Image
                       source={images.vipUserIcon}
                       style={styles.vipImageDimension}
