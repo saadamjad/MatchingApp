@@ -47,14 +47,8 @@ import SubscriptionPlansCmp1 from './components/auth/subscriptionplans';
 import FindMatchCmp from './components/main/findMatch';
 import ProfileCmp from './components/main/profile';
 import YoutubeCmp from './components/main/youtube';
-
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faHome,
-  faComments,
-  faUser,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
+import InterestedPeopleInYou from './components/main/interestedPeopleInYou';
+import YouinterestedinPeople from './components/main/YouinterestedinPeople';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const navOptionHandler = () => ({
@@ -104,14 +98,6 @@ function CustomDrawerContent(props) {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  );
-}
-
-function NotificationsScreen({navigation}) {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
   );
 }
 
@@ -176,19 +162,6 @@ function ChatStack() {
   );
 }
 
-const StackFindMatch = createStackNavigator();
-function FindMatchStack() {
-  return (
-    <StackFindMatch.Navigator initialRouteName="FindMatch">
-      <StackFindMatch.Screen
-        name="FindMatch"
-        component={FindMatchCmp}
-        options={navOptionHandler}
-      />
-    </StackFindMatch.Navigator>
-  );
-}
-
 const StackProfile = createStackNavigator();
 function ProfileStack() {
   return (
@@ -224,7 +197,7 @@ function WishlistStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -250,7 +223,7 @@ function InviteFriendsStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -276,7 +249,7 @@ function SubscribePlanStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -302,7 +275,7 @@ function FaqStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -328,7 +301,7 @@ function AboutStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -354,7 +327,7 @@ function WhyUsStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -380,7 +353,7 @@ function SuccessStoriesStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -406,7 +379,7 @@ function YoutubeStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -432,7 +405,7 @@ function matchesSuggestionStack() {
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -441,6 +414,50 @@ function matchesSuggestionStack() {
   );
 }
 
+function interestedPeopleInYou() {
+  return (
+    <StackMatches.Navigator initialRouteName="InterestedPeopleInYou">
+      <StackMatches.Screen
+        name="InterestedPeopleInYou"
+        component={InterestedPeopleInYou}
+        options={navOptionHandler}
+      />
+
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+      <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackMatches.Navigator>
+  );
+}
+function YouShowedinterest() {
+  return (
+    <StackMatches.Navigator initialRouteName="YouinterestedinPeople">
+      <StackMatches.Screen
+        name="YouinterestedinPeople"
+        component={YouinterestedinPeople}
+        options={navOptionHandler}
+      />
+
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
+      <StackHome.Screen
+        name="Profile1"
+        component={ProfileCmp}
+        options={navOptionHandler}
+      />
+    </StackMatches.Navigator>
+  );
+}
 const StackMatches = createStackNavigator();
 function MatchesStack() {
   return (
@@ -455,12 +472,12 @@ function MatchesStack() {
         component={FilterCmp}
         options={navOptionHandler}
       />
-        <StackProfile.Screen
+      <StackProfile.Screen
         name="innerChat"
         component={InnerChatCmp}
         options={navOptionHandler}
       />
-       <StackHome.Screen
+      <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
         options={navOptionHandler}
@@ -565,13 +582,6 @@ function TabNavigator() {
   );
 }
 
-// const Logout = async () => {
-//   console.log('helo');
-//   await AsyncStorage.removeItem('checkUserLoggedin').then(res => {
-//     console.log('remove item done', res);
-//     return AuthStack;
-//   });
-// };
 const Drawer = createDrawerNavigator();
 function SideMenuNavigator() {
   return (
@@ -594,22 +604,7 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name="Filter"
-        component={FilterCmp}
-        options={{
-          title: '',
-          // drawerIcon: ({focused, size}) => (
-          //   <Image
-          //     sourc  e={require('./assets/icons/menu/profile.png')}
-          //     style={[
-          //       focused ? styles.drawerActive : styles.drawerInActive,
-          //       {height: 19, width: 20},
-          //     ]}
-          //   />
-          // ),
-        }}
-      /> */}
+
       <Drawer.Screen
         name="EditProfile"
         component={EditProfileCmp}
@@ -660,9 +655,9 @@ function SideMenuNavigator() {
       />
       <Drawer.Screen
         name="Interest"
-        component={WishlistStack}
+        component={YouShowedinterest}
         options={{
-          title: 'Interest',
+          title: 'You Showed interest in People',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/interest-icon.png')}
@@ -674,14 +669,14 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name="Invite Friends"
-        component={InviteFriendsStack}
+      <Drawer.Screen
+        name="interestedPeopleInYou"
+        component={interestedPeopleInYou}
         options={{
-          title: 'Invite Friends',
+          title: 'interested People In You',
           drawerIcon: ({focused, size}) => (
             <Image
-              source={require('./assets/icons/menu/faqs-icon.png')}
+              source={require('./assets/icons/menu/interest-icon.png')}
               style={[
                 focused ? styles.drawerActive : styles.drawerInActive,
                 {height: 21, width: 20},
@@ -689,7 +684,8 @@ function SideMenuNavigator() {
             />
           ),
         }}
-      /> */}
+      />
+
       <Drawer.Screen
         name="Subscribe Plan"
         component={SubscribePlanStack}
@@ -818,7 +814,7 @@ function SideMenuNavigator() {
           ),
         }}
       /> */}
-    
+
       <Drawer.Screen
         name="Logout"
         component={AuthStack}

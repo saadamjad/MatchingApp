@@ -184,7 +184,7 @@ export default class HomeCmp extends PureComponent {
         let mySendData = await responseArray.map(val => {
           return {...res?.data?.collection[val]};
         });
-        console.log("CHECKUP", mySendData)
+        console.log('CHECKUP', mySendData);
         this.setState({
           blockUserData: mySendData,
         });
@@ -334,7 +334,9 @@ export default class HomeCmp extends PureComponent {
           <View style={styles.statsCardsView}>
             <View style={styles.statsCardView}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Interest')}>
+                onPress={() =>
+                  this.props.navigation.navigate('interestedPeopleInYou')
+                }>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>
@@ -410,7 +412,9 @@ export default class HomeCmp extends PureComponent {
             </View>
             <View style={styles.statsCardView}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Wishlist')}>
+                onPress={() =>
+                  this.props.navigation.navigate('YouinterestedinPeople')
+                }>
                 <ImageBackground
                   style={styles.statsImg}
                   source={images.statsDesignIcon}>
@@ -830,12 +834,12 @@ export default class HomeCmp extends PureComponent {
           ListHeaderComponent={this.renderFlatListHeader}
           ListFooterComponent={this.renderFlatListFooter}
           showsVerticalScrollIndicator={false}
-          data={this.state.collection.filter((el) => {
+          data={this.state.collection.filter(el => {
             let isData = this.state.blockUserData.filter(
               val => val.block_to == el.id,
             );
             if (!isData.length > 0) {
-              return {...el}
+              return {...el};
             }
           })}
           renderItem={this.renderFlatListData}
