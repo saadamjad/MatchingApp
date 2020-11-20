@@ -6,6 +6,10 @@ users !!!
 - interest page problem
 - go to the filer section there is many problem like navigate to the profile page. and when click on some icons showing   errors  and goBACK() prblems 
 - go the matchs screen from bottomTab and then click the MATCH one then navigate to the profile sceen and error occur
-- People  interested in you.!
-- people you showed interest in.
-get personal detaials and pertnaer details ni ha.
+- People  interested in you.!   //done
+- people you showed interest in.  //done
+
+
+get personal detaials and pertnaer details ni ha. 
+
+get ky uper interest kartu hwe data nhi arha hy proper check karo bc!!
