@@ -267,7 +267,6 @@ export default class MatchesCmp extends Component {
             // renderItem={this.renderFlatListData}
             keyExtractor={(item, index) => item.toString()}
             renderItem={({item, index, separators}) => (
-              console.log('item', item),
               (
                 <View
                   key={item.key}
@@ -279,13 +278,13 @@ export default class MatchesCmp extends Component {
                       <View style={[styles.vipUserInner1, styles.mb]}>
                         <View style={styles.vipImageView}>
                           <TouchableOpacity
-                            onPress={() =>
+                            onPress={() =>{
                               this.props.navigation.navigate('Profile1', {
                                 data: item,
                                 profilePic:
                                   'http://dev2.thebetatest.com/' +
                                   item.profile_pic,
-                              })
+                              })}
                             }>
                             <Image
                               source={{

@@ -50,10 +50,10 @@ export default class HomeCmp extends PureComponent {
   }
 
   componentDidMount() {
-    this._UserStatistic();
-    this.getData();
-    this.getVipData();
-    this.getBlockData();
+    // this._UserStatistic();
+    // this.getData();
+    // this.getVipData();
+    // this.getBlockData();
   }
 
   _UserStatistic = async () => {

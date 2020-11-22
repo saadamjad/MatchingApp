@@ -329,7 +329,6 @@ export default class ProfileCmp extends Component {
       alert('There is some error occured');
     }
   };
-
   header() {
     return (
       <View style={styles.headerView}>
@@ -451,6 +450,7 @@ export default class ProfileCmp extends Component {
               disabled={!this.state.isEdit}
               placeholder="Enter Bio"
               placeholderTextColor="#ccc"
+              value={this.state.text}
               keyboardType="email-address"
               style={styles.inputFld}
               onChangeText={text => this.setState({text})}
@@ -474,34 +474,6 @@ export default class ProfileCmp extends Component {
                 </Text>
               </TouchableOpacity>
             ))}
-            {/* <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i + 1, 'qualities');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.qualities[i + 1].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.qualities[i + 1].name}
-                  </Text>
-                </TouchableOpacity> */}
-            {/* <TouchableOpacity
-                  onPress={() => {
-                    this.updateArry(i + 2, 'qualities');
-                  }}
-                  style={{width: '33%'}}>
-                  <Text
-                    style={
-                      this.state.qualities[i + 2].selected == 0
-                        ? styles.tags
-                        : styles.tagsSelected
-                    }>
-                    {this.state.qualities[i + 2].name}
-                  </Text>
-                </TouchableOpacity> */}
           </View>
           <View style={{marginTop: 10}}>
             <Text style={styles.txtHeading}>Hobbies:</Text>
@@ -1010,6 +982,7 @@ export default class ProfileCmp extends Component {
 
   componentWillMount() {
     this._getData();
+    // this.getUserDetail();
     this._getHobbiesData();
     this.setState({
       loader: true,
@@ -1043,7 +1016,7 @@ export default class ProfileCmp extends Component {
               let checkThisBoy = newQuality[name].split(' ');
               await this.state[name].map(async (val, i) => {
                 checkThisBoy.map(async value => {
-                  console.log('YAR MERE BHAI JAN ', val[secName].split(' ')[0]);
+                  
                   if (val[secName].split(' ')[0] == value) {
                     if (setup.length > 0) {
                       let found = false;
@@ -1094,6 +1067,8 @@ export default class ProfileCmp extends Component {
           this.setState(
             {
               userDetail: newQuality,
+              text: newQuality.about
+
             },
             () => {
               checkOut('qualities', 'quality');

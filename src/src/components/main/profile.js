@@ -449,6 +449,18 @@ export default class ProfileCmp extends Component {
                   : 'N/A'}
               </Text>
             </View>
+            <View style={styles.mb10}>
+              <View style={styles.flxRw}>
+                <Image
+                  style={{width: 18, height: '100%'}}
+                  source={images.profileoccup}
+                />
+                <Text style={styles.txtHeading}>Hobbies</Text>
+              </View>
+              <Text style={styles.txtLbl}>
+                {this.state.data.hobbies ? this.state.data.hobbies : 'N/A'}
+              </Text>
+            </View>
           </View>
         </View>
       );
@@ -782,7 +794,6 @@ export default class ProfileCmp extends Component {
       fav_user_id: this.state.data.id,
       user_id: JSON.parse(user).user.id,
     };
-    console.log('data: ', data);
     const URL = 'http://dev2.thebetatest.com/api/removetowishlist';
     axios.post(URL, data, header).then(
       resposne => {
@@ -835,16 +846,23 @@ export default class ProfileCmp extends Component {
       from: userData.user.id,
       status: 'sent',
     };
+    // console.log("BHAIJAN LET SEE!!", data)
+    console.log('data: ', data);
+
     const URL = 'http://dev2.thebetatest.com/api/send-interest';
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
-        console.log(resposne.data);
+        console.log(
+          'api is working but the request data is wrong check it out',
+          resposne.data,
+        );
         if (!resposne.data.status)
           Toast.show({
             type: 'error',
             position: 'top',
             text1: 'Error',
+            text1: 'You have Already sent request',
             text2: resposne.data.message,
             visibilityTime: 4000,
             autoHide: true,
@@ -876,8 +894,8 @@ export default class ProfileCmp extends Component {
     );
   };
   _RemoveFriend = async () => {
+    alert('THIS API IS NOT YET READY');
     // this.setState({showSpinner: true});
-    alert('api not ready yet');
     // const user = await AsyncStorage.getItem('userData');
     // const userData = JSON.parse(user);
     // let headers = {
@@ -885,16 +903,17 @@ export default class ProfileCmp extends Component {
     //     Authorization: userData.access_token,
     //   },
     // };
+    // console.log('I KNOW VERY WEL', this.state.data.id)
     // const data = {
     //   to: this.state.data.id,
     //   from: userData.user.id,
-    //   status: 'sent',
+    //   status: 'deny',
     // };
-    // const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    // const URL = 'http://dev2.thebetatest.com/api/deny-interest';
     // axios.post(URL, data, headers).then(
     //   resposne => {
     //     this.setState({showSpinner: false});
-    //     console.log(resposne.data);
+    //     console.log('MEIN HUN QADIRI SUNNNI TANTANATAN',resposne.data);
     //     if (!resposne.data.status)
     //       Toast.show({
     //         type: 'error',
@@ -911,13 +930,13 @@ export default class ProfileCmp extends Component {
     //         type: 'success',
     //         position: 'top',
     //         text1: 'Success',
-    //         text2: 'Successfuly sent friend request.',
+    //         text2: 'Successfuly deny friend request.',
     //         visibilityTime: 4000,
     //         autoHide: true,
     //         topOffset: 30,
     //         bottomOffset: 40,
     //       });
-    //       this.setState({isFriend: true});
+    //       this.setState({isFriend: false});
     //     }
     //   },
     //   error => {
@@ -946,21 +965,24 @@ export default class ProfileCmp extends Component {
     return (
       <View>
         {this.state.isFriend ? (
-          <View
-            style={{
-              padding: 8,
-              backgroundColor: '#ed145b',
-              borderRadius: 30,
-              justifyContent: 'center',
-              marginRight: 10,
-            }}>
-            <FontAwesomeIcon
-              icon={faUserMinus}
-              color="#fff"
-              size={24}
-              onPress={this._RemoveFriend}
-            />
-          </View>
+          <TouchableOpacity activeOpacity={0.8} onPress={this._RemoveFriend}>
+            {/* <TouchableOpacityactiveOpacity={0.8} onPress={this.addFriend} */}
+            <View
+              style={{
+                padding: 8,
+                backgroundColor: '#ed145b',
+                borderRadius: 30,
+                justifyContent: 'center',
+                marginRight: 10,
+              }}>
+              <FontAwesomeIcon
+                icon={faUserMinus}
+                color="#fff"
+                size={24}
+                // onPress={this._RemoveFriend}
+              />
+            </View>
+          </TouchableOpacity>
         ) : (
           <TouchableOpacity activeOpacity={0.8} onPress={this.addFriend}>
             <View
