@@ -40,7 +40,7 @@ export default class ProfileCmp extends Component {
       kid: '',
       marital: '',
       Cooking: '',
-      smoke: '',
+      dpSmoke: '',
       tone: '',
       incomeDP: '',
       educationDP: '',
@@ -55,6 +55,8 @@ export default class ProfileCmp extends Component {
       religiousDP: '',
       nationality: '',
       tounge: '',
+      maxAge: '',
+      minAge: '',
       heightDP: '',
       seeking: '',
       userDetail: {},
@@ -105,19 +107,27 @@ export default class ProfileCmp extends Component {
           qualitiesToSend =
             qualitiesToSend.length > 0
               ? qualitiesToSend + ' ' + val.quality
-              : '';
+              : val.quality;
+          console.log('AWAAM KO PAGAL BNAYA HUA HY!!', qualitiesToSend);
         }
       });
       hobbies.map(val => {
         if (val.selected) {
           hobbiesToSend =
-            hobbiesToSend.length > 0 ? hobbiesToSend + ' ' + val.hobby : '';
+            hobbiesToSend.length > 0
+              ? hobbiesToSend + ' ' + val.hobby
+              : val.hobby;
         }
       });
+      // console.log(
+      //   'BHAI KIA CHUTYAPE MACHA RAKHE HY!!',
+      //   qualitiesToSend,
+      //   hobbiesToSend,
+      // );
       this.setState({showSpinner: true});
       axios
         .post(
-          `http://dev2.thebetatest.com/api/update/personal/details`,
+          `http://dev2.thebetatest.com/api/update/personal/bio`,
           {
             id,
             your_self: text,
@@ -192,18 +202,18 @@ export default class ProfileCmp extends Component {
             id,
             education,
             income,
-            skin,
-            body,
-            employee,
-            pet,
-            disablity,
-            occpation,
+            skin_tone: skin,
+            body_type: body,
+            employment_status: employee,
+            pets: pet,
+            disability: disablity,
+            occupation: occpation,
             drink,
             religious,
-            eye,
+            eye_color: eye,
             height,
-            kid,
-            marital,
+            kids: kid,
+            marital_status: marital,
           },
           {
             headers: {Authorization: access_token},
@@ -241,6 +251,11 @@ export default class ProfileCmp extends Component {
       children,
       tounge,
       drink,
+      minAge,
+      dpSmoke,
+      maxAge,
+      minHeight,
+      maxHeight,
       nationality,
       country,
       religiousDP,
@@ -255,7 +270,10 @@ export default class ProfileCmp extends Component {
     if (
       seeking !== '' ||
       age !== '' ||
-      heightDP !== '' ||
+      minAge !== '' ||
+      maxAge !== '' ||
+      minHeight !== '' ||
+      maxHeight !== '' ||
       bodyDP !== '' ||
       maritalDp !== '' ||
       children !== '' ||
@@ -283,10 +301,10 @@ export default class ProfileCmp extends Component {
           {
             id,
             seeking_a: seeking,
-            age_from: age,
-            age_to: age,
-            height_from: heightDP,
-            height_to: heightDP,
+            age_from: minAge,
+            age_to: maxAge,
+            height_from: minHeight,
+            height_to: maxHeight,
             marital_status: maritalDp,
             mother_tounge: tounge,
             children: children,
@@ -299,7 +317,7 @@ export default class ProfileCmp extends Component {
             body_type: bodyDP,
             skin_tone: tone,
             eye_color: eyeDP,
-            smoke: smoke,
+            smoke: dpSmoke,
             drink: drink,
             cooking: Cooking,
           },
@@ -447,7 +465,7 @@ export default class ProfileCmp extends Component {
         <ScrollView style={styles.getStarted}>
           <View>
             <TextInput
-              disabled={!this.state.isEdit}
+              editable={this.state.isEdit}
               placeholder="Enter Bio"
               placeholderTextColor="#ccc"
               value={this.state.text}
@@ -739,6 +757,7 @@ export default class ProfileCmp extends Component {
                   this.setState({seeking: val});
                 }}>
                 <Picker.Item label="I am Seeking" value="I am Seeking" />
+
                 <Picker.Item label="Female" value="Female" />
                 <Picker.Item label="Male" value="Male" />
               </Picker>
@@ -748,13 +767,33 @@ export default class ProfileCmp extends Component {
               <Picker
                 enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
-                selectedValue={this.state.heightDP}
+                selectedValue={this.state.minHeight || ''}
                 onValueChange={val => {
-                  this.setState({heightDP: val});
+                  this.setState({minHeight: val});
                 }}>
-                <Picker.Item label="Height" value="Height" />
+                <Picker.Item label="Maximum Height" value="Maximum Height" />
+
                 <Picker.Item label="46" value="46" />
-                <Picker.Item label="59" value="59" />
+                <Picker.Item label="12" value="12" />
+                <Picker.Item label="13" value="13" />
+                <Picker.Item label="16" value="16" />
+              </Picker>
+              <Text style={styles.text}>{this.state.user}</Text>
+            </View>
+            <View style={[styles.inputFldView, styles.mb2]}>
+              <Picker
+                enabled={this.state.isEdit2}
+                style={{height: 50, width: 280}}
+                selectedValue={this.state.maxHeight || ''}
+                onValueChange={val => {
+                  this.setState({maxHeight: val});
+                }}>
+                <Picker.Item label="Minimum Height" value="Minimum Height" />
+
+                <Picker.Item label="46" value="46" />
+                <Picker.Item label="12" value="12" />
+                <Picker.Item label="14" value="14" />
+                <Picker.Item label="12" value="12" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -767,6 +806,7 @@ export default class ProfileCmp extends Component {
                   this.setState({tounge: val});
                 }}>
                 <Picker.Item label="Mother Tongue" value="Mother Tongue" />
+
                 <Picker.Item label="Dont Care" value="Dont Care" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
@@ -851,13 +891,30 @@ export default class ProfileCmp extends Component {
               <Picker
                 enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
-                selectedValue={this.state.age}
+                selectedValue={this.state.maxAge}
                 onValueChange={val => {
-                  this.setState({age: val});
+                  this.setState({maxAge: val});
                 }}>
-                <Picker.Item label="Age" value="Age" />
-                <Picker.Item label="25" value="25" />
-                <Picker.Item label="21" value="21" />
+                <Picker.Item label="Maximum Age" value="Maximum Age" />
+                <Picker.Item label="46" value="46" />
+                <Picker.Item label="12" value="12" />
+                <Picker.Item label="13" value="13" />
+                <Picker.Item label="16" value="16" />
+              </Picker>
+            </View>
+            <View style={[styles.inputFldView, styles.mb2]}>
+              <Picker
+                enabled={this.state.isEdit2}
+                style={{height: 50, width: 280}}
+                selectedValue={this.state.minAge}
+                onValueChange={val => {
+                  this.setState({minAge: val});
+                }}>
+                <Picker.Item label="Minimum Age" value="Minimum Age" />
+                <Picker.Item label="46" value="46" />
+                <Picker.Item label="12" value="12" />
+                <Picker.Item label="13" value="13" />
+                <Picker.Item label="16" value="16" />
               </Picker>
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
@@ -936,9 +993,9 @@ export default class ProfileCmp extends Component {
               <Picker
                 enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
-                selectedValue={this.state.smoke}
+                selectedValue={this.state.dpSmoke}
                 onValueChange={val => {
-                  this.setState({smoke: val});
+                  this.setState({dpSmoke: val});
                 }}>
                 <Picker.Item label="Smoke" value="Smoke" />
                 <Picker.Item label="Dont Smoke" value="Dont Smoke" />
@@ -948,9 +1005,9 @@ export default class ProfileCmp extends Component {
               <Picker
                 enabled={this.state.isEdit2}
                 style={{height: 50, width: 280}}
-                selectedValue={this.state.cooking}
+                selectedValue={this.state.Cooking}
                 onValueChange={val => {
-                  this.setState({cooking: val});
+                  this.setState({Cooking: val});
                 }}>
                 <Picker.Item label="Cooking" value="Cooking" />
                 <Picker.Item label="Yes" value="Yes" />
@@ -1012,11 +1069,10 @@ export default class ProfileCmp extends Component {
           let newQuality = res.data?.user;
           const checkOut = async (name, secName) => {
             let setup = [];
-            if (newQuality[name]) {
+            if (newQuality[name] && newQuality[name] !== null) {
               let checkThisBoy = newQuality[name].split(' ');
               await this.state[name].map(async (val, i) => {
                 checkThisBoy.map(async value => {
-                  
                   if (val[secName].split(' ')[0] == value) {
                     if (setup.length > 0) {
                       let found = false;
@@ -1058,17 +1114,63 @@ export default class ProfileCmp extends Component {
                 });
               });
             }
-
-            this.setState({
-              [name]: setup,
-            });
+            if (setup.length > 0) {
+              this.setState({
+                [name]: setup,
+              });
+            }
           };
           console.log('BHAI JAN KIA HAL HY TUMHARA', newQuality);
           this.setState(
             {
               userDetail: newQuality,
-              text: newQuality.about
-
+              text: newQuality.about || '',
+              education: newQuality.education || '',
+              income: newQuality.income || '',
+              skin: newQuality.skin_tone || '',
+              body: newQuality.body_type || '',
+              smoke: newQuality.smoke || '',
+              dpSmoke: newQuality.partner_smoke || '',
+              tone: newQuality.partner_skin_tone || '',
+              employee: newQuality.employment_status || '',
+              pet: newQuality.pets || '',
+              disablity: newQuality.disablility || '',
+              body: newQuality.body_type || '',
+              bodyDP: newQuality.partner_body_type || '',
+              occpation: newQuality.occupation || '',
+              drink: newQuality.drink || '',
+              dpDrink: newQuality.partner_drink || '',
+              tounge: newQuality.partner_mother_tounge || '',
+              religious: newQuality.religious || '',
+              religiousDP: newQuality.partner_religious || '',
+              eye: newQuality.eye_color || '',
+              eyeDP: newQuality.partner_eye_color || '',
+              height: newQuality.height || '',
+              maxHeight: newQuality.partner_max_height || '',
+              minHeight: newQuality.partner_min_height || '',
+              kid: newQuality.kids || '',
+              marital: newQuality.marital_status || '',
+              maritalDp: newQuality.partner_marital_status || '',
+              Cooking: newQuality.partner_cooking || '',
+              incomeDP: newQuality.partner_annual_income || '',
+              educationDP: newQuality.partner_minimum_education || '',
+              country: newQuality.country || '',
+              countryDp: newQuality.partner_country_livein || '',
+              children: newQuality.partner_children || '',
+              age: newQuality.Age || '',
+              maxAge: newQuality.partner_max_age || '',
+              minAge: newQuality.partner_min_age || '',
+              profession: newQuality.partner_profession || '',
+              nationality: newQuality.partner_nationality || '',
+              // tounge: newQuality.parnter_enter_tounge || '',
+              seeking: newQuality.partner_looking_for || '',
+              gender: newQuality.Gender || '',
+              city: newQuality.city || '',
+              email: newQuality.email || '',
+              flag: newQuality.flag || '',
+              firstname: newQuality.FirstName || '',
+              profile_pic: newQuality.profile_pic || '',
+              pic2: newQuality.pic2 || '',
             },
             () => {
               checkOut('qualities', 'quality');
