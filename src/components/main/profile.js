@@ -948,16 +948,21 @@ export default class ProfileCmp extends Component {
 
   whatsApp() {
     return (
-      <View
+      <TouchableOpacity
         style={{
           padding: 8,
           backgroundColor: '#49c858',
           borderRadius: 30,
           justifyContent: 'center',
+        }}
+        onPress={() => {
+          this.props.navigation.navigate('innerChat', {
+            id: this.state.vipUserId,
+          });
         }}>
         <FontAwesomeIcon icon={faCommentDots} color="#fff" size={24} />
         {/* <Image style={styles.socialIcon} source={images.whatsappIcon} /> */}
-      </View>
+      </TouchableOpacity>
     );
   }
 

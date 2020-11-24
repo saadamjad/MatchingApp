@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
+  console.log('MIL RHA HUN ME!!', navigation);
   return (
     <View
       style={{
@@ -60,11 +61,11 @@ const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
           </TouchableOpacity>
         ) : null}
         {search == true ? (
-           <TouchableOpacity
-           onPress={() => {
-             navigation.navigate('Filter');
-           }}>
-          <FontAwesomeIcon icon={faSearch} size={24} color="#fff" />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Filter');
+            }}>
+            <FontAwesomeIcon icon={faSearch} size={24} color="#fff" />
           </TouchableOpacity>
         ) : null}
       </View>

@@ -143,6 +143,11 @@ function HomeStack() {
         component={ProfileCmp}
         options={navOptionHandler}
       />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
+        options={navOptionHandler}
+      />
       {/* <StackHome.Screen name='ChatInner' component={InnerChatCmp} options={navOptionHandler}/>
       <StackHome.Screen name='ChatCmp' component={ChatCmp} options={navOptionHandler}/> */}
     </StackHome.Navigator>
@@ -156,6 +161,11 @@ function ChatStack() {
       <StackChat.Screen
         name="Chat"
         component={ChatCmp}
+        options={navOptionHandler}
+      />
+      <StackProfile.Screen
+        name="innerChat"
+        component={InnerChatCmp}
         options={navOptionHandler}
       />
     </StackChat.Navigator>

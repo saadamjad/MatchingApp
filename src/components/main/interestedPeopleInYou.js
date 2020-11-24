@@ -24,10 +24,13 @@ import {
   faUserPlus,
   faCommentDots,
   faFemale,
+  faTimes,
   faMale,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {Header} from '../common';
+import {Value} from 'react-native-reanimated';
 
 export default class MatchesCmp extends Component {
   constructor(props) {
@@ -155,6 +158,103 @@ export default class MatchesCmp extends Component {
     );
   };
 
+  removeFromList = id => {
+    this.setState({
+      collection: this.state.collection.filter(val => val.id !== id),
+    });
+  };
+
+  deny = async id => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    this.setState({
+      loader: true,
+    });
+    axios
+      .post(
+        `https://dev2.thebetatest.com/api/deny-interest`,
+        {
+          toId: loggedInUserID,
+          fromId: id,
+        },
+        {
+          headers: {Authorization: access_token},
+        },
+      )
+      .then(async res => {
+        this.setState({
+          loader: false,
+        });
+        this.setState({showSpinner: false});
+        this.removeFromList(id);
+        alert('Remove Freind Successfullly');
+        console.log('res is here for now check it out boy!!===', res.data);
+        // this.setState({step: 1});
+        // this.setState({
+        //   chat: res.data?.fav,
+        // });
+      })
+      .catch(error => {
+        this.setState({
+          loader: false,
+        });
+        this.setState({showSpinner: false});
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  };
+  accept = async id => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    this.setState({
+      loader: true,
+    });
+    axios
+      .post(
+        `https://dev2.thebetatest.com/api/accept-interest`,
+        {
+          toId: loggedInUserID,
+          fromId: id,
+        },
+        {
+          headers: {Authorization: access_token},
+        },
+      )
+      .then(async res => {
+        this.setState({
+          loader: false,
+        });
+        this.setState({showSpinner: false});
+        console.log('res is here for now check it out boy!!===', res.data);
+        this.removeFromList(id);
+        alert('Accept Freind Successfullly');
+        // this.setState({step: 1});
+        // this.setState({
+        //   chat: res.data?.fav,
+        // });
+      })
+      .catch(error => {
+        this.setState({
+          loader: false,
+        });
+        this.setState({showSpinner: false});
+        console.log('error', error);
+        this.setState({
+          showAlert: true,
+          errorMsg: 'Something went wrong. ' + error,
+          errorTitle: 'Error!!',
+        });
+      });
+  };
+
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -257,7 +357,7 @@ export default class MatchesCmp extends Component {
                                   borderRadius: 30,
                                   marginRight: 7,
                                 }}
-                                onPress={() => this.addFriend(item.id)}>
+                                onPress={() => this.deny(item.id)}>
                                 {/* {this.state.isFriend ? (
                                 <Image
                                   source={require('../../assets/correct.jpg')}
@@ -265,23 +365,21 @@ export default class MatchesCmp extends Component {
                                 />
                               ) : ( */}
                                 <FontAwesomeIcon
-                                  icon={faUserPlus}
+                                  icon={faTimes}
                                   color="#fff"
                                   size={20}
                                 />
                                 {/* )} */}
                               </TouchableOpacity>
                               <TouchableOpacity
-                                onPress={() =>
-                                  this.props.navigation.navigate('innerChat')
-                                }
+                                onPress={() => this.accept(item.id)}
                                 style={{
                                   padding: 7,
                                   backgroundColor: '#49c858',
                                   borderRadius: 30,
                                 }}>
                                 <FontAwesomeIcon
-                                  icon={faCommentDots}
+                                  icon={faCheck}
                                   color="#fff"
                                   size={20}
                                 />

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   AsyncStorage,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 
@@ -20,17 +21,17 @@ export default class ChatCmp extends Component {
     super(props);
     this.state = {
       chat: [
-        {id: 0, image: images.chatSender1Icon, badget: 3},
-        {id: 1, image: images.chatSender2Icon, badget: 2},
-        {id: 2, image: images.chatSender1Icon, badget: 3},
-        {id: 3, image: images.chatSender2Icon, badget: 0},
-        {id: 4, image: images.chatSender1Icon, badget: 3},
-        {id: 5, image: images.chatSender2Icon, badget: 2},
-        {id: 6, image: images.chatSender1Icon, badget: 3},
-        {id: 7, image: images.chatSender2Icon, badget: 0},
-        {id: 8, image: images.chatSender1Icon, badget: 3},
-        {id: 9, image: images.chatSender2Icon, badget: 2},
-        {id: 10, image: images.chatSender1Icon, badget: 3},
+        // {id: 0, image: images.chatSender1Icon, badget: 3},
+        // {id: 1, image: images.chatSender2Icon, badget: 2},
+        // {id: 2, image: images.chatSender1Icon, badget: 3},
+        // {id: 3, image: images.chatSender2Icon, badget: 0},
+        // {id: 4, image: images.chatSender1Icon, badget: 3},
+        // {id: 5, image: images.chatSender2Icon, badget: 2},
+        // {id: 6, image: images.chatSender1Icon, badget: 3},
+        // {id: 7, image: images.chatSender2Icon, badget: 0},
+        // {id: 8, image: images.chatSender1Icon, badget: 3},
+        // {id: 9, image: images.chatSender2Icon, badget: 2},
+        // {id: 10, image: images.chatSender1Icon, badget: 3},
       ],
     };
   }
@@ -40,6 +41,9 @@ export default class ChatCmp extends Component {
     const userData = JSON.parse(user);
     const loggedInUserID = userData.user.id;
     const access_token = userData.access_token;
+    this.setState({
+      loader: true,
+    });
     axios
       .post(
         `http://dev2.thebetatest.com/api/show-all-chat`,
@@ -51,18 +55,20 @@ export default class ChatCmp extends Component {
         },
       )
       .then(async res => {
+        this.setState({
+          loader: false,
+        });
         this.setState({showSpinner: false});
         console.log('res is here for now check it out boy!!===', res.data);
-        if (res.data.status) {
-          // this.setState({step: 1});
-        } else
-          this.setState({
-            showAlert: true,
-            errorMsg: res.data.message,
-            errorTitle: 'Error!!',
-          });
+        // this.setState({step: 1});
+        this.setState({
+          chat: res.data?.fav,
+        });
       })
       .catch(error => {
+        this.setState({
+          loader: false,
+        });
         this.setState({showSpinner: false});
         console.log('error', error);
         this.setState({
@@ -82,32 +88,45 @@ export default class ChatCmp extends Component {
           search={true}
         />
         <ScrollView>
-          {this.state.chat.map((val, i) => {
-            return (
-              <TouchableOpacity
-                onPress={() => EventRegister.emit('isLoggedIn', 'Chat')}
-                key={i}
-                style={styles.chatMainView}>
-                <View style={styles.chatImageView}>
-                  <Image style={styles.chatImageDimension} source={val.image} />
-                </View>
+          {this.state.loader ? (
+            <ActivityIndicator color="red" size="large" />
+          ) : (
+            this.state?.chat.length > 0 &&
+            this.state.chat.map((val, i) => {
+              return (
+                <TouchableOpacity
+                  // onPress={() => EventRegister.emit('isLoggedIn', 'Chat')}
+                  onPress={() =>
+                    this.props.navigation.navigate('innerChat', {
+                      id: val.fav_user_id,
+                    })
+                  }
+                  key={i}
+                  style={styles.chatMainView}>
+                  <View style={styles.chatImageView}>
+                    <Image
+                      style={styles.chatImageDimension}
+                      source={images.chatSender1Icon}
+                    />
+                  </View>
 
-                <View style={styles.chatTxtContView}>
-                  <View style={styles.chatTxtView}>
-                    <Text style={styles.chatHeading}>@yolk32</Text>
-                    <Text style={styles.chatLabel}>Hi, How are you?</Text>
+                  <View style={styles.chatTxtContView}>
+                    <View style={styles.chatTxtView}>
+                      <Text style={styles.chatHeading}>{val.fav_user_id}</Text>
+                      <Text style={styles.chatLabel}>Hello Brother!</Text>
+                    </View>
+                    <View style={styles.chatBadgetContView}>
+                      {val.badget > 0 ? (
+                        <View style={styles.chatBadget}>
+                          <Text style={styles.chatBadgetTxt}>{val.badget}</Text>
+                        </View>
+                      ) : null}
+                    </View>
                   </View>
-                  <View style={styles.chatBadgetContView}>
-                    {val.badget > 0 ? (
-                      <View style={styles.chatBadget}>
-                        <Text style={styles.chatBadgetTxt}>{val.badget}</Text>
-                      </View>
-                    ) : null}
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                </TouchableOpacity>
+              );
+            })
+          )}
         </ScrollView>
       </SafeAreaView>
     );

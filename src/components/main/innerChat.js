@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  AsyncStorage,
   BackHandler,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
@@ -15,7 +16,8 @@ import {colors, images} from '../../constants/theme';
 import Slider from '@react-native-community/slider';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMicrophone, faPlay, faPause} from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
+import moment from 'moment';
 import {Header} from '../common';
 
 export default class InnerChatCmp extends Component {
@@ -24,33 +26,35 @@ export default class InnerChatCmp extends Component {
     this.state = {
       play: true,
       sliderVal: 0,
+      user_id: '',
       keyboardOpen: 0,
       time: '00:00',
       chat: [
-        {
-          id: 0,
-          message:
-            'Hi Lina How are you? where are you working? i wana meet you',
-          sender: 0,
-          time: '10:24 AM',
-          time: '10:24 AM',
-        },
-        {
-          id: 1,
-          message: 'Hey Hetin I am Fine and what about you?',
-          sender: 1,
-          time: '10:25 AM',
-        },
-        {id: 2, message: 'I wana meet you', sender: 0, time: '10:25 AM'},
-        {
-          id: 3,
-          message: 'when you free then call me',
-          sender: 0,
-          time: '10:28 AM',
-        },
-        {id: 4, message: 'Sure', sender: 1, time: '10:29 AM'},
-        {id: 5, message: 'Thanks', sender: 0, time: '10:30 AM'},
+        // {
+        //   id: 0,
+        //   message:
+        //     'Hi Lina How are you? where are you working? i wana meet you',
+        //   sender: 0,
+        //   time: '10:24 AM',
+        //   time: '10:24 AM',
+        // },
+        // {
+        //   id: 1,
+        //   message: 'Hey Hetin I am Fine and what about you?',
+        //   sender: 1,
+        //   time: '10:25 AM',
+        // },
+        // {id: 2, message: 'I wana meet you', sender: 0, time: '10:25 AM'},
+        // {
+        //   id: 3,
+        //   message: 'when you free then call me',
+        //   sender: 0,
+        //   time: '10:28 AM',
+        // },
+        // {id: 4, message: 'Sure', sender: 1, time: '10:29 AM'},
+        // {id: 5, message: 'Thanks', sender: 0, time: '10:30 AM'},
       ],
+      text: '',
     };
     this.setVal = this.setVal.bind(this);
   }
@@ -72,6 +76,99 @@ export default class InnerChatCmp extends Component {
       this.handleBackButtonClick,
     );
   }
+
+  getMessages = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    if (this.props?.route?.params?.id) {
+      this.setState({
+        loader: true,
+      });
+      axios
+        .post(
+          `http://dev2.thebetatest.com/api/show-chat`,
+          {
+            user_id: loggedInUserID,
+            person_id: this.props.route.params.id,
+          },
+          {
+            headers: {Authorization: access_token},
+          },
+        )
+        .then(async res => {
+          this.setState({
+            loader: false,
+          });
+          this.setState({showSpinner: false});
+          console.log('res is here for now check it out boy!!===', res.data);
+          // this.setState({step: 1});
+          this.setState({
+            chat: res.data?.messages,
+            user_id: userData.user.id,
+          });
+        })
+        .catch(error => {
+          this.setState({
+            loader: false,
+          });
+          this.setState({showSpinner: false});
+          console.log('error', error);
+          this.setState({
+            showAlert: true,
+            errorMsg: 'Something went wrong. ' + error,
+            errorTitle: 'Error!!',
+          });
+        });
+    } else {
+      //  There is nothing you can do so please does your work to upper side
+    }
+  };
+
+  async componentDidMount() {
+    this.getMessages();
+  }
+
+  sendMessage = async () => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const loggedInUserID = userData.user.id;
+    const access_token = userData.access_token;
+    if (this.props?.route?.params?.id) {
+      axios
+        .post(
+          `http://dev2.thebetatest.com/api/send-message`,
+          {
+            // from: loggedInUserID,
+            // to: this.props.route.params.id,
+            from: loggedInUserID,
+            to: this.props.route.params.id,
+            message: this.state.text,
+          },
+          {
+            headers: {Authorization: access_token},
+          },
+        )
+        .then(async res => {
+          this.setState({
+            text: '',
+          });
+          console.log('YE HUI NA BAAT', res.data, this.state.text);
+          this.getMessages();
+        })
+        .catch(error => {
+          console.log('error', error);
+          this.setState({
+            showAlert: true,
+            errorMsg: 'Something went wrong. ' + error,
+            errorTitle: 'Error!!',
+          });
+        });
+    } else {
+      //  There is nothing you can do so please does your work to upper side
+    }
+  };
 
   handleBackButtonClick = () => {
     EventRegister.emit('isLoggedIn', 'ChatScreen');
@@ -116,10 +213,14 @@ export default class InnerChatCmp extends Component {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header
-          name={'@Lina87'}
+          name={
+            this.props.route.params.id
+              ? this.props.route.params.id
+              : 'USER NAME'
+          }
           navigation={this.props.navigation}
           backBtn={true}
-          search={true}
+          // search={true}
         />
         <View style={{flex: 10}}>
           <ScrollView
@@ -130,52 +231,53 @@ export default class InnerChatCmp extends Component {
             onContentSizeChange={() =>
               this.scrollView.scrollToEnd({animated: true})
             }>
-            {this.state.chat.map((val, i) => {
-              return (
-                <View key={i} style={styles.chatMainView}>
-                  <View
-                    style={
-                      val.sender == 0
-                        ? styles.ChatBoxViewStart
-                        : styles.ChatBoxViewEnd
-                    }>
-                    <View style={{flexDirection: 'row'}}>
-                      {val.sender == 0 ? (
-                        <Image
-                          style={{marginRight: 5, width: 38, height: 38}}
-                          source={images.boyWidget}
-                        />
-                      ) : null}
-                      <View
-                        style={
-                          val.sender == 0
-                            ? styles.senderChat
-                            : styles.receiverChat
-                        }>
-                        <Text style={styles.chatHeading}>{val.message}</Text>
+            {this.state?.chat.length > 0 &&
+              this.state?.chat.map((val, i) => {
+                let myId = this.state.user_id;
+                let sender = myId == val.from ? 1 : 0;
+                return (
+                  <View key={i} style={styles.chatMainView}>
+                    <View
+                      style={
+                        sender == 0
+                          ? styles.ChatBoxViewStart
+                          : styles.ChatBoxViewEnd
+                      }>
+                      <View style={{flexDirection: 'row'}}>
+                        {val.sender == 0 ? (
+                          <Image
+                            style={{marginRight: 5, width: 38, height: 38}}
+                            source={images.boyWidget}
+                          />
+                        ) : null}
+                        <View
+                          style={
+                            sender == 0
+                              ? styles.senderChat
+                              : styles.receiverChat
+                          }>
+                          <Text style={styles.chatHeading}>{val.message}</Text>
+                        </View>
+                        {val.sender == 1 ? (
+                          <Image
+                            style={{marginLeft: 5, width: 38, height: 38}}
+                            source={images.boyWidget}
+                          />
+                        ) : null}
                       </View>
-                      {val.sender == 1 ? (
-                        <Image
-                          style={{marginLeft: 5, width: 38, height: 38}}
-                          source={images.boyWidget}
-                        />
-                      ) : null}
-                    </View>
-                    <View style={styles.chatBadgetContView}>
-                      <Text
-                        style={
-                          val.sender == 0
-                            ? styles.timeSender
-                            : styles.timeReciver
-                        }>
-                        {val.time}
-                      </Text>
+                      <View style={styles.chatBadgetContView}>
+                        <Text
+                          style={
+                            sender == 0 ? styles.timeSender : styles.timeReciver
+                          }>
+                          {moment(val.created_at).format('LLL')}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              );
-            })}
-            <View style={styles.chatMainView}>
+                );
+              })}
+            {/* <View style={styles.chatMainView}>
               <View style={styles.ChatBoxViewStart}>
                 <View style={{flexDirection: 'row'}}>
                   <Image
@@ -233,7 +335,7 @@ export default class InnerChatCmp extends Component {
                   </View>
                 </View>
               </View>
-            </View>
+            </View> */}
           </ScrollView>
         </View>
         <View
@@ -243,8 +345,16 @@ export default class InnerChatCmp extends Component {
               : styles.footerViewKeyboardOpen
           }>
           <FontAwesomeIcon icon={faMicrophone} size={28} color="#ff1822" />
-          <TextInput style={styles.textInputStyle} />
-          <TouchableOpacity style={{justifyContent: 'center'}}>
+          <TextInput
+            style={styles.textInputStyle}
+            value={this.state.text}
+            onChangeText={text => this.setState({text})}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              this.sendMessage();
+            }}
+            style={{justifyContent: 'center'}}>
             <Text style={styles.btnStyle}>SEND</Text>
           </TouchableOpacity>
         </View>

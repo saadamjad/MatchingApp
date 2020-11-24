@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {TouchableOpacity, FlatList} from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 
 import {Header} from '../common';
 
@@ -50,11 +51,78 @@ export default class HomeCmp extends PureComponent {
   }
 
   componentDidMount() {
-    // this._UserStatistic();
-    // this.getData();
-    // this.getVipData();
-    // this.getBlockData();
+    const unsubscribe = this.props.navigation.addListener('focus', () => {
+      // do something
+      this._UserStatistic();
+      this.getData();
+      this.getVipData();
+      this.getBlockData();
+    });
   }
+
+  addFriend = async id => {
+    this.setState({showSpinner: true});
+
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    let headers = {
+      headers: {
+        Authorization: userData.access_token,
+      },
+    };
+    const data = {
+      to: id,
+      from: userData.user.id,
+      status: 'sent',
+    };
+    // console.log("BHAIJAN LET SEE!!", data)
+    console.log('data: ', data);
+
+    const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    axios.post(URL, data, headers).then(
+      resposne => {
+        this.setState({showSpinner: false});
+        console.log(
+          'api is working but the request data is wrong check it out',
+          resposne.data,
+        );
+        console.log('sddsads', resposne.data.status);
+        if (!resposne.data.status)
+          Toast.show({
+            type: 'error',
+            position: 'top',
+            text1: 'Error',
+            text1: 'You have Already sent request',
+            text2: resposne.data.message,
+            visibilityTime: 4000,
+            autoHide: true,
+            topOffset: 100,
+            bottomOffset: 40,
+          });
+        else {
+          Toast.show({
+            type: 'success',
+            position: 'top',
+            text1: 'Success',
+            text2: 'Successfuly sent friend request.',
+            visibilityTime: 4000,
+            autoHide: true,
+            topOffset: 30,
+            bottomOffset: 40,
+          });
+          this.setState(
+            {isFriend: true},
+            //   ,()=>
+            // this.removeFromWishlist()
+          );
+        }
+      },
+      error => {
+        this.setState({showSpinner: false});
+        console.log(error);
+      },
+    );
+  };
 
   _UserStatistic = async () => {
     const user = await AsyncStorage.getItem('userData');
@@ -298,9 +366,10 @@ export default class HomeCmp extends PureComponent {
     );
   }
 
-  addUser() {
+  addUser(id) {
     return (
       <TouchableOpacity
+        onPress={() => this.addFriend(id)}
         style={{
           backgroundColor: '#ed145b',
           borderRadius: 30,
@@ -592,7 +661,7 @@ export default class HomeCmp extends PureComponent {
                               justifyContent: 'flex-end',
                               alignItems: 'flex-end',
                             }}>
-                            {this.addUser()}
+                            {this.addUser(el.id)}
                             {this.whatsApp()}
                           </View>
                         </View>
@@ -831,6 +900,7 @@ export default class HomeCmp extends PureComponent {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header name={'Dashboard'} navigation={this.props.navigation} />
+
         <FlatList
           ListHeaderComponent={this.renderFlatListHeader}
           ListFooterComponent={this.renderFlatListFooter}
@@ -848,6 +918,7 @@ export default class HomeCmp extends PureComponent {
           // onEndReached={this.onEndReached}
           // onEndReachedThreshold={0.5}
         />
+        <Toast ref={ref => Toast.setRef(ref)} />
 
         <View style={styles.horizontal}>
           <Spinner
@@ -857,6 +928,7 @@ export default class HomeCmp extends PureComponent {
             visible={this.state.showSpinner}
           />
         </View>
+
         <Dialog.Container visible={this.state.showAlert}>
           <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
           <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
