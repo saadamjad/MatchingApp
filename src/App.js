@@ -50,6 +50,7 @@ import YoutubeCmp from './components/main/youtube';
 import InterestedPeopleInYou from './components/main/interestedPeopleInYou';
 import YouinterestedinPeople from './components/main/YouinterestedinPeople';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Allfriend from './components/main/allfriends';
 
 const navOptionHandler = () => ({
   headerShown: false,
@@ -524,8 +525,8 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="FindMatch"
-        component={MatchesStack}
+        name="All Friends"
+        component={Allfriend}
         options={{
           tabBarIcon: ({color, size}) => (
             <Image

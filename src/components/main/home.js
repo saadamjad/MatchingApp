@@ -350,9 +350,10 @@ export default class HomeCmp extends PureComponent {
     }
   };
 
-  whatsApp() {
+  whatsApp(id) {
     return (
       <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('innerChat', {id: id})}
         style={{
           backgroundColor: '#49c858',
           borderRadius: 30,
@@ -662,7 +663,7 @@ export default class HomeCmp extends PureComponent {
                               alignItems: 'flex-end',
                             }}>
                             {this.addUser(el.id)}
-                            {this.whatsApp()}
+                            {this.whatsApp(el.id)}
                           </View>
                         </View>
                       </View>
@@ -865,28 +866,8 @@ export default class HomeCmp extends PureComponent {
                 </View>
                 <View style={styles.socialView}>
                   {/* {this.addUser()} */}
-                  <View
-                    style={{
-                      padding: 7,
-                      backgroundColor: '#ed145b',
-                      borderRadius: 30,
-                      marginRight: 7,
-                    }}>
-                    <FontAwesomeIcon icon={faUserPlus} color="#fff" size={20} />
-                  </View>
-                  {/* { this.whatsApp() } */}
-                  <View
-                    style={{
-                      padding: 7,
-                      backgroundColor: '#49c858',
-                      borderRadius: 30,
-                    }}>
-                    <FontAwesomeIcon
-                      icon={faCommentDots}
-                      color="#fff"
-                      size={20}
-                    />
-                  </View>
+                  {this.addUser(item.item.id)}
+                  {this.whatsApp(item.item.id)}
                 </View>
               </View>
             </View>
