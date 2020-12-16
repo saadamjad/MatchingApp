@@ -430,7 +430,7 @@ export default class ProfileCmp extends Component {
             selected: !states[i].selected,
           });
         } else {
-          updatedArry.push(states[i]);
+          updatedArry.push({...states[i]});
         }
       }
       setTimeout(() => {
@@ -448,7 +448,7 @@ export default class ProfileCmp extends Component {
             selected: !states[i].selected,
           });
         } else {
-          updatedArry.push(states[i]);
+          updatedArry.push({...states[i]});
         }
       }
       setTimeout(() => {

@@ -104,6 +104,7 @@ export default class MatchesCmp extends Component {
 
     // const loggedInUserID = userData.user.id;
     const URL = `https://dev2.thebetatest.com/api/get-interest-users/${loggedInUserID}`;
+    console.log('===================', URL);
     const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
 
     // let access_token = userData.access_token;

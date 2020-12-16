@@ -41,7 +41,9 @@ export default class ChatCmp extends Component {
   }
 
   componentDidMount = async () => {
-    this._GetAsynUserData();
+    const unsubscribe = this.props.navigation.addListener('focus', () => {
+      this._GetAsynUserData();
+    });
   };
 
   _checkIfAlreadyFriend = async (
@@ -182,7 +184,7 @@ export default class ChatCmp extends Component {
         <Header
           name={'Wishlist'}
           navigation={this.props.navigation}
-          search={true}
+          // search={true}
         />
         <ScrollView>
           {this.state.wishList?.fav_users?.map((item, i) => {

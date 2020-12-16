@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
-  console.log('MIL RHA HUN ME!!', navigation);
+  // console.log('MIL RHA HUN ME!!', navigation);
   return (
     <View
       style={{

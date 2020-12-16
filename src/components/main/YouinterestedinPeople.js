@@ -191,8 +191,10 @@ export default class MatchesCmp extends Component {
     const loggedInUserID = userData.user.id;
 
     // const loggedInUserID = userData.user.id;
-    const URL = `https://dev2.thebetatest.com/api/get-interest-users/${loggedInUserID}`;
+    const URL = `https://dev2.thebetatest.com/api/interest-users/${loggedInUserID}`;
+    console.log('========================================', URL);
     const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
+    console.log('========================================', SECONDURL);
 
     // let access_token = userData.access_token;
 
@@ -254,139 +256,10 @@ export default class MatchesCmp extends Component {
           navigation={this.props.navigation}
           // fliter="1"
         />
-
-        {this.state.isLoading ? (
-          <View style={{flex: 1, alignItems: 'center'}}>
-            <ActivityIndicator color="red" size="large" />
-          </View>
-        ) : (
-          <FlatList
-            ref={ref => (this.flatList = ref)}
-            showsVerticalScrollIndicator={false}
-            data={this.state.collection ? this.state.collection : []}
-            // renderItem={this.renderFlatListData}
-            keyExtractor={(item, index) => item.toString()}
-            renderItem={({item, index, separators}) => (
-              (
-                <View
-                  key={item.key}
-                  onPress={() => this.addFriend(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
-                  <View style={styles.reglarUserView}>
-                    <View style={{paddingHorizontal: 10}}>
-                      <View style={[styles.vipUserInner1, styles.mb]}>
-                        <View style={styles.vipImageView}>
-                          <TouchableOpacity
-                            onPress={() =>{
-                              this.props.navigation.navigate('Profile1', {
-                                data: item,
-                                profilePic:
-                                  'http://dev2.thebetatest.com/' +
-                                  item.profile_pic,
-                              })}
-                            }>
-                            <Image
-                              source={{
-                                uri:
-                                  'http://dev2.thebetatest.com/' +
-                                  item.profile_pic,
-                              }}
-                              defaultSource={require('../../assets/noImage.png')}
-                              style={styles.regularImageDimension}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                        <View style={[styles.vipContentView, styles.pt10]}>
-                          <View style={styles.nameView}>
-                            <Text style={styles.vipName}>{item.FirstName}</Text>
-                            {item.Gender == 'off' ? (
-                              <FontAwesomeIcon
-                                icon={faFemale}
-                                color="red"
-                                size={18}
-                              />
-                            ) : (
-                              <FontAwesomeIcon
-                                icon={faMale}
-                                color="blue"
-                                size={18}
-                              />
-                            )}
-                          </View>
-                          <View>
-                            <Text style={styles.vipAge}>{item.Age} years</Text>
-                          </View>
-                          <View style={{flexDirection: 'row'}}>
-                            <Image
-                              style={{marginRight: 5, width: 11, height: 16}}
-                              source={images.locationIcon}
-                            />
-                            <Text style={styles.vipLighTxt}>{item.state}</Text>
-                          </View>
-                          <View style={styles.vipEduView}>
-                            <Text style={styles.vipDrakTxt}>Educations: </Text>
-                            <Text style={styles.vipLighTxt}>
-                              {item.education
-                                ? item.education.length <= 10
-                                  ? item.education
-                                  : item.education.substring(0, 15) + '...'
-                                : 'N/A'}
-                            </Text>
-                          </View>
-                          <View style={{flexDirection: 'row'}}>
-                            <View style={styles.vipEduView}>
-                              <Text style={styles.vipDrakTxt}>Sect: </Text>
-                              <Text style={styles.vipLighTxt}>Shia </Text>
-                            </View>
-                            <View style={styles.socialView}>
-                              <TouchableOpacity
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#ed145b',
-                                  borderRadius: 30,
-                                  marginRight: 7,
-                                }}
-                                onPress={() => this.addFriend(item.id)}>
-                                {/* {this.state.isFriend ? (
-                                <Image
-                                  source={require('../../assets/correct.jpg')}
-                                  style={{width: 20, height: 20}}
-                                />
-                              ) : ( */}
-                                <FontAwesomeIcon
-                                  icon={faUserPlus}
-                                  color="#fff"
-                                  size={20}
-                                />
-                                {/* )} */}
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  this.props.navigation.navigate('innerChat')
-                                }
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#49c858',
-                                  borderRadius: 30,
-                                }}>
-                                <FontAwesomeIcon
-                                  icon={faCommentDots}
-                                  color="#fff"
-                                  size={20}
-                                />
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              )
-            )}
-          />
-        )}
+        <Text style={{fontSize: 16, textAlign: 'center'}}>
+          {' '}
+          BACKENDAPI NOT READY YET
+        </Text>
 
         <View style={styles.horizontal}>
           <Spinner
@@ -500,3 +373,138 @@ const styles = {
     padding: 10,
   },
 };
+
+// <>
+//         {this.state.isLoading ? (
+//           <View style={{flex: 1, alignItems: 'center'}}>
+//             <ActivityIndicator color="red" size="large" />
+//           </View>
+//         ) : (
+//           <FlatList
+//             ref={ref => (this.flatList = ref)}
+//             showsVerticalScrollIndicator={false}
+//             data={this.state.collection ? this.state.collection : []}
+//             // renderItem={this.renderFlatListData}
+//             keyExtractor={(item, index) => item.toString()}
+//             renderItem={({item, index, separators}) => (
+//               (
+//                 <View
+//                   key={item.key}
+//                   onPress={() => this.addFriend(item)}
+//                   onShowUnderlay={separators.highlight}
+//                   onHideUnderlay={separators.unhighlight}>
+//                   <View style={styles.reglarUserView}>
+//                     <View style={{paddingHorizontal: 10}}>
+//                       <View style={[styles.vipUserInner1, styles.mb]}>
+//                         <View style={styles.vipImageView}>
+//                           <TouchableOpacity
+//                             onPress={() =>{
+//                               this.props.navigation.navigate('Profile1', {
+//                                 data: item,
+//                                 profilePic:
+//                                   'http://dev2.thebetatest.com/' +
+//                                   item.profile_pic,
+//                               })}
+//                             }>
+//                             <Image
+//                               source={{
+//                                 uri:
+//                                   'http://dev2.thebetatest.com/' +
+//                                   item.profile_pic,
+//                               }}
+//                               defaultSource={require('../../assets/noImage.png')}
+//                               style={styles.regularImageDimension}
+//                             />
+//                           </TouchableOpacity>
+//                         </View>
+//                         <View style={[styles.vipContentView, styles.pt10]}>
+//                           <View style={styles.nameView}>
+//                             <Text style={styles.vipName}>{item.FirstName}</Text>
+//                             {item.Gender == 'off' ? (
+//                               <FontAwesomeIcon
+//                                 icon={faFemale}
+//                                 color="red"
+//                                 size={18}
+//                               />
+//                             ) : (
+//                               <FontAwesomeIcon
+//                                 icon={faMale}
+//                                 color="blue"
+//                                 size={18}
+//                               />
+//                             )}
+//                           </View>
+//                           <View>
+//                             <Text style={styles.vipAge}>{item.Age} years</Text>
+//                           </View>
+//                           <View style={{flexDirection: 'row'}}>
+//                             <Image
+//                               style={{marginRight: 5, width: 11, height: 16}}
+//                               source={images.locationIcon}
+//                             />
+//                             <Text style={styles.vipLighTxt}>{item.state}</Text>
+//                           </View>
+//                           <View style={styles.vipEduView}>
+//                             <Text style={styles.vipDrakTxt}>Educations: </Text>
+//                             <Text style={styles.vipLighTxt}>
+//                               {item.education
+//                                 ? item.education.length <= 10
+//                                   ? item.education
+//                                   : item.education.substring(0, 15) + '...'
+//                                 : 'N/A'}
+//                             </Text>
+//                           </View>
+//                           <View style={{flexDirection: 'row'}}>
+//                             <View style={styles.vipEduView}>
+//                               <Text style={styles.vipDrakTxt}>Sect: </Text>
+//                               <Text style={styles.vipLighTxt}>Shia </Text>
+//                             </View>
+//                             <View style={styles.socialView}>
+//                               <TouchableOpacity
+//                                 style={{
+//                                   padding: 7,
+//                                   backgroundColor: '#ed145b',
+//                                   borderRadius: 30,
+//                                   marginRight: 7,
+//                                 }}
+//                                 onPress={() => this.addFriend(item.id)}>
+//                                 {/* {this.state.isFriend ? (
+//                                 <Image
+//                                   source={require('../../assets/correct.jpg')}
+//                                   style={{width: 20, height: 20}}
+//                                 />
+//                               ) : ( */}
+//                                 <FontAwesomeIcon
+//                                   icon={faUserPlus}
+//                                   color="#fff"
+//                                   size={20}
+//                                 />
+//                                 {/* )} */}
+//                               </TouchableOpacity>
+//                               <TouchableOpacity
+//                                 onPress={() =>
+//                                   this.props.navigation.navigate('innerChat')
+//                                 }
+//                                 style={{
+//                                   padding: 7,
+//                                   backgroundColor: '#49c858',
+//                                   borderRadius: 30,
+//                                 }}>
+//                                 <FontAwesomeIcon
+//                                   icon={faCommentDots}
+//                                   color="#fff"
+//                                   size={20}
+//                                 />
+//                               </TouchableOpacity>
+//                             </View>
+//                           </View>
+//                         </View>
+//                       </View>
+//                     </View>
+//                   </View>
+//                 </View>
+//               )
+//             )}
+//           />
+//         )}
+// </>

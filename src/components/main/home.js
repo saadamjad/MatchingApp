@@ -51,12 +51,16 @@ export default class HomeCmp extends PureComponent {
   }
 
   componentDidMount() {
+    this._UserStatistic();
+    // this.getData();
+    this.getVipData();
+    this.getBlockData();
+    console.log('chal gya');
     const unsubscribe = this.props.navigation.addListener('focus', () => {
-      // do something
       this._UserStatistic();
-      this.getData();
-      this.getVipData();
-      this.getBlockData();
+      // this.getData();
+      // this.getVipData();
+      // this.getBlockData();
     });
   }
 
@@ -75,8 +79,6 @@ export default class HomeCmp extends PureComponent {
       from: userData.user.id,
       status: 'sent',
     };
-    // console.log("BHAIJAN LET SEE!!", data)
-    console.log('data: ', data);
 
     const URL = 'http://dev2.thebetatest.com/api/send-interest';
     axios.post(URL, data, headers).then(
@@ -110,11 +112,7 @@ export default class HomeCmp extends PureComponent {
             topOffset: 30,
             bottomOffset: 40,
           });
-          this.setState(
-            {isFriend: true},
-            //   ,()=>
-            // this.removeFromWishlist()
-          );
+          this.setState({isFriend: true});
         }
       },
       error => {
@@ -252,13 +250,13 @@ export default class HomeCmp extends PureComponent {
         let mySendData = await responseArray.map(val => {
           return {...res?.data?.collection[val]};
         });
-        console.log('CHECKUP', mySendData);
+        // console.log('CHECKUP', mySendData);
         this.setState({
           blockUserData: mySendData,
         });
       })
       .catch(error => {
-        console.log('error meri taraf se', error);
+        console.log('error meri taraf se =======', error);
         this.setState({
           showAlert: true,
           errorMsg: 'Something went wrong. ' + error,
@@ -282,7 +280,7 @@ export default class HomeCmp extends PureComponent {
     axios
       .get(URL, headers)
       .then(async res => {
-        console.log('lo check karo', res);
+        // console.log('lo check karo', res);
         let responseArray = res.data.collection.data;
         let mySendData = await responseArray.filter(
           val => Number(val.id) !== Number(loggedInUserID),
@@ -484,7 +482,7 @@ export default class HomeCmp extends PureComponent {
             <View style={styles.statsCardView}>
               <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate('YouinterestedinPeople')
+                  this.props.navigation.navigate('interestedPeopleInYou')
                 }>
                 <ImageBackground
                   style={styles.statsImg}

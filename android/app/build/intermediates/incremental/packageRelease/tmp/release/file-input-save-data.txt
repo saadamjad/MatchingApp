@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Nov 20 00:02:35 PKT 2020
+#Wed Nov 25 13:40:56 PKT 2020
 60.set=NATIVE_RESOURCE
 52.set=NATIVE_RESOURCE
 53.base=C\:\\Users\\skluh\\OneDrive\\Desktop\\Kahoodigitals projects\\MatchingApp\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\release\\0

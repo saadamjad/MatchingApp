@@ -51,6 +51,7 @@ import InterestedPeopleInYou from './components/main/interestedPeopleInYou';
 import YouinterestedinPeople from './components/main/YouinterestedinPeople';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Allfriend from './components/main/allfriends';
+import Blockuser from './components/main/blockedusers';
 
 const navOptionHandler = () => ({
   headerShown: false,
@@ -346,58 +347,7 @@ function WhyUsStack() {
     </StackProfile.Navigator>
   );
 }
-function SuccessStoriesStack() {
-  return (
-    <StackProfile.Navigator initialRouteName="SuccessStoriesCmp">
-      <StackProfile.Screen
-        name="SuccessStoriesCmp"
-        component={SuccessStoriesCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="Filter"
-        component={FilterCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="innerChat"
-        component={InnerChatCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="Profile1"
-        component={ProfileCmp}
-        options={navOptionHandler}
-      />
-    </StackProfile.Navigator>
-  );
-}
-function YoutubeStack() {
-  return (
-    <StackProfile.Navigator initialRouteName="YoutubeCmp">
-      <StackProfile.Screen
-        name="YoutubeCmp"
-        component={YoutubeCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="Filter"
-        component={FilterCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="innerChat"
-        component={InnerChatCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="Profile1"
-        component={ProfileCmp}
-        options={navOptionHandler}
-      />
-    </StackProfile.Navigator>
-  );
-}
+
 function matchesSuggestionStack() {
   return (
     <StackProfile.Navigator initialRouteName="matchesSuggestionCmp">
@@ -680,11 +630,28 @@ function SideMenuNavigator() {
           ),
         }}
       />
+
       <Drawer.Screen
         name="interestedPeopleInYou"
         component={interestedPeopleInYou}
         options={{
           title: 'interested People In You',
+          drawerIcon: ({focused, size}) => (
+            <Image
+              source={require('./assets/icons/menu/interest-icon.png')}
+              style={[
+                focused ? styles.drawerActive : styles.drawerInActive,
+                {height: 21, width: 20},
+              ]}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Block Users "
+        component={Blockuser}
+        options={{
+          title: 'Block Users',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/interest-icon.png')}
