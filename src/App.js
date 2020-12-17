@@ -635,7 +635,7 @@ function SideMenuNavigator() {
         name="interestedPeopleInYou"
         component={interestedPeopleInYou}
         options={{
-          title: 'interested People In You',
+          title: 'Interested People In You',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/interest-icon.png')}
@@ -647,7 +647,7 @@ function SideMenuNavigator() {
           ),
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Block Users "
         component={Blockuser}
         options={{
@@ -662,7 +662,7 @@ function SideMenuNavigator() {
             />
           ),
         }}
-      />
+      /> */}
 
       <Drawer.Screen
         name="Subscribe Plan"
@@ -700,7 +700,7 @@ function SideMenuNavigator() {
         name="About"
         component={AboutStack}
         options={{
-          title: 'Contact Us',
+          title: 'About Us ',
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('./assets/icons/menu/contact-us.png')}

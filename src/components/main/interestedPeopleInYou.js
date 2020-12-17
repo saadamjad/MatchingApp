@@ -56,58 +56,14 @@ export default class MatchesCmp extends Component {
     this.setState({showAlert: false});
   }
 
-  // async getData(i) {
-  //   console.log('getData index: ', i);
-  //   let URL;
-  //   if (i == undefined) {
-  //     URL = 'http://dev2.thebetatest.com/api/allusers';
-  //   } else {
-  //     URL = 'http://dev2.thebetatest.com/api/allusers?page=' + i;
-  //   }
-
-  //   const user = await AsyncStorage.getItem('userData');
-  //   const access_token = JSON.parse(user).access_token;
-  //   console.log(access_token);
-  //   let headers = {
-  //     headers: {
-  //       Authorization: access_token,
-  //     },
-  //   };
-
-  //   this.setState({showSpinner: true});
-  //   axios
-  //     .get(URL, headers)
-  //     .then(async res => {
-  //       this.setState({
-  //         showSpinner: false,
-  //         usersData: res.data,
-  //         collection: res.data.collection.data,
-  //       });
-  //       console.log(res.data);
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error);
-  //       this.setState({
-  //         showSpinner: false,
-  //         showAlert: true,
-  //         errorMsg: 'Something went wrong. ' + error,
-  //         errorTitle: 'Error!!',
-  //       });
-  //     });
-  // }
-
   _GetWishtlistData = async anty => {
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
     const access_token = userData.access_token;
     const loggedInUserID = userData.user.id;
-
-    // const loggedInUserID = userData.user.id;
-    const URL = `https://dev2.thebetatest.com/api/get-interest-users/${loggedInUserID}`;
+    const URL = `https://dev2.thebetatest.com/api/interest-users/${loggedInUserID}`;
     console.log('===================', URL);
     const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
-
-    // let access_token = userData.access_token;
 
     let headers = {
       headers: {
@@ -132,7 +88,7 @@ export default class MatchesCmp extends Component {
             await data.map(val => {
               Response?.data?.collection?.data.map(value => {
                 console.log(val);
-                if (val.to == value.id) {
+                if (val.from == value.id) {
                   newData.push(value);
                 }
               });
@@ -260,7 +216,7 @@ export default class MatchesCmp extends Component {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header
-          name={'interested People In you'}
+          name={'Interested People In you'}
           navigation={this.props.navigation}
           // fliter="1"
         />

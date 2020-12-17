@@ -969,26 +969,26 @@ export default class ProfileCmp extends Component {
   addUser() {
     return (
       <View>
-        {this.state.isFriend ? (
-          <TouchableOpacity activeOpacity={0.8} onPress={this._RemoveFriend}>
-            {/* <TouchableOpacityactiveOpacity={0.8} onPress={this.addFriend} */}
-            <View
-              style={{
-                padding: 8,
-                backgroundColor: '#ed145b',
-                borderRadius: 30,
-                justifyContent: 'center',
-                marginRight: 10,
-              }}>
-              <FontAwesomeIcon
-                icon={faUserMinus}
-                color="#fff"
-                size={24}
-                // onPress={this._RemoveFriend}
-              />
-            </View>
-          </TouchableOpacity>
-        ) : (
+        {this.state.isFriend ? null : (
+          // <TouchableOpacity activeOpacity={0.8} onPress={this._RemoveFriend}>
+          //   {/* <TouchableOpacityactiveOpacity={0.8} onPress={this.addFriend} */}
+          //   <View
+          //     style={{
+          //       padding: 8,
+          //       backgroundColor: '#ed145b',
+          //       borderRadius: 30,
+          //       justifyContent: 'center',
+          //       marginRight: 10,
+          //     }}>
+          //     <FontAwesomeIcon
+          //       icon={faUserMinus}
+          //       color="#fff"
+          //       size={24}
+          //       // onPress={this._RemoveFriend}
+          //     />
+          //   </View>
+          // </TouchableOpacity>
+
           <TouchableOpacity activeOpacity={0.8} onPress={this.addFriend}>
             <View
               style={{

@@ -52,16 +52,16 @@ export default class HomeCmp extends PureComponent {
 
   componentDidMount() {
     this._UserStatistic();
-    // this.getData();
+    this.getData();
     this.getVipData();
     this.getBlockData();
     console.log('chal gya');
-    const unsubscribe = this.props.navigation.addListener('focus', () => {
-      this._UserStatistic();
-      // this.getData();
-      // this.getVipData();
-      // this.getBlockData();
-    });
+    // const unsubscribe = this.props.navigation.addListener('focus', () => {
+    //   this._UserStatistic();
+    //   this.getData();
+    //   this.getVipData();
+    //   this.getBlockData();
+    // });
   }
 
   addFriend = async id => {
