@@ -134,10 +134,10 @@ export default class SignupCmp extends Component {
     });
   };
   UNSAFE_componentWillMount() {
-    BackHandler.addEventListener(
-      'hardwareBackPress',
-      this.handleBackButtonClick,
-    );
+    // BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   this.handleBackButtonClick,
+    // );
   }
   handleBackButtonClick = () => {
     this.props?.navigation?.navigate('Matches');

@@ -123,11 +123,6 @@ export default class SigninCmp extends Component {
           this.setState({showSpinner: false});
           console.log(res.data);
           if (res.data.status) {
-            // const checkUser = await AsyncStorage.setItem(
-            //   'checkUserLoggedin',
-            //   JSON.stringify(true),
-            // );
-            // console.log('save', checkUser);
             const user = await AsyncStorage.setItem(
               'userData',
               JSON.stringify(res.data),
@@ -136,6 +131,7 @@ export default class SigninCmp extends Component {
               'user_type',
               res.data.user.user_type,
             );
+            // this.props.navigation.navigate('Main');
             this._storeData();
           } else
             this.setState({

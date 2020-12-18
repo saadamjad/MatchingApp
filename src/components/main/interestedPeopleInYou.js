@@ -56,14 +56,60 @@ export default class MatchesCmp extends Component {
     this.setState({showAlert: false});
   }
 
+  // async getData(i) {
+  //   console.log('getData index: ', i);
+  //   let URL;
+  //   if (i == undefined) {
+  //     URL = 'http://dev2.thebetatest.com/api/allusers';
+  //   } else {
+  //     URL = 'http://dev2.thebetatest.com/api/allusers?page=' + i;
+  //   }
+
+  //   const user = await AsyncStorage.getItem('userData');
+  //   const access_token = JSON.parse(user).access_token;
+  //   console.log(access_token);
+  //   let headers = {
+  //     headers: {
+  //       Authorization: access_token,
+  //     },
+  //   };
+
+  //   this.setState({showSpinner: true});
+  //   axios
+  //     .get(URL, headers)
+  //     .then(async res => {
+  //       this.setState({
+  //         showSpinner: false,
+  //         usersData: res.data,
+  //         collection: res.data.collection.data,
+  //       });
+  //       console.log(res.data);
+  //     })
+  //     .catch(error => {
+  //       console.log('error', error);
+  //       this.setState({
+  //         showSpinner: false,
+  //         showAlert: true,
+  //         errorMsg: 'Something went wrong. ' + error,
+  //         errorTitle: 'Error!!',
+  //       });
+  //     });
+  // }
+
   _GetWishtlistData = async anty => {
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
     const access_token = userData.access_token;
     const loggedInUserID = userData.user.id;
-    const URL = `https://dev2.thebetatest.com/api/interest-users/${loggedInUserID}`;
+
+    // const loggedInUserID = userData.user.id;
+    // https://dev2.thebetatest.com/api/get-interest-users/131
+
+    const URL = `https://dev2.thebetatest.com/api/get-interest-users/${loggedInUserID}`;
     console.log('===================', URL);
     const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
+
+    // let access_token = userData.access_token;
 
     let headers = {
       headers: {
@@ -88,7 +134,7 @@ export default class MatchesCmp extends Component {
             await data.map(val => {
               Response?.data?.collection?.data.map(value => {
                 console.log(val);
-                if (val.from == value.id) {
+                if (val.to == value.id) {
                   newData.push(value);
                 }
               });
@@ -212,11 +258,49 @@ export default class MatchesCmp extends Component {
       });
   };
 
+  isUserAlreadyFriend = async ThereIsClickableUserId => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const access_token = userData.access_token;
+    const thereIsOurId = userData.user.id;
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    let isFriend = false;
+    await axios
+      .get(
+        `https://dev2.thebetatest.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
+        headers,
+      )
+      .then(async Response => {
+        if (Response.data) {
+          if (
+            Response.data.collection.interest_to == 'sent' &&
+            Response.data.collection.interest_from == 'sent'
+          ) {
+            isFriend = true;
+          }
+          // console.log('FULL SHOOT HY', Response.data.status);
+          return true;
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log('PAHLY ERROR SOLVE KARO', err);
+      });
+    return isFriend;
+  };
+
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header
-          name={'Interested People In you'}
+          name={'You Showed Interest in People'}
           navigation={this.props.navigation}
           // fliter="1"
         />
@@ -306,43 +390,37 @@ export default class MatchesCmp extends Component {
                               <Text style={styles.vipDrakTxt}>Sect: </Text>
                               <Text style={styles.vipLighTxt}>Shia </Text>
                             </View>
-                            <View style={styles.socialView}>
-                              <TouchableOpacity
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#ed145b',
-                                  borderRadius: 30,
-                                  marginRight: 7,
-                                }}
-                                onPress={() => this.deny(item.id)}>
-                                {/* {this.state.isFriend ? (
-                                <Image
-                                  source={require('../../assets/correct.jpg')}
-                                  style={{width: 20, height: 20}}
-                                />
-                              ) : ( */}
-                                <FontAwesomeIcon
-                                  icon={faTimes}
-                                  color="#fff"
-                                  size={20}
-                                />
-                                {/* )} */}
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                onPress={() => this.accept(item.id)}
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#49c858',
-                                  borderRadius: 30,
-                                }}>
-                                <FontAwesomeIcon
-                                  icon={faCheck}
-                                  color="#fff"
-                                  size={20}
-                                />
-                              </TouchableOpacity>
-                            </View>
                           </View>
+                          {!this.isUserAlreadyFriend(item.id) ? (
+                            <TouchableOpacity
+                              style={styles.chatBadgetContView}
+                              disabled={true}>
+                              <Text style={styles.greenColor}>
+                                {'Request Sent'}
+                              </Text>
+                            </TouchableOpacity>
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() =>
+                                this.props.navigation.navigate('innerChat', {
+                                  id: item.id,
+                                })
+                              }
+                              style={{
+                                backgroundColor: '#49c858',
+                                borderRadius: 30,
+                                height: 30,
+                                width: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}>
+                              <FontAwesomeIcon
+                                icon={faCommentDots}
+                                color="#fff"
+                                size={20}
+                              />
+                            </TouchableOpacity>
+                          )}
                         </View>
                       </View>
                     </View>
@@ -464,4 +542,43 @@ const styles = {
     justifyContent: 'space-around',
     padding: 10,
   },
+  chatMainView: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 10,
+    borderColor: '#c5c5c5',
+    borderWidth: 1,
+    margin: 10,
+    borderRadius: 5,
+  },
+  chatImageView: {flex: 1, alignItems: 'center', marginRight: 10},
+  chatImageDimension: {width: 56, height: 56},
+  chatTxtContView: {flex: 4, flexDirection: 'row'},
+  chatTxtView: {flex: 4},
+  chatHeading: {fontSize: 16, color: '#252525', fontFamily: 'Poppins-SemiBold'},
+  chatLabel: {fontSize: 12, color: '#252525', fontFamily: 'Poppins-Regular'},
+  chatBadgetContView: {flex: 2, alignItems: 'center', justifyContent: 'center'},
+  chatBadget: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
+    backgroundColor: '#ff1822',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  chatBadgetTxt: {fontSize: 11, fontFamily: 'Poppins-Medium', color: '#fff'},
+  greenColor: {
+    color: '#39b54a',
+    fontSize: 11,
+    fontFamily: 'Poppins-SemiBold',
+    textDecorationLine: 'underline',
+  },
+  redColor: {
+    color: '#ff1822',
+    fontSize: 11,
+    fontFamily: 'Poppins-SemiBold',
+    textDecorationLine: 'underline',
+  },
+  locationcont: {flexDirection: 'row'},
+  locationImg: {marginRight: 5, width: 11, height: 16},
 };

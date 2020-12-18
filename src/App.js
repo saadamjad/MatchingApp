@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -51,28 +51,62 @@ import InterestedPeopleInYou from './components/main/interestedPeopleInYou';
 import YouinterestedinPeople from './components/main/YouinterestedinPeople';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Allfriend from './components/main/allfriends';
-import Blockuser from './components/main/blockedusers';
 
 const navOptionHandler = () => ({
   headerShown: false,
 });
 
-function CustomDrawerContent(props) {
+const CustomDrawerContent = props => {
+  const [state, setState] = React.useState({
+    name: 'bbbbbbbb',
+    vip: false,
+    image: false,
+  });
+  React.useEffect(() => {
+    getUserDetailsMc();
+  }, []);
+
+  const getUserDetailsMc = () => {
+    AsyncStorage.getItem('userData', (err, res) => {
+      if (err) {
+      } else {
+        let data = JSON.parse(res);
+        // alert(data.username);
+        console.log('data', data);
+        setState({
+          ...state,
+          name: data.user.username,
+          vip: data.user.user_type == 'v',
+          image: data.user.image ? data.user.image : false,
+        });
+      }
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safeViewCont}>
       <View style={styles.cont}>
         <View style={styles.imgViewCont}>
           <View style={styles.imgView}>
-            <Image style={styles.imgSize} source={images.profileImgIcon} />
+            <Image
+              style={styles.imgSize}
+              source={{uri: state.image && state.image}}
+            />
           </View>
         </View>
         <View style={styles.txtViewCont}>
           <View style={styles.txtView}>
             <View style={styles.txtViewCenter}>
-              <Text style={styles.nameTxt}>@dwayne115</Text>
-              <TouchableOpacity style={styles.vipBtn}>
-                <Text style={styles.vipTxt}>VIP</Text>
-              </TouchableOpacity>
+              <Text style={styles.nameTxt}> @{state.name}</Text>
+              {state.vip ? (
+                <TouchableOpacity style={styles.vipBtn}>
+                  <Text style={styles.vipTxt}>VIP</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={styles.vipBtn}>
+                  <Text style={styles.vipTxt}>REGULAR</Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 onPress={() => props.navigation.navigate('EditProfile')}
                 style={styles.profileBtn}>
@@ -101,7 +135,7 @@ function CustomDrawerContent(props) {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const StackAuth = createStackNavigator();
 function AuthStack() {
@@ -475,7 +509,7 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="All Friends"
+        name="Find Friends"
         component={Allfriend}
         options={{
           tabBarIcon: ({color, size}) => (
@@ -548,7 +582,7 @@ function SideMenuNavigator() {
   return (
     <Drawer.Navigator
       initialRouteName="MenuTab"
-      drawerContent={props => CustomDrawerContent(props)}>
+      drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen
         name="Home"
         component={TabNavigator}

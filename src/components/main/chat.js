@@ -62,7 +62,7 @@ export default class ChatCmp extends Component {
         console.log('res is here for now check it out boy!!===', res.data);
         // this.setState({step: 1});
         this.setState({
-          chat: res.data?.fav,
+          chat: res.data?.users,
         });
       })
       .catch(error => {
@@ -98,29 +98,24 @@ export default class ChatCmp extends Component {
                   // onPress={() => EventRegister.emit('isLoggedIn', 'Chat')}
                   onPress={() =>
                     this.props.navigation.navigate('innerChat', {
-                      id: val.fav_user_id,
+                      id: val.id,
+                      userName: val.UserName,
                     })
                   }
                   key={i}
                   style={styles.chatMainView}>
                   <View style={styles.chatImageView}>
-                    <Image
-                      style={styles.chatImageDimension}
-                      source={images.chatSender1Icon}
-                    />
+                    <View style={styles.chatImageDimension}>
+                      <Image
+                        style={styles.chatImageDimension}
+                        source={val.profile_pic}
+                      />
+                    </View>
                   </View>
 
                   <View style={styles.chatTxtContView}>
                     <View style={styles.chatTxtView}>
-                      <Text style={styles.chatHeading}>{val.fav_user_id}</Text>
-                      <Text style={styles.chatLabel}>Hello Brother!</Text>
-                    </View>
-                    <View style={styles.chatBadgetContView}>
-                      {val.badget > 0 ? (
-                        <View style={styles.chatBadget}>
-                          <Text style={styles.chatBadgetTxt}>{val.badget}</Text>
-                        </View>
-                      ) : null}
+                      <Text style={styles.chatHeading}>@{val.UserName}</Text>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -140,10 +135,15 @@ const styles = {
     borderBottomColor: '#c5c5c5',
     borderBottomWidth: 2,
   },
-  chatImageView: {flex: 1, alignItems: 'center', marginRight: 10},
-  chatImageDimension: {width: 56, height: 56},
+  chatImageView: {
+    flex: 1,
+    alignItems: 'center',
+    marginRight: 10,
+    // borderWidth: 0.6,
+  },
+  chatImageDimension: {width: 56, height: 56, borderWidth: 1, borderRadius: 56},
   chatTxtContView: {flex: 4, flexDirection: 'row'},
-  chatTxtView: {flex: 4},
+  chatTxtView: {flex: 4, justifyContent: 'center'},
   chatHeading: {fontSize: 16, color: '#252525', fontFamily: 'Poppins-SemiBold'},
   chatLabel: {fontSize: 12, color: '#252525', fontFamily: 'Poppins-Regular'},
   chatBadgetContView: {flex: 1, alignItems: 'center', justifyContent: 'center'},

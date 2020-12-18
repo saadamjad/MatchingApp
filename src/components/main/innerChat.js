@@ -71,10 +71,10 @@ export default class InnerChatCmp extends Component {
         this.setState({keyboardOpen: 0});
       },
     );
-    BackHandler.addEventListener(
-      'hardwareBackPress',
-      this.handleBackButtonClick,
-    );
+    // BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   this.handleBackButtonClick,
+    // );
   }
 
   getMessages = async () => {
@@ -214,8 +214,8 @@ export default class InnerChatCmp extends Component {
       <SafeAreaView style={{flex: 1}}>
         <Header
           name={
-            this.props.route.params.id
-              ? this.props.route.params.id
+            this.props.route.params.userName
+              ? this.props.route.params.userName
               : 'USER NAME'
           }
           navigation={this.props.navigation}

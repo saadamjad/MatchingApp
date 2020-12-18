@@ -220,7 +220,7 @@ export default class MatchesCmp extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <Header
           name={'Match Suggestion'}
           navigation={this.props.navigation}
@@ -240,11 +240,15 @@ export default class MatchesCmp extends Component {
             keyExtractor={(item, index) => item.toString()}
             renderItem={({item, index, separators}) => (
               // console.log('item', item),
-              <View
+              <TouchableOpacity
                 key={item.key}
-                onPress={() => this.addFriend(item)}
-                onShowUnderlay={separators.highlight}
-                onHideUnderlay={separators.unhighlight}>
+                onPress={() =>
+                  this.props.navigation.navigate('Profile1', {
+                    data: item,
+                    profilePic:
+                      'http://dev2.thebetatest.com/' + item.profile_pic,
+                  })
+                }>
                 <View style={styles.reglarUserView}>
                   <View style={{paddingHorizontal: 10}}>
                     <View style={[styles.vipUserInner1, styles.mb]}>
@@ -311,48 +315,16 @@ export default class MatchesCmp extends Component {
                             <Text style={styles.vipDrakTxt}>Sect: </Text>
                             <Text style={styles.vipLighTxt}>Shia </Text>
                           </View>
-                          <View style={styles.socialView}>
-                            <TouchableOpacity
-                              style={{
-                                padding: 7,
-                                backgroundColor: '#ed145b',
-                                borderRadius: 30,
-                                marginRight: 7,
-                              }}
-                              onPress={() => this.deny(item.id)}>
-                              {/* {this.state.isFriend ? (
-                                <Image
-                                  source={require('../../assets/correct.jpg')}
-                                  style={{width: 20, height: 20}}
-                                />
-                              ) : ( */}
-                              <FontAwesomeIcon
-                                icon={faTimes}
-                                color="#fff"
-                                size={20}
-                              />
-                              {/* )} */}
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={() => this.accept(item.id)}
-                              style={{
-                                padding: 7,
-                                backgroundColor: '#49c858',
-                                borderRadius: 30,
-                              }}>
-                              <FontAwesomeIcon
-                                icon={faCheck}
-                                color="#fff"
-                                size={20}
-                              />
-                            </TouchableOpacity>
-                          </View>
                         </View>
+
+                        <TouchableOpacity style={{height: 30}}>
+                          <Text> Send Interest </Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             )}
           />
         )}
@@ -393,13 +365,6 @@ const styles = {
     borderRadius: 10,
     backgroundColor: '#fff',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 2,
   },
   mb: {
     marginBottom: 10,

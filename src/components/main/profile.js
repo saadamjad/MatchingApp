@@ -70,6 +70,11 @@ export default class ProfileCmp extends Component {
   }
 
   async componentDidMount() {
+    console.log(
+      '======',
+
+      this.props.route.params.data ? this.props.route.params.data : null,
+    );
     let getVipUserDataFromParams = this.props.route.params.data
       ? this.props.route.params.data
       : null;

@@ -54,11 +54,11 @@ export default class SignupCmp extends Component {
 
   componentDidMount() {
     console.log(this.state.step);
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    // BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   handleBackButton() {

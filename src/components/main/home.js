@@ -7,8 +7,9 @@ import {
   Image,
   AsyncStorage,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity, FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 
 import {Header} from '../common';
@@ -25,6 +26,7 @@ import {
   faHeart,
   faStar,
   faThumbsUp,
+  faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import {colors, images} from '../../constants/theme';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -52,7 +54,7 @@ export default class HomeCmp extends PureComponent {
 
   componentDidMount() {
     this._UserStatistic();
-    this.getData();
+    this.getData(10);
     this.getVipData();
     this.getBlockData();
     console.log('chal gya');
@@ -348,6 +350,50 @@ export default class HomeCmp extends PureComponent {
     }
   };
 
+  isUserAlreadyFriend = async (ThereIsClickableUserId, setFriend) => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const access_token = userData.access_token;
+    const thereIsOurId = userData.user.id;
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    let isFriend = false;
+    await axios
+      .get(
+        `https://dev2.thebetatest.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
+        headers,
+      )
+      .then(async Response => {
+        // console.log('res====', response.data.collection.data);
+
+        if (Response.data) {
+          console.log('ME TO FRIEND HUN', Response.data.collection.interest_to);
+          if (
+            Response.data.collection.interest_to == 'sent' &&
+            Response.data.collection.interest_from == 'sent'
+          ) {
+            setFriend(Response.data.collection);
+          } else {
+            console.log('I AM BHAI');
+            isFriend = false;
+          }
+          return true;
+          // console.log('FULL SHOOT HY', Response.data.status);
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log('PAHLY ERROR SOLVE KARO', err);
+      });
+    return isFriend;
+  };
+
   whatsApp(id) {
     return (
       <TouchableOpacity
@@ -365,7 +411,7 @@ export default class HomeCmp extends PureComponent {
     );
   }
 
-  addUser(id) {
+  addUser(id, check) {
     return (
       <TouchableOpacity
         onPress={() => this.addFriend(id)}
@@ -378,7 +424,11 @@ export default class HomeCmp extends PureComponent {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <FontAwesomeIcon icon={faUserPlus} color="#fff" size={20} />
+        <FontAwesomeIcon
+          icon={!check ? faUserPlus : faUserCheck}
+          color="#fff"
+          size={20}
+        />
       </TouchableOpacity>
     );
   }
@@ -556,7 +606,15 @@ export default class HomeCmp extends PureComponent {
                   // console.log('profilepic', profilePic);
 
                   return (
-                    <View style={styles.vipUserInner} key={index}>
+                    <TouchableOpacity
+                      style={styles.vipUserInner}
+                      key={index}
+                      onPress={() =>
+                        this.props.navigation.navigate('Profile1', {
+                          data: el,
+                          profilePic: profilePic,
+                        })
+                      }>
                       <View
                         style={{
                           flex: 1,
@@ -569,7 +627,7 @@ export default class HomeCmp extends PureComponent {
                           shadowOffset: {width: 0, height: 1},
                           shadowOpacity: 0.22,
                           shadowRadius: 2.22,
-                          elevation: 2,
+                          // elevation: 2,
                         }}>
                         <TouchableOpacity
                           onPress={() =>
@@ -613,26 +671,6 @@ export default class HomeCmp extends PureComponent {
                               }}
                               style={{width: 20, height: 16}}
                             />
-                            {/* <View
-                            style={{
-                              position: 'relative',
-                              bottom: 5,
-                              marginBottom: -10,
-                            }}>
-                            <CountryPicker
-                            withAlphaFilter={true}
-                            withCallingCode={true}
-                            withFilter={true}
-                            countryCode={this.state.cca2}
-                            onSelect={value => {
-                                this.setState({
-                                  cca2: value.cca2,
-                                });
-                              }}
-                              cca2={this.state.cca2}
-                              translation="eng"
-                              />
-                          </View> */}
                           </View>
                           {el.education ? (
                             <View style={styles.vipEduView}>
@@ -665,7 +703,7 @@ export default class HomeCmp extends PureComponent {
                           </View>
                         </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   );
                 }
               })
@@ -674,16 +712,6 @@ export default class HomeCmp extends PureComponent {
             )}
           </Swiper>
         </View>
-
-        {/* <YouTube
-                  apiKey="app key here"
-          // playlistId="PL5nl7U11kP5pVOMByiMAfSUWfF-NDFtcJ"
-          videoId="6zTWmkfPrlE"
-          // videoIds={["6zTWmkfPrlE" , "uTTJ1QKLi48" , "33SNNv9tJaQ"]}
-          loop
-          onError={e => console.log(e)}
-          style={{ alignSelf: 'stretch', height: 200 }}
-        /> */}
 
         <View style={styles.reglarUserView}>
           <View>
@@ -795,8 +823,22 @@ export default class HomeCmp extends PureComponent {
     );
   };
   renderFlatListData = (item, index) => {
+    let isFriend = {
+      wish_list: false,
+      block: false,
+      interest_to: false,
+      interest_from: false,
+    };
+    this.isUserAlreadyFriend(item.item.id, setFriend);
+    const setFriend = friend => {
+      isFriend = friend;
+    };
     return (
-      <View style={styles.reglarUserView}>
+      <TouchableOpacity
+        style={styles.reglarUserView}
+        onPress={() =>
+          this.props.navigation.navigate('Profile1', {data: item.item})
+        }>
         <View style={{paddingHorizontal: 10}}>
           <View style={[styles.vipUserInner1, styles.mb]}>
             <View style={styles.vipImageView}>
@@ -864,14 +906,20 @@ export default class HomeCmp extends PureComponent {
                 </View>
                 <View style={styles.socialView}>
                   {/* {this.addUser()} */}
-                  {this.addUser(item.item.id)}
-                  {this.whatsApp(item.item.id)}
+                  {/* {this.addUser(item.item.id)} */}
+                  {isFriend.interest_from == 'send' &&
+                  isFriend.interest_to == 'send'
+                    ? this.whatsApp(item.item.id)
+                    : this.addUser(
+                        item.item.id,
+                        isFriend.interest_from == 'send',
+                      )}
                 </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -966,6 +1014,7 @@ const styles = {
     flexDirection: 'row',
     borderRadius: 10,
     paddingHorizontal: 30,
+    backgroundColor: 'white',
   },
   vipUserInner1: {
     flex: 1,
@@ -976,7 +1025,7 @@ const styles = {
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 2,
+    // elevation: 2,
   },
   vipImageView: {flex: 1},
   vipImageDimension: {width: 120, height: 150, borderRadius: 10},

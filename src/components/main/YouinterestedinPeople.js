@@ -258,6 +258,44 @@ export default class MatchesCmp extends Component {
       });
   };
 
+  isUserAlreadyFriend = async ThereIsClickableUserId => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const access_token = userData.access_token;
+    const thereIsOurId = userData.user.id;
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+    let isFriend = false;
+    await axios
+      .get(
+        `https://dev2.thebetatest.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
+        headers,
+      )
+      .then(async Response => {
+        if (Response.data) {
+          if (
+            Response.data.collection.interest_to == 'sent' &&
+            Response.data.collection.interest_from == 'sent'
+          ) {
+            isFriend = true;
+          }
+          // console.log('FULL SHOOT HY', Response.data.status);
+          return true;
+        }
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false,
+        });
+        console.log('PAHLY ERROR SOLVE KARO', err);
+      });
+    return isFriend;
+  };
+
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -281,11 +319,14 @@ export default class MatchesCmp extends Component {
             renderItem={({item, index, separators}) => (
               console.log('item', item),
               (
-                <View
-                  key={item.key}
-                  onPress={() => this.addFriend(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Profile1', {
+                      data: item,
+                      profilePic:
+                        'http://dev2.thebetatest.com/' + item.profile_pic,
+                    })
+                  }>
                   <View style={styles.reglarUserView}>
                     <View style={{paddingHorizontal: 10}}>
                       <View style={[styles.vipUserInner1, styles.mb]}>
@@ -352,48 +393,42 @@ export default class MatchesCmp extends Component {
                               <Text style={styles.vipDrakTxt}>Sect: </Text>
                               <Text style={styles.vipLighTxt}>Shia </Text>
                             </View>
-                            <View style={styles.socialView}>
-                              <TouchableOpacity
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#ed145b',
-                                  borderRadius: 30,
-                                  marginRight: 7,
-                                }}
-                                onPress={() => this.deny(item.id)}>
-                                {/* {this.state.isFriend ? (
-                                <Image
-                                  source={require('../../assets/correct.jpg')}
-                                  style={{width: 20, height: 20}}
-                                />
-                              ) : ( */}
-                                <FontAwesomeIcon
-                                  icon={faTimes}
-                                  color="#fff"
-                                  size={20}
-                                />
-                                {/* )} */}
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                onPress={() => this.accept(item.id)}
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#49c858',
-                                  borderRadius: 30,
-                                }}>
-                                <FontAwesomeIcon
-                                  icon={faCheck}
-                                  color="#fff"
-                                  size={20}
-                                />
-                              </TouchableOpacity>
-                            </View>
                           </View>
+                          {!this.isUserAlreadyFriend(item.id) ? (
+                            <TouchableOpacity
+                              style={styles.chatBadgetContView}
+                              disabled={true}>
+                              <Text style={styles.greenColor}>
+                                {'Request Sent'}
+                              </Text>
+                            </TouchableOpacity>
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() =>
+                                this.props.navigation.navigate('innerChat', {
+                                  id: item.id,
+                                })
+                              }
+                              style={{
+                                backgroundColor: '#49c858',
+                                borderRadius: 30,
+                                height: 30,
+                                width: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}>
+                              <FontAwesomeIcon
+                                icon={faCommentDots}
+                                color="#fff"
+                                size={20}
+                              />
+                            </TouchableOpacity>
+                          )}
                         </View>
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             )}
           />
@@ -435,13 +470,6 @@ const styles = {
     borderRadius: 10,
     backgroundColor: '#fff',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 2,
   },
   mb: {
     marginBottom: 10,
@@ -510,4 +538,43 @@ const styles = {
     justifyContent: 'space-around',
     padding: 10,
   },
+  chatMainView: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 10,
+    borderColor: '#c5c5c5',
+    borderWidth: 1,
+    margin: 10,
+    borderRadius: 5,
+  },
+  chatImageView: {flex: 1, alignItems: 'center', marginRight: 10},
+  chatImageDimension: {width: 56, height: 56},
+  chatTxtContView: {flex: 4, flexDirection: 'row'},
+  chatTxtView: {flex: 4},
+  chatHeading: {fontSize: 16, color: '#252525', fontFamily: 'Poppins-SemiBold'},
+  chatLabel: {fontSize: 12, color: '#252525', fontFamily: 'Poppins-Regular'},
+  chatBadgetContView: {flex: 2, alignItems: 'center', justifyContent: 'center'},
+  chatBadget: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
+    backgroundColor: '#ff1822',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  chatBadgetTxt: {fontSize: 11, fontFamily: 'Poppins-Medium', color: '#fff'},
+  greenColor: {
+    color: '#39b54a',
+    fontSize: 11,
+    fontFamily: 'Poppins-SemiBold',
+    textDecorationLine: 'underline',
+  },
+  redColor: {
+    color: '#ff1822',
+    fontSize: 11,
+    fontFamily: 'Poppins-SemiBold',
+    textDecorationLine: 'underline',
+  },
+  locationcont: {flexDirection: 'row'},
+  locationImg: {marginRight: 5, width: 11, height: 16},
 };
