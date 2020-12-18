@@ -394,7 +394,7 @@ export default class MatchesCmp extends Component {
                               <Text style={styles.vipLighTxt}>Shia </Text>
                             </View>
                           </View>
-                          {!this.isUserAlreadyFriend(item.id) ? (
+                          {/* {!this.isUserAlreadyFriend(item.id) ? (
                             <TouchableOpacity
                               style={styles.chatBadgetContView}
                               disabled={true}>
@@ -423,7 +423,7 @@ export default class MatchesCmp extends Component {
                                 size={20}
                               />
                             </TouchableOpacity>
-                          )}
+                          )} */}
                         </View>
                       </View>
                     </View>
