@@ -89,9 +89,7 @@ export default class ProfileCmp extends Component {
     let getVipUserDataFromParams = this.props.route.params.data
       ? this.props.route.params.data
       : null;
-    let profilePic = this.props.route.params.profilePic
-      ? this.props.route.params.profilePic
-      : null;
+
     let pic1 = getVipUserDataFromParams.profile_pic;
     // let pic2 = getVipUserDataFromParams.pic2;
     // console.log('getVipUserDataFromParams', getVipUserDataFromParams.user_type);
@@ -1339,7 +1337,7 @@ export default class ProfileCmp extends Component {
                         fontFamily: 'Poppins-Reglar',
                         marginBottom: 5,
                       }}>
-                      {this.state.data.FirstName}
+                      @{this.state.data.UserName}
                     </Text>
                     {this.state.data.Gender == 'on' ? (
                       <FontAwesomeIcon icon={faMale} color="blue" size={18} />

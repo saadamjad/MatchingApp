@@ -133,15 +133,15 @@ export default class SignupCmp extends Component {
       );
     });
   };
-  UNSAFE_componentWillMount() {
-    // BackHandler.addEventListener(
-    //   'hardwareBackPress',
-    //   this.handleBackButtonClick,
-    // );
-  }
-  handleBackButtonClick = () => {
-    this.props?.navigation?.navigate('Matches');
-  };
+  // UNSAFE_componentWillMount() {
+  //   BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     this.handleBackButtonClick,
+  //   );
+  // }
+  // handleBackButtonClick = () => {
+  //   this.props?.navigation?.navigate('Matches');
+  // };
 
   updateCountry = country => {
     this.setState({country});

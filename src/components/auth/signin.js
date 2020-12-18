@@ -131,7 +131,7 @@ export default class SigninCmp extends Component {
               'user_type',
               res.data.user.user_type,
             );
-            // this.props.navigation.navigate('Main');
+            this.props.navigation.navigate('Home');
             this._storeData();
           } else
             this.setState({

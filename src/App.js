@@ -44,9 +44,7 @@ import ResetPasswordCmp from './components/main/resetPassword';
 import InviteFriendsCmp from './components/main/inviteFriends';
 import SubscriptionPlansCmp from './components/main/subscriptionplans';
 import SubscriptionPlansCmp1 from './components/auth/subscriptionplans';
-import FindMatchCmp from './components/main/findMatch';
 import ProfileCmp from './components/main/profile';
-import YoutubeCmp from './components/main/youtube';
 import InterestedPeopleInYou from './components/main/interestedPeopleInYou';
 import YouinterestedinPeople from './components/main/YouinterestedinPeople';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -72,7 +70,7 @@ const CustomDrawerContent = props => {
       } else {
         let data = JSON.parse(res);
         // alert(data.username);
-        console.log('data', data);
+        console.log('data=', data);
         setState({
           ...state,
           name: data.user.username,
@@ -90,7 +88,11 @@ const CustomDrawerContent = props => {
           <View style={styles.imgView}>
             <Image
               style={styles.imgSize}
-              source={{uri: state.image && state.image}}
+              source={{
+                uri:
+                  `http://dev2.thebetatest.com/${state.image}` &&
+                  `http://dev2.thebetatest.com/${state.image}`,
+              }}
             />
           </View>
         </View>
@@ -929,7 +931,7 @@ const styles = {
     flexDirection: 'row',
     backgroundColor: '#ffcadc',
     borderBottomColor: '#ff1822',
-    borderWidth: 2,
+    // borderWidth: 2,
   },
   imgViewCont: {flex: 2, justifyContent: 'center', alignItems: 'center'},
   imgView: {

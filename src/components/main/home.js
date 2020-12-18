@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 
 import {Header} from '../common';
@@ -690,7 +690,7 @@ export default class HomeCmp extends PureComponent {
                               alignItems: 'flex-end',
                             }}>
                             {this.addUser(el.id)}
-                            {this.whatsApp(el.id)}
+                            {/* {this.whatsApp(el.id)} */}
                           </View>
                         </View>
                       </View>
@@ -701,81 +701,6 @@ export default class HomeCmp extends PureComponent {
             ) : (
               <ActivityIndicator size="large" color="red" />
             )}
-          </Swiper>
-        </View>
-
-        <View style={styles.reglarUserView}>
-          <View>
-            <Text style={styles.vipTxt}>Success Stories</Text>
-          </View>
-        </View>
-
-        <View style={styles.signupGSView}>
-          <Swiper
-            style={styles.wrapper}
-            showsButtons={true}
-            dotColor="#ccc"
-            activeDotColor="#ff1822"
-            // showsPagination={false}
-            prevButton={
-              <Text style={{color: '#000', fontSize: 40, fontWeight: 'bold'}}>
-                ‹
-              </Text>
-            }
-            nextButton={
-              <Text style={{color: '#000', fontSize: 40, fontWeight: 'bold'}}>
-                ›
-              </Text>
-            }
-            // nextButton={<Text style={{ color:'#ff1822', fontSize:40,fontWeight:'bold' }}>›</Text>}
-            height={250}>
-            <View style={styles.swipCont}>
-              <Image style={styles.swipImg} source={images.manWomenIcon} />
-              <View style={styles.starCont}>
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-              </View>
-              <Text style={styles.txtFormat}>
-                "Mustafa & Zeynep, Canada “We never thought we will find each
-                other and click so quickly. I have to give credit to my friend
-                Aliya for pointing me out about matchelitemuslim matchmaking
-                service, no doubt most secure and private platform for Muslim
-                community."
-              </Text>
-            </View>
-            <View style={styles.swipCont}>
-              <Image style={styles.swipImg} source={images.manWomenIcon0} />
-              <View style={styles.starCont}>
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-              </View>
-              <Text style={styles.txtFormat}>
-                "Zehra and Salman are both excited about finding their lifetime
-                partner. Their whimsy, emotion,and excitement that comes from
-                true and genuine moments. It’s PRICELESS! "
-              </Text>
-            </View>
-            <View style={styles.swipCont}>
-              <Image style={styles.swipImg} source={images.manWomenIcon1} />
-              <View style={styles.starCont}>
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-                <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
-              </View>
-              <Text style={styles.txtFormat}>
-                " Aslam & Lubna, England “We are both professionals and from
-                moderate Muslim family and our requirements was very
-                specific…thanks matchelitemuslim for your VVIP service"
-              </Text>
-            </View>
           </Swiper>
         </View>
 
@@ -921,44 +846,121 @@ export default class HomeCmp extends PureComponent {
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Header name={'Dashboard'} navigation={this.props.navigation} />
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <Header name={'Dashboard'} navigation={this.props.navigation} />
 
-        <FlatList
-          ListHeaderComponent={this.renderFlatListHeader}
-          ListFooterComponent={this.renderFlatListFooter}
-          showsVerticalScrollIndicator={false}
-          data={this.state.collection.filter(el => {
-            console.log('eeelll', el.user_type);
-            let isData = this.state.blockUserData.filter(
-              val => val.block_to == el.id,
-            );
-            if (!isData.length > 0) {
-              return {...el};
-            }
-          })}
-          renderItem={this.renderFlatListData}
-        />
-        <Toast ref={ref => Toast.setRef(ref)} />
-
-        <View style={styles.horizontal}>
-          <Spinner
-            textContent={'Loading...'}
-            animation="fade"
-            textStyle={styles.spinnerTextStyle}
-            visible={this.state.showSpinner}
+          <FlatList
+            ListHeaderComponent={this.renderFlatListHeader}
+            ListFooterComponent={this.renderFlatListFooter}
+            showsVerticalScrollIndicator={false}
+            data={this.state.collection.filter(el => {
+              console.log('eeelll', el.user_type);
+              let isData = this.state.blockUserData.filter(
+                val => val.block_to == el.id,
+              );
+              if (!isData.length > 0) {
+                return {...el};
+              }
+            })}
+            renderItem={this.renderFlatListData}
           />
-        </View>
+          <Toast ref={ref => Toast.setRef(ref)} />
 
-        <Dialog.Container visible={this.state.showAlert}>
-          <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
-          <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
-          <Dialog.Button
-            color="#58c4b7"
-            bold
-            label="Okay"
-            onPress={this.handleCancel.bind(this)}
-          />
-        </Dialog.Container>
+          <View style={styles.reglarUserView}>
+            <View>
+              <Text style={styles.vipTxt}>Success Stories</Text>
+            </View>
+          </View>
+
+          <View style={styles.signupGSView}>
+            <Swiper
+              style={styles.wrapper}
+              showsButtons={true}
+              dotColor="#ccc"
+              activeDotColor="#ff1822"
+              // showsPagination={false}
+              prevButton={
+                <Text style={{color: '#000', fontSize: 40, fontWeight: 'bold'}}>
+                  ‹
+                </Text>
+              }
+              nextButton={
+                <Text style={{color: '#000', fontSize: 40, fontWeight: 'bold'}}>
+                  ›
+                </Text>
+              }
+              // nextButton={<Text style={{ color:'#ff1822', fontSize:40,fontWeight:'bold' }}>›</Text>}
+              height={250}>
+              <View style={styles.swipCont}>
+                <Image style={styles.swipImg} source={images.manWomenIcon} />
+                <View style={styles.starCont}>
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                </View>
+                <Text style={styles.txtFormat}>
+                  "Mustafa & Zeynep, Canada “We never thought we will find each
+                  other and click so quickly. I have to give credit to my friend
+                  Aliya for pointing me out about matchelitemuslim matchmaking
+                  service, no doubt most secure and private platform for Muslim
+                  community."
+                </Text>
+              </View>
+              <View style={styles.swipCont}>
+                <Image style={styles.swipImg} source={images.manWomenIcon0} />
+                <View style={styles.starCont}>
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                </View>
+                <Text style={styles.txtFormat}>
+                  "Zehra and Salman are both excited about finding their
+                  lifetime partner. Their whimsy, emotion,and excitement that
+                  comes from true and genuine moments. It’s PRICELESS! "
+                </Text>
+              </View>
+              <View style={styles.swipCont}>
+                <Image style={styles.swipImg} source={images.manWomenIcon1} />
+                <View style={styles.starCont}>
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                  <FontAwesomeIcon icon={faStar} color="#f9cb39" size={16} />
+                </View>
+                <Text style={styles.txtFormat}>
+                  " Aslam & Lubna, England “We are both professionals and from
+                  moderate Muslim family and our requirements was very
+                  specific…thanks matchelitemuslim for your VVIP service"
+                </Text>
+              </View>
+            </Swiper>
+          </View>
+
+          <View style={styles.horizontal}>
+            <Spinner
+              textContent={'Loading...'}
+              animation="fade"
+              textStyle={styles.spinnerTextStyle}
+              visible={this.state.showSpinner}
+            />
+          </View>
+
+          <Dialog.Container visible={this.state.showAlert}>
+            <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
+            <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
+            <Dialog.Button
+              color="#58c4b7"
+              bold
+              label="Okay"
+              onPress={this.handleCancel.bind(this)}
+            />
+          </Dialog.Container>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -1092,6 +1094,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+    paddingHorizontal: 5,
   },
   swipCont: {alignItems: 'center', paddingHorizontal: 35},
   swipImg: {width: 75, height: 75, borderRadius: 75, marginBottom: 10},
