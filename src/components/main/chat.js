@@ -11,7 +11,6 @@ import {
 import axios from 'axios';
 
 import {EventRegister} from 'react-native-event-listeners';
-import {colors, images} from '../../constants/theme';
 import {Header} from '../common';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 // import { ScrollView } from 'react-native-gesture-handler';
@@ -59,7 +58,7 @@ export default class ChatCmp extends Component {
           loader: false,
         });
         this.setState({showSpinner: false});
-        console.log('res is here for now check it out boy!!===', res.data);
+        // console.log('res is here for now check it out boy!!===', res.data);
         // this.setState({step: 1});
         this.setState({
           chat: res.data?.users,
@@ -81,11 +80,11 @@ export default class ChatCmp extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <Header
           name={'Chat'}
           navigation={this.props.navigation}
-          search={true}
+          // search={true}
         />
         <ScrollView>
           {this.state.loader ? (
@@ -93,6 +92,11 @@ export default class ChatCmp extends Component {
           ) : (
             this.state?.chat.length > 0 &&
             this.state.chat.map((val, i) => {
+              let profileimage = `http://dev2.thebetatest.com/${
+                val.profile_pic
+              }`;
+              console.log('profileimage', profileimage);
+
               return (
                 <TouchableOpacity
                   // onPress={() => EventRegister.emit('isLoggedIn', 'Chat')}
@@ -107,8 +111,10 @@ export default class ChatCmp extends Component {
                   <View style={styles.chatImageView}>
                     <View style={styles.chatImageDimension}>
                       <Image
-                        style={styles.chatImageDimension}
-                        source={val.profile_pic}
+                        // style={styles.chatImageDimension}
+                        source={{uri: profileimage}}
+                        style={{height: '100%', width: '100%'}}
+                        resizeMode="contain"
                       />
                     </View>
                   </View>
@@ -141,7 +147,14 @@ const styles = {
     marginRight: 10,
     // borderWidth: 0.6,
   },
-  chatImageDimension: {width: 56, height: 56, borderWidth: 1, borderRadius: 56},
+  chatImageDimension: {
+    width: 56,
+    height: 56,
+    elevation: 1,
+    backgroundColor: 'white',
+    borderRadius: 56,
+    overflow: 'hidden',
+  },
   chatTxtContView: {flex: 4, flexDirection: 'row'},
   chatTxtView: {flex: 4, justifyContent: 'center'},
   chatHeading: {fontSize: 16, color: '#252525', fontFamily: 'Poppins-SemiBold'},

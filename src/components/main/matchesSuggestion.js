@@ -317,9 +317,9 @@ export default class MatchesCmp extends Component {
                           </View>
                         </View>
 
-                        <TouchableOpacity style={{height: 30}}>
+                        {/* <TouchableOpacity style={{height: 30}}>
                           <Text> Send Interest </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                       </View>
                     </View>
                   </View>

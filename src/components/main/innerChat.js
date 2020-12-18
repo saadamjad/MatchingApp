@@ -215,7 +215,7 @@ export default class InnerChatCmp extends Component {
         <Header
           name={
             this.props.route.params.userName
-              ? this.props.route.params.userName
+              ? `@${this.props.route.params.userName}`
               : 'USER NAME'
           }
           navigation={this.props.navigation}

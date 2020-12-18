@@ -86,11 +86,11 @@ export default class HomeCmp extends PureComponent {
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
-        console.log(
-          'api is working but the request data is wrong check it out',
-          resposne.data,
-        );
-        console.log('sddsads', resposne.data.status);
+        // console.log(
+        //   'api is working but the request data is wrong check it out',
+        //   resposne.data,
+        // );
+        // console.log('sddsads', resposne.data.status);
         if (!resposne.data.status)
           Toast.show({
             type: 'error',
@@ -213,6 +213,7 @@ export default class HomeCmp extends PureComponent {
     axios
       .get(URL, headers)
       .then(async res => {
+        // console.log('Res=======', res.data.collection.data[0].user_type);
         this.setState({
           showSpinner: false,
           usersData: res.data,
@@ -307,11 +308,6 @@ export default class HomeCmp extends PureComponent {
     console.log('onEndReached');
     const URL = this.state.usersData.collection.next_page_url;
 
-    console.log(
-      this.state.collection.length,
-      this.state.usersData.collection.total,
-    );
-
     if (this.state.collection.length >= this.state.usersData.collection.total)
       console.log('Completed');
     else {
@@ -329,7 +325,7 @@ export default class HomeCmp extends PureComponent {
         .get(URL, headers)
         .then(async res => {
           this.setState({isLoading: false, usersData: res.data});
-          console.log(res.data.collection);
+          // console.log(res.data.collection);
           for (let i = 0; i < res.data.collection.data.length; i++) {
             let tmp = this.state.collection;
             tmp.push(res.data.collection.data[i]);
@@ -368,21 +364,16 @@ export default class HomeCmp extends PureComponent {
         headers,
       )
       .then(async Response => {
-        // console.log('res====', response.data.collection.data);
-
         if (Response.data) {
-          console.log('ME TO FRIEND HUN', Response.data.collection.interest_to);
           if (
             Response.data.collection.interest_to == 'sent' &&
             Response.data.collection.interest_from == 'sent'
           ) {
             setFriend(Response.data.collection);
           } else {
-            console.log('I AM BHAI');
             isFriend = false;
           }
           return true;
-          // console.log('FULL SHOOT HY', Response.data.status);
         }
       })
       .catch(err => {
@@ -646,7 +637,7 @@ export default class HomeCmp extends PureComponent {
                         </TouchableOpacity>
                         <View style={[styles.vipContentView, styles.pt10]}>
                           <View style={styles.nameView}>
-                            <Text style={styles.vipName}>{el.FirstName}</Text>
+                            <Text style={styles.vipName}>@{el.UserName}</Text>
                             <FontAwesomeIcon
                               icon={faFemale}
                               color="red"
@@ -839,7 +830,11 @@ export default class HomeCmp extends PureComponent {
         onPress={() =>
           this.props.navigation.navigate('Profile1', {data: item.item})
         }>
-        <View style={{paddingHorizontal: 10}}>
+        <TouchableOpacity
+          style={{paddingHorizontal: 10}}
+          onPress={() =>
+            this.props.navigation.navigate('Profile1', {data: item.item})
+          }>
           <View style={[styles.vipUserInner1, styles.mb]}>
             <View style={styles.vipImageView}>
               <TouchableOpacity
@@ -858,7 +853,7 @@ export default class HomeCmp extends PureComponent {
             </View>
             <View style={[styles.vipContentView, styles.pt10]}>
               <View style={styles.nameView}>
-                <Text style={styles.vipName}>{item.item.FirstName}</Text>
+                <Text style={styles.vipName}>@{item.item.UserName}</Text>
                 {item.item.Gender == 'off' ? (
                   <FontAwesomeIcon icon={faFemale} color="red" size={18} />
                 ) : (
@@ -918,7 +913,7 @@ export default class HomeCmp extends PureComponent {
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
@@ -933,6 +928,7 @@ export default class HomeCmp extends PureComponent {
           ListFooterComponent={this.renderFlatListFooter}
           showsVerticalScrollIndicator={false}
           data={this.state.collection.filter(el => {
+            console.log('eeelll', el.user_type);
             let isData = this.state.blockUserData.filter(
               val => val.block_to == el.id,
             );
@@ -941,9 +937,6 @@ export default class HomeCmp extends PureComponent {
             }
           })}
           renderItem={this.renderFlatListData}
-          keyExtractor={(item, index) => index.toString()}
-          // onEndReached={this.onEndReached}
-          // onEndReachedThreshold={0.5}
         />
         <Toast ref={ref => Toast.setRef(ref)} />
 

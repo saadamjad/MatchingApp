@@ -266,7 +266,7 @@ export default class MatchesCmp extends Component {
                         </View>
                         <View style={[styles.vipContentView, styles.pt10]}>
                           <View style={styles.nameView}>
-                            <Text style={styles.vipName}>{item.FirstName}</Text>
+                            <Text style={styles.vipName}>@{item.UserName}</Text>
                             {item.Gender == 'off' ? (
                               <FontAwesomeIcon
                                 icon={faFemale}

@@ -41,6 +41,7 @@ export default class ProfileCmp extends Component {
       userDataShow: false,
       profiePicShow: false,
       cca2: 'US',
+
       reportBlock: false,
       data: {},
       user_type: '',
@@ -51,12 +52,15 @@ export default class ProfileCmp extends Component {
 
       errorMsg: '',
       errorTitle: '',
+      showSlider: false,
       isFriend: false,
       isWishlist: false,
       reports: [],
       confirmAction: '',
       // userData: {}
       profileImage: '',
+      profilePic: [],
+      imageee: 'http://dev2.thebetatest.com/uploads/woman.png',
       imagetest: [
         'https://source.unsplash.com/1024x768/?water',
         'http://dev2.thebetatest.com/uploads/woman.png',
@@ -73,6 +77,13 @@ export default class ProfileCmp extends Component {
     console.log(
       '======',
 
+      this.props.route.params.data
+        ? this.props.route.params.data.user_type
+        : null,
+    );
+    console.log(
+      '======',
+
       this.props.route.params.data ? this.props.route.params.data : null,
     );
     let getVipUserDataFromParams = this.props.route.params.data
@@ -81,11 +92,15 @@ export default class ProfileCmp extends Component {
     let profilePic = this.props.route.params.profilePic
       ? this.props.route.params.profilePic
       : null;
-    let pic1 = getVipUserDataFromParams.pic1;
-    let pic2 = getVipUserDataFromParams.pic2;
-    console.log('getVipUserDataFromParams', getVipUserDataFromParams.user_type);
+    let pic1 = getVipUserDataFromParams.profile_pic;
+    // let pic2 = getVipUserDataFromParams.pic2;
+    // console.log('getVipUserDataFromParams', getVipUserDataFromParams.user_type);
     // this._ProfilePics(profilePic, pic1, pic2);
-    this.setState({data: getVipUserDataFromParams, userDataShow: true});
+    this.setState({
+      data: getVipUserDataFromParams,
+      userDataShow: true,
+      profilePic: `http://dev2.thebetatest.com/${pic1}`,
+    });
     this._GetLoggedInValue(getVipUserDataFromParams);
   }
   _ProfilePics = async (profilePic, pic1, pic2) => {
@@ -107,24 +122,17 @@ export default class ProfileCmp extends Component {
   };
 
   _GetLoggedInValue = async getVipUserDataFromParams => {
-    console.log('loggedin user', getVipUserDataFromParams);
     const data = await AsyncStorage.getItem('userData');
     let access_token = JSON.parse(data).access_token;
     let loggedInUser = JSON.parse(data).user.id;
     let vipUserId = getVipUserDataFromParams.id;
     this.setState({
+      showSlider: true,
       loggedInUser: loggedInUser,
       vipUserId: vipUserId,
       access_token: access_token,
     });
-    console.log(
-      'v',
-      vipUserId,
-      'loggedInUser',
-      loggedInUser,
-      'access_token',
-      access_token,
-    );
+
     this.checkIfAlreadyFriend(access_token, vipUserId, loggedInUser);
   };
 
@@ -961,8 +969,10 @@ export default class ProfileCmp extends Component {
           justifyContent: 'center',
         }}
         onPress={() => {
+          console.log('this.state.vipUserId,', this.state.data.UserName);
+
           this.props.navigation.navigate('innerChat', {
-            id: this.state.vipUserId,
+            userName: this.state.data.UserName,
           });
         }}>
         <FontAwesomeIcon icon={faCommentDots} color="#fff" size={24} />
@@ -1225,13 +1235,17 @@ export default class ProfileCmp extends Component {
   };
 
   render() {
-    if (this.state.userDataShow == true) {
+    if (this.state.userDataShow == true && this.state.showSlider) {
       return (
         <View style={{flex: 1}}>
+          {console.log(
+            'profilePicprofilePicprofilePicprofilePicprofilePic',
+            this.state.profilePic,
+          )}
           <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={{height: 250}}>
               <SliderBox
-                images={this.state.imagetest}
+                images={[this.state.profilePic]}
                 sliderBoxHeight={250}
                 inactiveDotColor="#ffffff"
                 dotStyle={{
