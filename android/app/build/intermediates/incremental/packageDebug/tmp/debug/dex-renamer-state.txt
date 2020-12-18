@@ -1,0 +1,4 @@
+#Sat Dec 19 00:23:21 PKT 2020
+base.0=C\:\\Users\\skluh\\OneDrive\\Desktop\\Kahoodigitals projects\\MatchingApp\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex
