@@ -52,6 +52,8 @@ import Allfriend from './components/main/allfriends';
 import updatepassword from './components/auth/updatepassword';
 import Login from '../src/components/auth/signin';
 import Bottomtab from './bottomtab';
+import Payment from './components/main/payment';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const navOptionHandler = () => ({
   headerShown: false,
@@ -114,7 +116,7 @@ const CustomDrawerContent = props => {
                 </TouchableOpacity>
               )}
               <TouchableOpacity
-                onPress={() => props.navigation.navigate('EditProfile')}
+                onPress={() => props.navigation.navigate('ProfileStack')}
                 style={styles.profileBtn}>
                 <Text style={styles.profileTxt}>Edit Profile</Text>
               </TouchableOpacity>
@@ -128,47 +130,44 @@ const CustomDrawerContent = props => {
           {
             (array = [
               {
-                title: 'Profile',
-                name: 'ProfileStack',
-              },
-              {
                 title: 'Find Match',
                 name: 'MatchesStack',
+                icon: <Fontisto name="persons" size={15} />,
               },
               {
                 title: 'Wishlist',
                 name: 'WishlistStack',
-                type: 'FontAwesome',
+                icon: <Fontisto name="persons" size={15} />,
               },
               {
                 title: 'Interested People In You ',
                 name: 'interestedPeopleInYou',
-                type: 'FontAwesome',
+                icon: <Fontisto name="pinterest" size={15} />,
               },
               {
                 title: 'You Showed Interest In  ',
                 name: 'YouShowedinterest',
-                type: 'FontAwesome',
+                icon: <Fontisto name="pinterest" size={15} />,
               },
               {
                 title: 'Subscription',
                 name: 'SubscribePlanStack',
-                type: 'FontAwesome',
+                icon: <Fontisto name="persons" size={15} />,
               },
               {
                 title: 'FAQS',
                 name: 'FaqStack',
-                type: 'FontAwesome',
+                icon: <Fontisto name="pinterest" size={15} />,
               },
               {
                 title: 'Contact Us',
                 name: 'AboutStack',
-                type: 'FontAwesome',
+                icon: <Fontisto name="persons" size={15} />,
               },
               {
                 title: 'Logout',
                 name: 'Auth',
-                type: 'FontAwesome',
+                icon: <Fontisto name="persons" size={15} />,
               },
             ].map(
               (val, i) => (
@@ -185,7 +184,16 @@ const CustomDrawerContent = props => {
                       marginVertical: 5,
                       alignItems: 'center',
                     }}>
-                    <View style={{height: '100%', width: 60, borderWidth: 0}} />
+                    <View
+                      style={{
+                        height: '100%',
+                        width: 60,
+                        borderWidth: 0,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      {val.icon}
+                    </View>
 
                     <Text
                       style={{color: 'black', fontSize: 15, marginLeft: 10}}>
@@ -221,12 +229,12 @@ const CustomDrawerContent = props => {
 const StackProfile = createStackNavigator();
 function ProfileStack() {
   return (
-    <StackProfile.Navigator initialRouteName="Profile">
-      <StackProfile.Screen
+    <StackProfile.Navigator initialRouteName="EditProfile">
+      {/* <StackProfile.Screen
         name="Profile"
         component={ProfileCmp}
         options={navOptionHandler}
-      />
+      /> */}
       <StackProfile.Screen
         name="EditProfile"
         component={EditProfileCmp}
@@ -244,11 +252,11 @@ function WishlistStack() {
         component={WishlistCmp}
         options={navOptionHandler}
       />
-      <wishlist.Screen
+      {/* <wishlist.Screen
         name="Profile1"
         component={ProfileStack}
         options={navOptionHandler}
-      />
+      /> */}
     </wishlist.Navigator>
   );
 }
@@ -285,6 +293,11 @@ function SubscribePlanStack() {
       <subscritionStack.Screen
         name="subscribePlan"
         component={SubscriptionPlansCmp}
+        options={navOptionHandler}
+      />
+      <subscritionStack.Screen
+        name="Payment"
+        component={Payment}
         options={navOptionHandler}
       />
     </subscritionStack.Navigator>

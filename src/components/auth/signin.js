@@ -97,10 +97,7 @@ export default class SigninCmp extends Component {
   }
   _storeData = async () => {
     try {
-      await AsyncStorage.setItem('checkUserLoggedin', 'login').then(res => {
-        // EventRegister.emit('isLoggedIn', 'Main');
-        console.log('save', res);
-      });
+      await AsyncStorage.setItem('checkUserLoggedin', 'login');
     } catch (error) {
       // Error saving data
     }
@@ -132,7 +129,8 @@ export default class SigninCmp extends Component {
               res.data.user.user_type,
             );
             this.props.navigation.navigate('SideMenuNavigator');
-            this._storeData();
+            AsyncStorage.setItem('checkUserLoggedin', 'login');
+            // this._storeData();
           } else
             this.setState({
               showAlert: true,
@@ -245,10 +243,11 @@ export default class SigninCmp extends Component {
               <View>
                 <TouchableOpacity
                   style={styles.loginBtn}
-                  // onPress={this.signin}
-                  onPress={() =>
-                    this.props.navigation.navigate('SideMenuNavigator')
-                  }>
+                  onPress={this.signin}
+                  // onPress={() =>
+                  //   this.props.navigation.navigate('SideMenuNavigator')
+                  // }
+                >
                   <Text style={styles.loginBtnTxt}>Login</Text>
                 </TouchableOpacity>
               </View>

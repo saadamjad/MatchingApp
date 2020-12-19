@@ -32,73 +32,13 @@ class Splash extends React.Component {
       timeout: null,
       showBtn: false,
     };
-    this.rotateAnimation();
   }
-
-  performTimeConsumingTask = async () => {
-    return new Promise(resolve =>
-      setTimeout(() => {
-        resolve('result');
-      }, 5000),
-    );
-  };
-
-  _retrieveData = async () => {
-    AsyncStorage.getItem('checkUserLoggedin').then(res => {
-      console.log('check user', res);
-
-      if (res == 'login') {
-        setTimeout(() => {
-          EventRegister.emit('isLoggedIn', 'Main');
-          // EventRegister.emit('isLoggedIn', 'Main');
-        }, 3000);
-      } else {
-        setTimeout(() => {
-          EventRegister.emit('isLoggedIn', 'Login');
-          // EventRegister.emit('isLoggedIn', 'Main');
-        }, 3000);
-      }
-    });
-  };
-
-  componentDidMount = async () => {
-    const data = await this.performTimeConsumingTask();
-
-    this._retrieveData();
-  };
-
-  componentWillUnmount() {
-    clearTimeout(this.state.timeout);
-  }
-
-  rotateAnimation = () => {
-    Animated.sequence([
-      Animated.timing(this.state.rotateValue, {
-        toValue: 100,
-        duration: 1000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-      Animated.timing(this.state.rotateValue, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      this.setState({
-        text: true,
-        inputStart: '20deg',
-        inputEnd: '20deg',
-      });
-    });
-  };
 
   render() {
     return (
       <View style={styles.viewStyles}>
         <ImageBackground
           source={images.splashBackground}
-          // resizeMode="contain"
           resizeMode="cover"
           style={styles.imageView}>
           <View style={styles.splashLogostyle}>

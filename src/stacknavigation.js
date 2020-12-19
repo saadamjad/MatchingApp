@@ -401,6 +401,24 @@ function MatchesStack() {
 }
 const stack = createStackNavigator();
 export default class App extends React.Component {
+  stat = {
+    logged: true,
+  };
+  componentDidMount() {
+    this._retrieveData();
+  }
+  _retrieveData = async () => {
+    AsyncStorage.getItem('checkUserLoggedin').then(res => {
+      console.log('check user====== -', res);
+
+      if (res == 'login') {
+        this.setState({
+          logged: true,
+        });
+      }
+    });
+  };
+
   render() {
     return (
       <NavigationContainer>

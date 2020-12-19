@@ -13,7 +13,6 @@ import CountryPicker from 'react-native-country-picker-modal';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
-
 import Toast from 'react-native-toast-message';
 import Dialog from 'react-native-dialog';
 

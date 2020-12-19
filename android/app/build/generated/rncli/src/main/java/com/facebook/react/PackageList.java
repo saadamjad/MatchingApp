@@ -31,6 +31,8 @@ import com.swmansion.rnscreens.RNScreensPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
+// react-native-vector-icons
+import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-webview
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 // react-native-youtube
@@ -92,6 +94,7 @@ public class PackageList {
       new RNScreensPackage(),
       new RNSoundPackage(),
       new SvgPackage(),
+      new VectorIconsPackage(),
       new RNCWebViewPackage(),
       new ReactNativeYouTube(),
       new RangeSliderPackage()

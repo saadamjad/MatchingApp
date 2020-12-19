@@ -1,12 +1,34 @@
 import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
-
+import {SafeAreaView, AsyncStorage} from 'react-native';
 import Stacknavigation from './stacknavigation';
-const AppContainerStack = createStackNavigator();
+import Splash from './components/splash';
 export default class App extends React.Component {
+  state = {
+    timer: true,
+  };
+  componentDidMount() {
+    this._Checking();
+  }
+
+  _Checking = () => {
+    setTimeout(() => {
+      this.setState({
+        timer: false,
+      });
+    }, 4000);
+  };
   render() {
-    return <Stacknavigation navigation {...this.props} />;
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        {this.state.timer ? (
+          <Splash />
+        ) : (
+          <Stacknavigation navigation {...this.props} />
+        )}
+      </SafeAreaView>
+    );
   }
 }
 
