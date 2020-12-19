@@ -66,9 +66,6 @@ export default class ProfileCmp extends Component {
         'http://dev2.thebetatest.com/uploads/woman.png',
         'https://source.unsplash.com/1024x768/?water',
         'http://dev2.thebetatest.com/uploads/woman.png',
-        // 'https://source.unsplash.com/1024x768/?water',
-        // 'http://dev2.thebetatest.com/uploads/woman.png',
-        // 'http://dev2.thebetatest.com/uploads/woman.png',
       ],
     };
   }
@@ -91,9 +88,7 @@ export default class ProfileCmp extends Component {
       : null;
 
     let pic1 = getVipUserDataFromParams.profile_pic;
-    // let pic2 = getVipUserDataFromParams.pic2;
-    // console.log('getVipUserDataFromParams', getVipUserDataFromParams.user_type);
-    // this._ProfilePics(profilePic, pic1, pic2);
+
     this.setState({
       data: getVipUserDataFromParams,
       userDataShow: true,

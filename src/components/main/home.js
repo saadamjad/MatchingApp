@@ -445,7 +445,7 @@ export default class HomeCmp extends PureComponent {
             <View style={styles.statsCardView}>
               <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate('interestedPeopleInYou')
+                  this.props.navigation.navigate('InterestedPeopleInYou')
                 }>
                 <ImageBackground
                   style={styles.statsImg}
@@ -487,7 +487,7 @@ export default class HomeCmp extends PureComponent {
                 style={styles.statsImg}
                 source={images.statsDesignIcon}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Wishlist')}>
+                  onPress={() => this.props.navigation.navigate('WishlistCmp')}>
                   <View style={styles.statsCardTxt}>
                     <View style={{flex: 1}}>
                       <Text style={styles.statsHeading}>WishList count</Text>
@@ -523,7 +523,7 @@ export default class HomeCmp extends PureComponent {
             <View style={styles.statsCardView}>
               <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate('interestedPeopleInYou')
+                  this.props.navigation.navigate('YouShowedinterest')
                 }>
                 <ImageBackground
                   style={styles.statsImg}
@@ -531,7 +531,7 @@ export default class HomeCmp extends PureComponent {
                   <View style={styles.statsCardTxt}>
                     <View style={{flex: 1}}>
                       <Text style={styles.statsHeading}>
-                        People You Showed Interest in
+                        You Showed Interest in People
                       </Text>
                     </View>
                     <View style={{flex: 2}}>
