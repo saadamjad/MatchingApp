@@ -7,7 +7,6 @@ import {
   Image,
   AsyncStorage,
 } from 'react-native';
-import {EventRegister} from 'react-native-event-listeners';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -30,7 +29,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Allfriend from './components/main/allfriends';
 // import YouShowedinterest from './components/main/YouinterestedinPeople'
 import updatepassword from './components/auth/updatepassword';
-
+const navOptionHandler = () => ({
+  headerShown: false,
+});
 const StackHome = createStackNavigator();
 //
 function HomeStack() {
@@ -39,37 +40,37 @@ function HomeStack() {
       <StackHome.Screen
         name="Home"
         component={HomeCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="innerChat"
         component={InnerChatCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="YouinterestedinPeople"
         component={YouinterestedinPeople}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="InterestedPeopleInYou"
         component={InterestedPeopleInYou}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="WishlistCmp"
         component={WishlistCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="Filter"
         component={FilterCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
     </StackHome.Navigator>
   );
@@ -82,12 +83,12 @@ function ChatStack() {
       <StackChat.Screen
         name="Chat"
         component={ChatCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackProfile.Screen
         name="innerChat"
         component={InnerChatCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
     </StackChat.Navigator>
   );
@@ -100,12 +101,12 @@ function ProfileStack() {
       <StackProfile.Screen
         name="Profile"
         component={ProfileCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackProfile.Screen
         name="EditProfile"
         component={EditProfileCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
     </StackProfile.Navigator>
   );
@@ -117,22 +118,22 @@ function matchesSuggestionStack() {
       <StackProfile.Screen
         name="matchesSuggestionCmp"
         component={matchesSuggestionCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackProfile.Screen
         name="Filter"
         component={FilterCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackProfile.Screen
         name="innerChat"
         component={InnerChatCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
     </StackProfile.Navigator>
   );
@@ -145,22 +146,22 @@ function MatchesStack() {
       <StackMatches.Screen
         name="Matches"
         component={MatchesCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackMatches.Screen
         name="Filter"
         component={FilterCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackProfile.Screen
         name="innerChat"
         component={InnerChatCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
       <StackHome.Screen
         name="Profile1"
         component={ProfileCmp}
-        // options={navOptionHandler}
+        options={navOptionHandler}
       />
     </StackMatches.Navigator>
   );

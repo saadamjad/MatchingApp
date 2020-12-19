@@ -51,7 +51,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Allfriend from './components/main/allfriends';
 import updatepassword from './components/auth/updatepassword';
 import Login from '../src/components/auth/signin';
-// import HomeStack from './stacknavigation';
 import Bottomtab from './bottomtab';
 
 const navOptionHandler = () => ({
@@ -67,7 +66,7 @@ const CustomDrawerContent = props => {
     image: false,
   });
   React.useEffect(() => {
-    // getUserDetailsMc();
+    getUserDetailsMc();
   }, []);
 
   const getUserDetailsMc = () => {
@@ -124,22 +123,7 @@ const CustomDrawerContent = props => {
         </View>
       </View>
 
-      <Drawer.Screen name="ProfileStack" component={ProfileStack} />
-      <Drawer.Screen name="WishlistStack" component={WishlistStack} />
-      <Drawer.Screen
-        name="matchesSuggestionStack"
-        component={matchesSuggestionStack}
-      />
-      <Drawer.Screen name="MatchesStack" component={MatchesStack} />
-      <Drawer.Screen
-        name="interestedPeopleInYou"
-        component={interestedPeopleInYou}
-      />
-      <Drawer.Screen name="YouShowedinterest" component={YouShowedinterest} />
-      <Drawer.Screen name="SubscribePlanStack" component={SubscribePlanStack} />
-      <Drawer.Screen name="FaqStack" component={FaqStack} />
-      <Drawer.Screen name="AboutStack" component={AboutStack} />
-      <View style={{flex: 3, borderWidth: 1}}>
+      <View style={{flex: 3, borderWidth: 0}}>
         <View style={{flex: 1}}>
           {
             (array = [
@@ -183,7 +167,7 @@ const CustomDrawerContent = props => {
               },
               {
                 title: 'Logout',
-                name: 'Login',
+                name: 'Auth',
                 type: 'FontAwesome',
               },
             ].map(
@@ -214,6 +198,22 @@ const CustomDrawerContent = props => {
           }
         </View>
       </View>
+
+      <Drawer.Screen name="ProfileStack" component={ProfileStack} />
+      <Drawer.Screen name="WishlistStack" component={WishlistStack} />
+      <Drawer.Screen
+        name="matchesSuggestionStack"
+        component={matchesSuggestionStack}
+      />
+      <Drawer.Screen name="MatchesStack" component={MatchesStack} />
+      <Drawer.Screen
+        name="interestedPeopleInYou"
+        component={interestedPeopleInYou}
+      />
+      <Drawer.Screen name="YouShowedinterest" component={YouShowedinterest} />
+      <Drawer.Screen name="SubscribePlanStack" component={SubscribePlanStack} />
+      <Drawer.Screen name="FaqStack" component={FaqStack} />
+      <Drawer.Screen name="AboutStack" component={AboutStack} />
     </SafeAreaView>
   );
 };
@@ -239,7 +239,11 @@ const wishlist = createStackNavigator();
 function WishlistStack() {
   return (
     <wishlist.Navigator initialRouteName="Wishlist">
-      <wishlist.Screen name="Wishlist" component={WishlistCmp} />
+      <wishlist.Screen
+        name="Wishlist"
+        component={WishlistCmp}
+        options={navOptionHandler}
+      />
       <wishlist.Screen
         name="Profile1"
         component={ProfileStack}
@@ -361,8 +365,8 @@ function interestedPeopleInYou() {
     </interestedpeopleinyouStack.Navigator>
   );
 }
-const YoushowedinterestinStack = createStackNavigator();
 
+const YoushowedinterestinStack = createStackNavigator();
 function YouShowedinterest() {
   return (
     <YoushowedinterestinStack.Navigator initialRouteName="YouinterestedinPeople">
@@ -484,7 +488,7 @@ const SideMenuNavigator = () => {
 export default SideMenuNavigator;
 
 const styles = {
-  safeViewCont: {backgroundColor: '#fff', flex: 1, borderWidth: 1},
+  safeViewCont: {backgroundColor: '#fff', flex: 1, borderWidth: 0},
   cont: {
     flex: 1,
     flexDirection: 'row',
@@ -501,7 +505,12 @@ const styles = {
     borderWidth: 2,
   },
   imgSize: {width: 72, height: 72},
-  txtViewCont: {flex: 3, justifyContent: 'center'},
+  txtViewCont: {
+    flex: 3,
+    justifyContent: 'center',
+    // borderWidth: 1,
+    paddingRight: 20,
+  },
   txtView: {flex: 1, flexDirection: 'row', justifyContent: 'center'},
   txtViewCenter: {flex: 1, justifyContent: 'center'},
   nameTxt: {fontSize: 14, fontFamily: 'Poppins-Medium', color: '#ff1822'},
@@ -521,7 +530,7 @@ const styles = {
   profileBtn: {
     borderRadius: 5,
     borderColor: '#1e1e1e',
-    borderWidth: 1,
+    borderWidth: 0.5,
     padding: 5,
   },
   profileTxt: {

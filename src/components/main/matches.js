@@ -416,11 +416,14 @@ export default class MatchesCmp extends Component {
             renderItem={({item, index, separators}) => (
               console.log('item', item),
               (
-                <View
-                  key={item.key}
-                  onPress={() => this.addFriend(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Profile1', {
+                      data: item,
+                      profilePic:
+                        'http://dev2.thebetatest.com/' + item.profile_pic,
+                    })
+                  }>
                   <View style={styles.reglarUserView}>
                     <View style={{paddingHorizontal: 10}}>
                       <View style={[styles.vipUserInner1, styles.mb]}>
@@ -530,7 +533,7 @@ export default class MatchesCmp extends Component {
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             )}
           />
@@ -583,9 +586,9 @@ const styles = {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 2,
+    // shadowOpacity: 0.22,
+    // shadowRadius: 2.22,
+    // elevation: 2,
   },
   mb: {
     marginBottom: 10,
