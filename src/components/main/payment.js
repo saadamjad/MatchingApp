@@ -126,51 +126,32 @@ const App = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            zIndex: 10000,
+            // zIndex: 10000,
           }}>
-          <DropDownPicker
-            items={[
-              {label: 'January', value: 'JAN'},
-              {label: 'Feburary', value: 'FEB'},
-              {label: 'March', value: 'MAR'},
-              {label: 'April', value: 'APR'},
-              {label: 'May', value: 'MAY'},
-              {label: 'June', value: 'JUN'},
-              {label: 'Jully', value: 'JUL;'},
-              {label: 'August', value: 'AUG'},
-              {label: 'September', value: 'SEP'},
-              {label: 'October', value: 'OCT'},
-              {label: 'November', value: 'NOV'},
-              {label: 'December', value: 'DEC'},
-            ]}
-            containerStyle={{width: 130, borderRadius: 50, height: 50}}
-            dropDownStyle={{backgroundColor: 'white', borderRadius: 30}}
-            arrowColor="#ff1822"
-            // style={{borderRadius:30}}
-            placeholder="Month"
-            // itemStyle={{}}
-          />
-          <DropDownPicker
-            items={[
-              {label: 'January', value: 'JAN'},
-              {label: 'Feburary', value: 'FEB'},
-              {label: 'March', value: 'MAR'},
-              {label: 'April', value: 'APR'},
-              {label: 'May', value: 'MAY'},
-              {label: 'June', value: 'JUN'},
-              {label: 'Jully', value: 'JUL;'},
-              {label: 'August', value: 'AUG'},
-              {label: 'September', value: 'SEP'},
-              {label: 'October', value: 'OCT'},
-              {label: 'November', value: 'NOV'},
-              {label: 'December', value: 'DEC'},
-            ]}
-            containerStyle={{width: 130, borderRadius: 50, height: 50}}
-            dropDownStyle={{backgroundColor: 'teal', borderRadius: 30}}
-            arrowColor="#ff1822"
-            // style={{borderRadius:30}}
+          <TextInput
             placeholder="Year"
-            // itemStyle={{}}
+            style={{
+              width: 130,
+              borderRadius: 50,
+              paddingLeft: 10,
+              height: 50,
+              elevation: 1,
+              backgroundColor: 'white',
+            }}
+            maxLength={4}
+          />
+          <TextInput
+            placeholder="Month"
+            style={{
+              width: 130,
+              borderRadius: 50,
+              paddingLeft: 10,
+              height: 50,
+              elevation: 1,
+              backgroundColor: 'white',
+            }}
+            maxLength={4}
+            // keyboardType={'phone-pad'}
           />
         </View>
 

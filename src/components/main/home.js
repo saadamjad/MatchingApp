@@ -179,7 +179,7 @@ const RenderFlatListData = ({item, index, navigation}) => {
   const negativeMind = () => {
     switch (codeNumber) {
       case 0:
-        return <Text>Request Sent</Text>;
+        return <Text style={{color: 'red'}}>Request Sent</Text>;
       case 1:
         return <Text>Accept Request</Text>;
       case 3:

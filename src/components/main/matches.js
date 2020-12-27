@@ -7,8 +7,9 @@ import {
   AsyncStorage,
   ActivityIndicator,
   TouchableHighlight,
+  TouchableOpacity,
+  FlatList,
 } from 'react-native';
-import {TouchableOpacity, FlatList} from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 
 import axios from 'axios';
@@ -355,221 +356,209 @@ export default class MatchesCmp extends Component {
   };
 
   render() {
-    if (!this.state.filter)
-      return (
-        <SafeAreaView style={{flex: 1}}>
-          {/* <Header
-          name={'Matches'}
-          navigation={this.props.navigation}
-          fliter="1"
-        /> */}
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            height: 50,
+            backgroundColor: colors.headerColor,
+            borderBottomColor: colors.ligthGrey,
+            borderBottomWidth: 0.5,
+            elevation: 1,
+          }}>
+          <TouchableOpacity
+            style={{
+              width: '15%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              // borderWidth: 1,
+            }}
+            onPress={() => this.props.navigation.goBack()}>
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              size={24}
+              color={colors.ligth}
+            />
+          </TouchableOpacity>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'white', fontSize: 14}}>Matches </Text>
+          </View>
           <View
             style={{
-              flexDirection: 'row',
-              height: 50,
-              backgroundColor: colors.headerColor,
-              borderBottomColor: colors.ligthGrey,
-              borderBottomWidth: 0.5,
-              elevation: 1,
+              width: '15%',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            <TouchableOpacity
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-              onPress={() => this.props.navigation.goBack()}>
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                size={24}
-                color={colors.ligth}
-              />
-            </TouchableOpacity>
-            <View
-              style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.headerHeading}>Matches </Text>
-            </View>
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              {this.state.fliterIcon ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    // this.props.navigation.navigate('Filter');
-                    this.setState({
-                      filter: true,
-                    });
-                  }}>
-                  <Image
-                    style={{width: 28, height: 26}}
-                    source={images.fliterIcon}
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
+            {this.state.fliterIcon ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('Filter');
+                }}>
+                <Image
+                  style={{width: 28, height: 26}}
+                  source={images.fliterIcon}
+                />
+              </TouchableOpacity>
+            ) : null}
           </View>
+        </View>
 
-          {/* <TouchableOpacity
-          style={{height: 50, width: 50, backgroundColor: 'red'}}
-          onPress={() => this.props.navigation.navigate('Filter')}
-        /> */}
-          <FlatList
-            ref={ref => (this.flatList = ref)}
-            ListFooterComponent={this.renderFlatListFooter}
-            showsVerticalScrollIndicator={false}
-            data={this.state.collection ? this.state.collection : []}
-            // renderItem={this.renderFlatListData}
-            keyExtractor={(item, index) => item.toString()}
-            renderItem={({item, index, separators}) => (
-              console.log('item', item),
-              (
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('Profile1', {
-                      data: item,
-                      profilePic:
-                        'https://api.matchelitemuslim.com/' + item.profile_pic,
-                    })
-                  }>
-                  <View style={styles.reglarUserView}>
-                    <View style={{paddingHorizontal: 10}}>
-                      <View style={[styles.vipUserInner1, styles.mb]}>
-                        <View style={styles.vipImageView}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              this.props.navigation.navigate('Profile1', {
-                                data: item,
-                                profilePic:
-                                  'https://api.matchelitemuslim.com/' +
-                                  item.profile_pic,
-                              })
-                            }>
-                            <Image
-                              source={{
-                                uri:
-                                  'https://api.matchelitemuslim.com/' +
-                                  item.profile_pic,
-                              }}
-                              defaultSource={require('../../assets/noImage.png')}
-                              style={styles.regularImageDimension}
+        <FlatList
+          ref={ref => (this.flatList = ref)}
+          ListFooterComponent={this.renderFlatListFooter}
+          showsVerticalScrollIndicator={false}
+          data={this.state.collection ? this.state.collection : []}
+          // renderItem={this.renderFlatListData}
+          keyExtractor={(item, index) => item.toString()}
+          renderItem={({item, index, separators}) => (
+            console.log('item', item),
+            (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('Profile1', {
+                    data: item,
+                    profilePic:
+                      'https://api.matchelitemuslim.com/' + item.profile_pic,
+                  })
+                }>
+                <View style={styles.reglarUserView}>
+                  <View style={{paddingHorizontal: 10}}>
+                    <View style={[styles.vipUserInner1, styles.mb]}>
+                      <View style={styles.vipImageView}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate('Profile1', {
+                              data: item,
+                              profilePic:
+                                'https://api.matchelitemuslim.com/' +
+                                item.profile_pic,
+                            })
+                          }>
+                          <Image
+                            source={{
+                              uri:
+                                'https://api.matchelitemuslim.com/' +
+                                item.profile_pic,
+                            }}
+                            defaultSource={require('../../assets/noImage.png')}
+                            style={styles.regularImageDimension}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={[styles.vipContentView, styles.pt10]}>
+                        <View style={styles.nameView}>
+                          <Text style={styles.vipName}>{item.FirstName}</Text>
+                          {item.Gender == 'off' ? (
+                            <FontAwesomeIcon
+                              icon={faFemale}
+                              color="red"
+                              size={18}
                             />
-                          </TouchableOpacity>
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faMale}
+                              color="blue"
+                              size={18}
+                            />
+                          )}
                         </View>
-                        <View style={[styles.vipContentView, styles.pt10]}>
-                          <View style={styles.nameView}>
-                            <Text style={styles.vipName}>{item.FirstName}</Text>
-                            {item.Gender == 'off' ? (
-                              <FontAwesomeIcon
-                                icon={faFemale}
-                                color="red"
-                                size={18}
-                              />
-                            ) : (
-                              <FontAwesomeIcon
-                                icon={faMale}
-                                color="blue"
-                                size={18}
-                              />
-                            )}
-                          </View>
-                          <View>
-                            <Text style={styles.vipAge}>{item.Age} years</Text>
-                          </View>
-                          <View style={{flexDirection: 'row'}}>
-                            <Image
-                              style={{marginRight: 5, width: 11, height: 16}}
-                              source={images.locationIcon}
-                            />
-                            <Text style={styles.vipLighTxt}>{item.state}</Text>
-                          </View>
+                        <View>
+                          <Text style={styles.vipAge}>{item.Age} years</Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                          <Image
+                            style={{marginRight: 5, width: 11, height: 16}}
+                            source={images.locationIcon}
+                          />
+                          <Text style={styles.vipLighTxt}>{item.state}</Text>
+                        </View>
+                        <View style={styles.vipEduView}>
+                          <Text style={styles.vipDrakTxt}>Educations: </Text>
+                          <Text style={styles.vipLighTxt}>
+                            {item.education
+                              ? item.education.length <= 10
+                                ? item.education
+                                : item.education.substring(0, 15) + '...'
+                              : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
                           <View style={styles.vipEduView}>
-                            <Text style={styles.vipDrakTxt}>Educations: </Text>
-                            <Text style={styles.vipLighTxt}>
-                              {item.education
-                                ? item.education.length <= 10
-                                  ? item.education
-                                  : item.education.substring(0, 15) + '...'
-                                : 'N/A'}
-                            </Text>
+                            <Text style={styles.vipDrakTxt}>Sect: </Text>
+                            <Text style={styles.vipLighTxt}>Shia </Text>
                           </View>
-                          <View style={{flexDirection: 'row'}}>
-                            <View style={styles.vipEduView}>
-                              <Text style={styles.vipDrakTxt}>Sect: </Text>
-                              <Text style={styles.vipLighTxt}>Shia </Text>
-                            </View>
-                            <View style={styles.socialView}>
-                              <TouchableOpacity
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#ed145b',
-                                  borderRadius: 30,
-                                  marginRight: 7,
-                                }}
-                                onPress={() => this.addFriend(item.id)}>
-                                {/* {this.state.isFriend ? (
+                          <View style={styles.socialView}>
+                            <TouchableOpacity
+                              style={{
+                                padding: 7,
+                                backgroundColor: '#ed145b',
+                                borderRadius: 30,
+                                marginRight: 7,
+                              }}
+                              onPress={() => this.addFriend(item.id)}>
+                              {/* {this.state.isFriend ? (
                                 <Image
                                   source={require('../../assets/correct.jpg')}
                                   style={{width: 20, height: 20}}
                                 />
                               ) : ( */}
-                                <FontAwesomeIcon
-                                  icon={faUserPlus}
-                                  color="#fff"
-                                  size={20}
-                                />
-                                {/* )} */}
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  this.props.navigation.navigate('innerChat')
-                                }
-                                style={{
-                                  padding: 7,
-                                  backgroundColor: '#49c858',
-                                  borderRadius: 30,
-                                }}>
-                                <FontAwesomeIcon
-                                  icon={faCommentDots}
-                                  color="#fff"
-                                  size={20}
-                                />
-                              </TouchableOpacity>
-                            </View>
+                              <FontAwesomeIcon
+                                icon={faUserPlus}
+                                color="#fff"
+                                size={20}
+                              />
+                              {/* )} */}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() =>
+                                this.props.navigation.navigate('innerChat')
+                              }
+                              style={{
+                                padding: 7,
+                                backgroundColor: '#49c858',
+                                borderRadius: 30,
+                              }}>
+                              <FontAwesomeIcon
+                                icon={faCommentDots}
+                                color="#fff"
+                                size={20}
+                              />
+                            </TouchableOpacity>
                           </View>
                         </View>
                       </View>
                     </View>
                   </View>
-                </TouchableOpacity>
-              )
-            )}
+                </View>
+              </TouchableOpacity>
+            )
+          )}
+        />
+
+        <View style={styles.horizontal}>
+          <Spinner
+            textContent={'Loading...'}
+            animation="fade"
+            textStyle={styles.spinnerTextStyle}
+            visible={this.state.showSpinner}
           />
+        </View>
+        <Toast ref={ref => Toast.setRef(ref)} />
 
-          <View style={styles.horizontal}>
-            <Spinner
-              textContent={'Loading...'}
-              animation="fade"
-              textStyle={styles.spinnerTextStyle}
-              visible={this.state.showSpinner}
-            />
-          </View>
-          <Toast ref={ref => Toast.setRef(ref)} />
-
-          <Dialog.Container visible={this.state.showAlert}>
-            <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
-            <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
-            <Dialog.Button
-              color="#58c4b7"
-              bold
-              label="Okay"
-              onPress={this.handleCancel.bind(this)}
-            />
-          </Dialog.Container>
-        </SafeAreaView>
-      );
-    else {
-      return (
-        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-          {/* <Text> hello</Text> */}
-          <Filter {...this.props} />
-        </SafeAreaView>
-      );
-    }
+        <Dialog.Container visible={this.state.showAlert}>
+          <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
+          <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
+          <Dialog.Button
+            color="#58c4b7"
+            bold
+            label="Okay"
+            onPress={this.handleCancel.bind(this)}
+          />
+        </Dialog.Container>
+      </SafeAreaView>
+    );
   }
 }
 const styles = {

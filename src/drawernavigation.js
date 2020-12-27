@@ -54,6 +54,7 @@ import Login from '../src/components/auth/signin';
 import Bottomtab from './bottomtab';
 import Payment from './components/main/payment';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+// import filter from '../src/components/main/filter';
 
 const navOptionHandler = () => ({
   headerShown: false,
@@ -175,7 +176,11 @@ const CustomDrawerContent = props => {
                 (
                   <TouchableOpacity
                     onPress={() => {
-                      props.navigation.navigate(val.name);
+                      i == 7
+                        ? AsyncStorage.getAllKeys()
+                            .then(keys => AsyncStorage.multiRemove(keys))
+                            .then(() => props.navigation.navigate(val.name))
+                        : props.navigation.navigate(val.name);
                     }}
                     style={{
                       height: 50,
@@ -252,40 +257,10 @@ function WishlistStack() {
         component={WishlistCmp}
         options={navOptionHandler}
       />
-      {/* <wishlist.Screen
-        name="Profile1"
-        component={ProfileStack}
-        options={navOptionHandler}
-      /> */}
     </wishlist.Navigator>
   );
 }
-function InviteFriendsStack() {
-  return (
-    <StackProfile.Navigator initialRouteName="Invite Friends">
-      <StackProfile.Screen
-        name="Invite Friends"
-        component={InviteFriendsCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="Filter"
-        component={FilterCmp}
-        options={navOptionHandler}
-      />
-      <StackProfile.Screen
-        name="innerChat"
-        component={InnerChatCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="Profile1"
-        component={ProfileCmp}
-        options={navOptionHandler}
-      />
-    </StackProfile.Navigator>
-  );
-}
+
 const subscritionStack = createStackNavigator();
 function SubscribePlanStack() {
   return (
@@ -430,48 +405,6 @@ function MatchesStack() {
   );
 }
 const StackHome = createStackNavigator();
-
-function MainHomeStack() {
-  return (
-    <StackHome.Navigator initialRouteName="Home">
-      <StackHome.Screen
-        name="Home"
-        component={HomeCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="Profile1"
-        component={ProfileCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="innerChat"
-        component={InnerChatCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="YouShowedinterest"
-        component={YouShowedinterest}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="InterestedPeopleInYou"
-        component={InterestedPeopleInYou}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="WishlistCmp"
-        component={WishlistCmp}
-        options={navOptionHandler}
-      />
-      <StackHome.Screen
-        name="Filter"
-        component={FilterCmp}
-        options={navOptionHandler}
-      />
-    </StackHome.Navigator>
-  );
-}
 
 const Drawer = createDrawerNavigator();
 const SideMenuNavigator = () => {

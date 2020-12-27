@@ -7,6 +7,7 @@ import {
   Image,
   AsyncStorage,
   ActivityIndicator,
+  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -36,6 +37,9 @@ import CountryPicker from 'react-native-country-picker-modal';
 import Swiper from 'react-native-swiper';
 import YouTube from 'react-native-youtube';
 import {ScrollView} from 'react-native-gesture-handler';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+const sliderWidth = Dimensions.get('window').width;
+const itemWidth = Dimensions.get('window').width;
 
 export default class HomeCmp extends PureComponent {
   constructor(props) {
@@ -52,7 +56,46 @@ export default class HomeCmp extends PureComponent {
       blockUserData: [],
       isLoading: false,
       errorMsg: 'a',
+      loader: true,
       errorTitle: '',
+      entries: [
+        {
+          images: require('../../assets/mainProfile.png'),
+          userName: '@elena933',
+          city: 'New York USA',
+          Education: 'Masters',
+          years: '22 yr',
+          status: 'single',
+          religion: 'shia',
+        },
+        {
+          images: require('../../assets/mainProfile.png'),
+          userName: '@elena933',
+          city: 'New York USA',
+          Education: 'Masters',
+          years: '22 yr',
+          status: 'single',
+          religion: 'shia',
+        },
+        {
+          images: require('../../assets/mainProfile.png'),
+          userName: '@elena933',
+          city: 'New York USA',
+          Education: 'Masters',
+          years: '22 yr',
+          status: 'single',
+          religion: 'shia',
+        },
+        {
+          images: require('../../assets/mainProfile.png'),
+          userName: '@elena933',
+          city: 'New York USA',
+          Education: 'Masters',
+          years: '22 yr',
+          status: 'single',
+          religion: 'shia',
+        },
+      ],
     };
   }
 
@@ -83,133 +126,186 @@ export default class HomeCmp extends PureComponent {
           // showSpinner: false,
           usersData: res.data,
           collection: res.data.collection.data,
+          loader: false,
         });
         // console.log(res.data);
       })
       .catch(error => {
-        // this.setState({showSpinner: false});
         console.log('error', error);
         this.setState({
-          // showAlert: true,
-          // errorMsg: 'Something went wrong. ' + error,
-          // errorTitle: 'Error!!',
+          loader: false,
         });
       });
   }
+  _renderItem = ({item, index}) => {
+    console.log('item', item);
+    return (
+      <View style={{flex: 1, marginVertical: 10}}>
+        <View
+          style={{
+            height: '100%',
+            width: '90%',
+            borderWidth: 0.6,
+            borderColor: 'gray',
+            marginVertical: 10,
+            borderRadius: 20,
+            alignSelf: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+
+            elevation: 1,
+            // borderWidth: 1,
+            overflow: 'hidden',
+          }}>
+          <ImageBackground
+            source={item.images}
+            style={{
+              height: '100%',
+              width: '100%',
+              borderRadius: 20,
+              justifyContent: 'flex-end',
+              overflow: 'hidden',
+            }}
+            resizeMode="cover">
+            <View
+              style={{
+                elevation: 2,
+
+                width: '100%',
+                backgroundColor: 'white',
+
+                opacity: 0.9,
+              }}>
+              <View style={{width: '100%', borderWidth: 0}}>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    marginVertical: 2,
+                    paddingHorizontal: 10,
+                  }}>
+                  {' '}
+                  {item.userName}{' '}
+                </Text>
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    flexDirection: 'row',
+                    // borderWidth: 1,
+                    paddingVertical: 10,
+                    backgroundColor: 'white',
+                    paddingHorizontal: 10,
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: 'white',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 19,
+                        fontWeight: 'bold',
+                      }}>
+                      {' '}
+                      {item.city}{' '}
+                    </Text>
+
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                      }}>
+                      {' '}
+                      Education : {item.Education}{' '}
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                      }}>
+                      {' '}
+                      Sect: {item.religion}{' '}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'flex-end',
+                      backgroundColor: 'white',
+                      justifyContent: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginVertical: 2,
+                      }}>
+                      {' '}
+                      {item.years}{' '}
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginVertical: 2,
+                      }}>
+                      {' '}
+                      {item.status}{' '}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ImageBackground>
+        </View>
+      </View>
+    );
+  };
 
   render() {
     return (
       <ScrollView
         style={{flex: 1, backgroundColor: 'white'}}
         contentContainerStyle={{flexGrow: 1}}>
-        <Header name={'Find Friends'} navigation={this.props.navigation} />
+        <Header
+          name={'MATCHES SUGGESTIONS'}
+          navigation={this.props.navigation}
+          drawer={false}
+          backgroundColor={'transparent'}
+          textColor={'black'}
+        />
         <View
           style={{
-            height: 300,
-            borderWidth: 0,
-            marginTop: 20,
-            paddingHorizontal: 10,
+            height: 430,
+            // flex: 0.6,
+            // paddingVertical: 20,
+            // borderWidth: 1,
+            // marginTop: 20,
+            // paddingHorizontal: 10,
+            // borderWidth: 1,
           }}>
-          <Swiper showsPagination={false}>
-            {[0, 1, 2].map(val => (
-              <View style={styles.vipUserInner}>
-                <View
-                  style={{
-                    paddingRight: 0,
-                    borderRadius: 10,
-                    backgroundColor: '#f6f6f6',
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 1},
-                    shadowOpacity: 0.22,
-                    shadowRadius: 2.22,
-                    elevation: 2,
-                    flex: 1,
-                    // borderWidth: 1,
-                  }}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate('Profile1', {data: {}})
-                    }
-                    style={styles.vipImageView}>
-                    <ImageBackground
-                      source={images.vipUserIcon}
-                      style={styles.vipImageDimension}
-                      // resizeMode="cover"
-                    />
-                  </TouchableOpacity>
-                  <View style={[styles.vipContentView, styles.pt10]}>
-                    <View style={{flex: 1}}>
-                      <View style={styles.nameView}>
-                        <Text style={styles.vipName}>@elena45</Text>
-                        <FontAwesomeIcon
-                          icon={faFemale}
-                          color="red"
-                          size={18}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          borderWidth: 0,
-                          paddingHorizontal: 20,
-                        }}>
-                        <Image
-                          style={{marginRight: 5, width: 11, height: 16}}
-                          source={images.locationIcon}
-                        />
-                        <Text style={styles.vipLighTxt}>New York, USA </Text>
-                        <View
-                          style={{
-                            position: 'relative',
-                            bottom: 5,
-                            marginBottom: -10,
-                          }}>
-                          <CountryPicker
-                            withAlphaFilter={true}
-                            withCallingCode={true}
-                            withFilter={true}
-                            countryCode={this.state.cca2}
-                            onSelect={value => {
-                              this.setState({
-                                cca2: value.cca2,
-                                app,
-                              });
-                            }}
-                            cca2={this.state.cca2}
-                            translation="eng"
-                          />
-                        </View>
-                      </View>
-                      <View style={{paddingHorizontal: 20}}>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.vipDrakTxt}>Education: </Text>
-                          <Text style={styles.vipLighTxt}>Masters </Text>
-                        </View>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.vipDrakTxt}>Religious: </Text>
-                          <Text style={styles.vipLighTxt}>Shia </Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'flex-end',
-                        alignItems: 'flex-end',
-                      }}>
-                      <View>
-                        <Text style={styles.vipAge}>28 yrs</Text>
-                      </View>
-                      <View>
-                        <Text style={styles.vipLighTxt}>Single</Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </Swiper>
+          <Carousel
+            ref={c => {
+              this._carousel = c;
+            }}
+            data={this.state.entries}
+            renderItem={this._renderItem}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+            layout={'tinder'}
+            layoutCardOffset={`9`}
+          />
           <View
             style={{
               paddingHorizontal: 25,
@@ -272,7 +368,10 @@ export default class HomeCmp extends PureComponent {
           </View>
         </View>
         <View style={{flex: 1, borderWidth: 0}}>
-          {this.state.collection &&
+          {this.state.loader ? (
+            <ActivityIndicator size={'large'} color={'red'} />
+          ) : (
+            this.state.collection &&
             this.state.collection.map((item, i) => {
               console.log('====', item.id);
               return (
@@ -347,7 +446,8 @@ export default class HomeCmp extends PureComponent {
                   </View>
                 </TouchableOpacity>
               );
-            })}
+            })
+          )}
         </View>
         <Toast ref={ref => Toast.setRef(ref)} />
       </ScrollView>

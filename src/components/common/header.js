@@ -10,17 +10,26 @@ import {
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 
-const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
+const Header = ({
+  name,
+  navigation,
+  fliter,
+  backBtn,
+  search,
+  drawer,
+  backgroundColor,
+  textColor,
+}) => {
   // console.log('MIL RHA HUN ME!!', navigation);
   return (
     <View
       style={{
         flexDirection: 'row',
         height: 50,
-        backgroundColor: colors.headerColor,
+        backgroundColor: backgroundColor ? backgroundColor : colors.headerColor,
         borderBottomColor: colors.ligthGrey,
-        borderBottomWidth: 0.5,
-        elevation: 1,
+        // borderBottomWidth: 0.5,
+        // elevation: 1,
       }}>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         {backBtn == true ? (
@@ -49,7 +58,14 @@ const Header = ({name, navigation, fliter, backBtn, search, drawer}) => {
         )}
       </View>
       <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={styles.headerHeading}>{name}</Text>
+        <Text
+          style={{
+            color: textColor ? textColor : '#fff',
+            fontSize: 18,
+            fontFamily: 'poppins-Medium',
+          }}>
+          {name}
+        </Text>
       </View>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         {fliter == 1 ? (

@@ -98,9 +98,7 @@ export default class SigninCmp extends Component {
   _storeData = async () => {
     try {
       await AsyncStorage.setItem('checkUserLoggedin', 'login');
-    } catch (error) {
-      // Error saving data
-    }
+    } catch (error) {}
   };
 
   signin = async () => {
@@ -124,13 +122,14 @@ export default class SigninCmp extends Component {
               'userData',
               JSON.stringify(res.data),
             );
+
             const user_type = await AsyncStorage.setItem(
               'user_type',
               res.data.user.user_type,
             );
             this.props.navigation.navigate('SideMenuNavigator');
+
             AsyncStorage.setItem('checkUserLoggedin', 'login');
-            // this._storeData();
           } else
             this.setState({
               showAlert: true,

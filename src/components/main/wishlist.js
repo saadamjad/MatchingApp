@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, SafeAreaView, ScrollView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 
 import {colors, images} from '../../constants/theme';
 import {Header} from '../common';
@@ -21,6 +28,7 @@ export default class ChatCmp extends Component {
       message: '',
       userData: {},
       requestSent: false,
+      loader: true,
       chat: [
         {id: 0, image: images.chatSender1Icon, request: 0},
         {id: 1, image: images.chatSender2Icon, request: 1},
@@ -51,12 +59,6 @@ export default class ChatCmp extends Component {
     loggedInUserId,
     wishlistUserId,
   ) => {
-    console.log(
-      'access_token,loggedInUserId,wishlistUserId',
-      access_token,
-      loggedInUserId,
-      wishlistUserId,
-    );
     let headers = {
       headers: {
         Authorization: access_token,
@@ -84,13 +86,11 @@ export default class ChatCmp extends Component {
   _GetAsynUserData = async () => {
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
-    console.log('user', userData);
     this.setState({userData: userData}, () =>
       this._GetWishtlistData(this.state.userData),
     );
   };
   _GetWishtlistData = async userData => {
-    console.log('userData====', userData);
     let access_token = userData.access_token;
     let loggedInUserId = userData.user.id;
 
@@ -101,7 +101,6 @@ export default class ChatCmp extends Component {
     };
     axios.get(URL, headers).then(
       async response => {
-        console.log('Api response', response.data);
         var i;
         let fav_users = response.data.fav_users.length;
         var wishlistUserId;
@@ -111,17 +110,13 @@ export default class ChatCmp extends Component {
           console.log('no data ');
           this.setState({
             message: 'No user addded in wishlist',
+            loader: false,
           });
         } else {
           for (i = 0; i < fav_users; i++) {
             console.log('loop', i);
             wishlistUserId = response.data.fav_users[i].id;
-            console.log(
-              'fav_users',
-              fav_users,
-              'wishlistUserId',
-              wishlistUserId,
-            );
+
             let is = await this._checkIfAlreadyFriend(
               access_token,
               loggedInUserId,
@@ -129,20 +124,19 @@ export default class ChatCmp extends Component {
             );
             fav_users_data[i].interest = is;
           }
-          //   let data = {
-          //     wishlistUserId,
-          //   };
-          this.setState(
-            {
-              wishList: {...response.data, fav_users: fav_users_data},
-              // wishList: response.data,
-            },
-            () => console.log('state=====', this.state.wishList.fav_users),
-          );
+
+          this.setState({
+            wishList: {...response.data, fav_users: fav_users_data},
+            loader: false,
+            // wishList: response.data,
+          });
         }
       },
       error => {
         console.log(error);
+        this.setState({
+          loader: false,
+        });
       },
     );
   };
@@ -187,68 +181,72 @@ export default class ChatCmp extends Component {
           // search={true}
         />
         <ScrollView>
-          {this.state.wishList?.fav_users?.map((item, i) => {
-            // console.log('item', item);
-            let profilePic =
-              'https://api.matchelitemuslim.com/' + item.profile_pic;
-            let toID = item.id;
-            let fromID = this.state.userData.user.id;
+          {this.state.loader ? (
+            <ActivityIndicator size={'large'} color="red" />
+          ) : (
+            this.state.wishList?.fav_users?.map((item, i) => {
+              // console.log('item', item);
+              let profilePic =
+                'https://api.matchelitemuslim.com/' + item.profile_pic;
+              let toID = item.id;
+              let fromID = this.state.userData.user.id;
 
-            return (
-              <View style={styles.chatMainView} key={i}>
-                <View
-                  style={{
-                    width: '20%',
-                    // borderWidth: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+              return (
+                <View style={styles.chatMainView} key={i}>
                   <View
                     style={{
-                      height: 50,
-                      width: 50,
-                      //   borderWidth: 1,
-                      borderRadius: 50,
+                      width: '20%',
+                      // borderWidth: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
-                    <Image
-                      style={styles.chatImageDimension}
-                      source={{
-                        uri: profilePic,
-                      }}
-                      style={{height: '100%', width: '100%'}}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </View>
-                <View style={styles.chatTxtContView}>
-                  <View style={styles.chatTxtView}>
-                    <Text style={styles.chatHeading}> {item.FirstName} </Text>
-                    <View style={styles.locationcont}>
+                    <View
+                      style={{
+                        height: 50,
+                        width: 50,
+                        //   borderWidth: 1,
+                        borderRadius: 50,
+                      }}>
                       <Image
-                        style={styles.locationImg}
-                        source={images.locationIcon}
+                        style={styles.chatImageDimension}
+                        source={{
+                          uri: profilePic,
+                        }}
+                        style={{height: '100%', width: '100%'}}
+                        resizeMode="contain"
                       />
-                      <Text style={styles.chatLabel}> {item.country} </Text>
                     </View>
                   </View>
+                  <View style={styles.chatTxtContView}>
+                    <View style={styles.chatTxtView}>
+                      <Text style={styles.chatHeading}> {item.FirstName} </Text>
+                      <View style={styles.locationcont}>
+                        <Image
+                          style={styles.locationImg}
+                          source={images.locationIcon}
+                        />
+                        <Text style={styles.chatLabel}> {item.country} </Text>
+                      </View>
+                    </View>
 
-                  {item.interest || this.state.requestSent ? (
-                    <TouchableOpacity
-                      style={styles.chatBadgetContView}
-                      disabled={true}>
-                      <Text style={styles.greenColor}>{'Request Sent'}</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.chatBadgetContView}
-                      onPress={() => this._SendInterest(toID, fromID)}>
-                      <Text style={styles.redColor}>{'Send Request'}</Text>
-                    </TouchableOpacity>
-                  )}
+                    {item.interest || this.state.requestSent ? (
+                      <TouchableOpacity
+                        style={styles.chatBadgetContView}
+                        disabled={true}>
+                        <Text style={styles.greenColor}>{'Request Sent'}</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.chatBadgetContView}
+                        onPress={() => this._SendInterest(toID, fromID)}>
+                        <Text style={styles.redColor}>{'Send Request'}</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })
+          )}
           <Text
             style={{
               color: 'red',
