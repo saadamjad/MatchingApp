@@ -61,9 +61,9 @@ export default class MatchesCmp extends Component {
     const userData = JSON.parse(user);
     const access_token = userData.access_token;
     const loggedInUserID = userData.user.id;
-    const URL = `https://dev2.thebetatest.com/api/interest-users/${loggedInUserID}`;
+    const URL = `https://api.matchelitemuslim.com/api/interest-users/${loggedInUserID}`;
     console.log('===================', URL);
-    const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
+    const SECONDURL = `https://api.matchelitemuslim.com/api/allusers`;
 
     let headers = {
       headers: {
@@ -131,7 +131,7 @@ export default class MatchesCmp extends Component {
     });
     axios
       .post(
-        `https://dev2.thebetatest.com/api/deny-interest`,
+        `https://api.matchelitemuslim.com/api/deny-interest`,
         {
           toId: loggedInUserID,
           fromId: id,
@@ -176,7 +176,7 @@ export default class MatchesCmp extends Component {
     });
     axios
       .post(
-        `https://dev2.thebetatest.com/api/accept-interest`,
+        `https://api.matchelitemuslim.com/api/accept-interest`,
         {
           toId: loggedInUserID,
           fromId: id,
@@ -249,14 +249,14 @@ export default class MatchesCmp extends Component {
                               this.props.navigation.navigate('Profile1', {
                                 data: item,
                                 profilePic:
-                                  'http://dev2.thebetatest.com/' +
+                                  'https://api.matchelitemuslim.com/' +
                                   item.profile_pic,
                               })
                             }>
                             <Image
                               source={{
                                 uri:
-                                  'http://dev2.thebetatest.com/' +
+                                  'https://api.matchelitemuslim.com/' +
                                   item.profile_pic,
                               }}
                               defaultSource={require('../../assets/noImage.png')}

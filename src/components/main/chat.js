@@ -45,7 +45,7 @@ export default class ChatCmp extends Component {
     });
     axios
       .post(
-        `http://dev2.thebetatest.com/api/show-all-chat`,
+        `https://api.matchelitemuslim.com/api/show-all-chat`,
         {
           user_id: loggedInUserID,
         },
@@ -92,7 +92,7 @@ export default class ChatCmp extends Component {
           ) : (
             this.state?.chat.length > 0 &&
             this.state.chat.map((val, i) => {
-              let profileimage = `http://dev2.thebetatest.com/${
+              let profileimage = `https://api.matchelitemuslim.com/${
                 val.profile_pic
               }`;
               console.log('profileimage', profileimage);

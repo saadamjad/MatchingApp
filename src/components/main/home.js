@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {PureComponent, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -32,6 +32,253 @@ import {colors, images} from '../../constants/theme';
 import CountryPicker from 'react-native-country-picker-modal';
 import Swiper from 'react-native-swiper';
 import YouTube from 'react-native-youtube';
+
+const RenderFlatListData = ({item, index, navigation}) => {
+  // let codeNumber = this.isUserAlreadyFriend(item.item.id);
+  // console.log('HMMMMMMM', codeNumber);
+  const [codeNumber, setCodeNumber] = useState(false);
+  useEffect(() => {
+    isUserAlreadyFriend(item.item.id);
+  }, []);
+
+  const addFriend = async id => {
+    console.log('id', id);
+
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    let headers = {
+      headers: {
+        Authorization: userData.access_token,
+      },
+    };
+    const data = {
+      to: id,
+      from: userData.user.id,
+      status: 'sent',
+    };
+    console.log('data', data);
+
+    // const URL = 'https://api.matchelitemuslim.com/api/send-interest';
+    const URL = 'https://api.matchelitemuslim.com/api/send-interest';
+
+    axios.post(URL, data, headers).then(
+      resposne => {
+        // console.log(
+        //   'api is working but the request data is wrong check it out',
+        //   resposne.data,
+        // );
+        // console.log('sddsads', resposne.data.status);
+        if (!resposne.data.status)
+          Toast.show({
+            type: 'error',
+            position: 'top',
+            text1: 'Error',
+            text1: 'You have Already sent request',
+            text2: resposne.data.message,
+            visibilityTime: 4000,
+            autoHide: true,
+            topOffset: 100,
+            bottomOffset: 40,
+          });
+        else {
+          Toast.show({
+            type: 'success',
+            position: 'top',
+            text1: 'Success',
+            text2: 'Successfuly sent friend request.',
+            visibilityTime: 4000,
+            autoHide: true,
+            topOffset: 30,
+            bottomOffset: 40,
+          });
+        }
+      },
+      error => {
+        console.log(error);
+      },
+    );
+  };
+
+  const addUser = (id, check) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          addFriend(id);
+        }}
+        style={{
+          backgroundColor: '#ed145b',
+          borderRadius: 30,
+          marginRight: 7,
+          height: 30,
+          width: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <FontAwesomeIcon
+          icon={!check ? faUserPlus : faUserCheck}
+          color="#fff"
+          size={20}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const isUserAlreadyFriend = async ThereIsClickableUserId => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    const access_token = userData.access_token;
+    const thereIsOurId = userData.user.id;
+
+    let headers = {
+      headers: {
+        Authorization: access_token,
+      },
+    };
+
+    /// 0 for request send
+    /// 1 for accepting incoming request
+    // 3 you are friend murghi chor!
+    console.log('WHAT IS ID ', ThereIsClickableUserId);
+    await axios
+      .get(
+        `https://api.matchelitemuslim.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
+        headers,
+      )
+      .then(async Response => {
+        if (Response.data) {
+          let {data} = Response;
+          let {collection} = data;
+          let {interest_to, interest_from} = collection;
+          console.log(collection);
+          if (interest_to == false && interest_from == false) {
+            console.log('YOU ARE IDIOT', codeNumber);
+            setCodeNumber(false);
+          } else if (!interest_from && interest_to == 'sent') {
+            console.log('YOU ARE IDIOT2', codeNumber);
+            setCodeNumber(0);
+          } else if (!interest_to && interest_from == 'sent') {
+            console.log('YOU ARE IDIOT33', codeNumber);
+            setCodeNumber(1);
+          } else if (interest_from == 'accept') {
+            console.log('YOU ARE IDIOT44', codeNumber);
+            setCodeNumber(3);
+          } else if (interest_to == 'accept') {
+            console.log('YOU ARE IDIOT55', codeNumber);
+            setCodeNumber(3);
+          } else {
+            console.log('YOU ARE IDIOT77', codeNumber);
+            setCodeNumber(1);
+          }
+        }
+      })
+      .catch(err => {
+        console.log('PAHLY ERROR SOLVE KARO', err);
+      });
+    // setCodeNumber(isFriend);
+  };
+  const negativeMind = () => {
+    switch (codeNumber) {
+      case 0:
+        return <Text>Request Sent</Text>;
+      case 1:
+        return <Text>Accept Request</Text>;
+      case 3:
+        return addUser(item.item.id, true);
+      default:
+        return addUser(item.item.id);
+    }
+  };
+  return (
+    <TouchableOpacity
+      style={styles.reglarUserView}
+      onPress={() => navigation.navigate('Profile1', {data: item.item})}>
+      <TouchableOpacity
+        style={{paddingHorizontal: 10}}
+        onPress={() => navigation.navigate('Profile1', {data: item.item})}>
+        <View style={[styles.vipUserInner1, styles.mb]}>
+          <View style={styles.vipImageView}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Profile1', {data: item.item})
+              }>
+              <Image
+                resizeMode="contain"
+                source={{
+                  uri:
+                    'https://api.matchelitemuslim.com/' + item.item.profile_pic,
+                }}
+                defaultSource={require('../../assets/noImage.png')}
+                style={styles.regularImageDimension}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.vipContentView, styles.pt10]}>
+            <View style={styles.nameView}>
+              <Text style={styles.vipName}>@{item.item.UserName}</Text>
+              {item.item.Gender == 'off' ? (
+                <FontAwesomeIcon icon={faFemale} color="red" size={18} />
+              ) : (
+                <FontAwesomeIcon icon={faMale} color="blue" size={18} />
+              )}
+            </View>
+            <View>
+              <Text style={styles.vipAge}>{item.item.Age} years</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                style={{marginRight: 5, width: 11, height: 16}}
+                source={images.locationIcon}
+              />
+              <Text style={styles.vipLighTxt}>{item.item.state}</Text>
+              {/* <Image style={{ marginLeft:5, width:30, height:16 }} source={images.flagIcon} /> */}
+              {/* <View style={{ position:'relative', bottom:5, marginBottom:-10 }}>
+                <CountryPicker 
+                  withAlphaFilter={true} 
+                  withCallingCode={true} 
+                  withFilter={true} 
+                  countryCode={this.state.cca22}
+                  onSelect={(value) => {  
+                    this.setState({ cca22:value.cca2})
+                  }}
+                  cca2={this.state.cca22}
+                  translation='eng'
+                />
+              </View> */}
+            </View>
+            <View style={styles.vipEduView}>
+              <Text style={styles.vipDrakTxt}>Education: </Text>
+              <Text style={styles.vipLighTxt}>
+                {item.item.education
+                  ? item.item.education.length <= 10
+                    ? item.item.education
+                    : item.item.education.substring(0, 15) + '...'
+                  : 'N/A'}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.vipEduView}>
+                <Text style={styles.vipDrakTxt}>Sect: </Text>
+                <Text style={styles.vipLighTxt}>Shia </Text>
+              </View>
+              <View style={styles.socialView}>
+                {negativeMind()}
+                {/* {this.addUser()} */}
+                {/* {this.addUser(item.item.id)} */}
+                {/* {isFriend.interest_from == 'send' &&
+                isFriend.interest_to == 'send'
+                  ? this.whatsApp(item.item.id)
+                  : this.addUser(
+                      item.item.id,
+                      isFriend.interest_from == 'send',
+                    )} */}
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+};
 
 export default class HomeCmp extends PureComponent {
   constructor(props) {
@@ -67,6 +314,7 @@ export default class HomeCmp extends PureComponent {
   }
 
   addFriend = async id => {
+    console.log('id', id);
     this.setState({showSpinner: true});
 
     const user = await AsyncStorage.getItem('userData');
@@ -81,8 +329,9 @@ export default class HomeCmp extends PureComponent {
       from: userData.user.id,
       status: 'sent',
     };
+    console.log('data', data);
 
-    const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    const URL = 'https://api.matchelitemuslim.com/api/send-interest';
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
@@ -132,7 +381,7 @@ export default class HomeCmp extends PureComponent {
     const access_token = userData.access_token;
     console.log('access_token', access_token),
       console.log('loggedInUserID', loggedInUserID);
-    let URL = 'https://dev2.thebetatest.com/api/your-statistic';
+    let URL = 'https://api.matchelitemuslim.com/api/your-statistic';
     let headers = {
       headers: {
         Authorization: access_token,
@@ -161,7 +410,7 @@ export default class HomeCmp extends PureComponent {
   };
   _SendInterest = async (toID, fromID) => {
     console.log('_SendInterest', 'toId', toID, 'fromId', fromID);
-    const URL = 'https://dev2.thebetatest.com/api/your-statistic';
+    const URL = 'https://api.matchelitemuslim.com/api/your-statistic';
     let access_token = this.state.userData.access_token;
     console.log('access_token', access_token);
 
@@ -196,9 +445,9 @@ export default class HomeCmp extends PureComponent {
     this.setState({showSpinner: true});
     let URL;
     if (i == undefined) {
-      URL = 'http://dev2.thebetatest.com/api/allusers';
+      URL = 'https://api.matchelitemuslim.com/api/allusers';
     } else {
-      URL = 'http://dev2.thebetatest.com/api/allusers?page=' + i;
+      URL = 'https://api.matchelitemuslim.com/api/allusers?page=' + i;
     }
 
     const user = await AsyncStorage.getItem('userData');
@@ -237,7 +486,7 @@ export default class HomeCmp extends PureComponent {
     const userData = JSON.parse(user);
     // console.log('userdata', userData);
     const loggedInUserID = userData.user.id;
-    const URL = `http://dev2.thebetatest.com/api/get-block-users/${loggedInUserID}`;
+    const URL = `https://api.matchelitemuslim.com/api/get-block-users/${loggedInUserID}`;
     // console.log('loggedin', loggedInUserID);
     const access_token = userData.access_token;
     console.log(loggedInUserID);
@@ -268,7 +517,7 @@ export default class HomeCmp extends PureComponent {
       });
   }
   async getVipData() {
-    const URL = 'https://dev2.thebetatest.com/api/all-vip';
+    const URL = 'https://api.matchelitemuslim.com/api/all-vip';
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
     // console.log('userdata', userData);
@@ -346,7 +595,7 @@ export default class HomeCmp extends PureComponent {
     }
   };
 
-  isUserAlreadyFriend = async (ThereIsClickableUserId, setFriend) => {
+  isUserAlreadyFriend = async ThereIsClickableUserId => {
     const user = await AsyncStorage.getItem('userData');
     const userData = JSON.parse(user);
     const access_token = userData.access_token;
@@ -358,28 +607,38 @@ export default class HomeCmp extends PureComponent {
       },
     };
     let isFriend = false;
+
+    /// 0 for request send
+    /// 1 for accepting incoming request
+    // 3 you are friend murghi chor!
     await axios
       .get(
-        `https://dev2.thebetatest.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
+        `https://api.matchelitemuslim.com/api/get-friend-details/?user_id=${thereIsOurId}&person_id=${ThereIsClickableUserId}`,
         headers,
       )
       .then(async Response => {
         if (Response.data) {
-          if (
-            Response.data.collection.interest_to == 'sent' &&
-            Response.data.collection.interest_from == 'sent'
-          ) {
-            setFriend(Response.data.collection);
-          } else {
+          let {data} = Response;
+          let {collection} = data;
+          console.log('YES YOU ARE BUNDUR I KNOW!!', collection);
+          let {interest_to, interest_from} = collection;
+
+          if (!interest_to && !interest_from) {
             isFriend = false;
+          } else if (!interest_from && interest_to == 'send') {
+            isFriend = 0;
+          } else if (!interest_to && interest_from == 'send') {
+            isFriend = 1;
+          } else if (interest_from == 'accept') {
+            isFriend = 3;
+          } else if (interest_to == 'accept') {
+            isFriend = 3;
+          } else {
+            isFriend = 1;
           }
-          return true;
         }
       })
       .catch(err => {
-        this.setState({
-          isLoading: false,
-        });
         console.log('PAHLY ERROR SOLVE KARO', err);
       });
     return isFriend;
@@ -405,7 +664,9 @@ export default class HomeCmp extends PureComponent {
   addUser(id, check) {
     return (
       <TouchableOpacity
-        onPress={() => this.addFriend(id)}
+        onPress={() => {
+          this.addFriend(id);
+        }}
         style={{
           backgroundColor: '#ed145b',
           borderRadius: 30,
@@ -593,7 +854,7 @@ export default class HomeCmp extends PureComponent {
                 );
                 if (!isData.length > 0) {
                   let profilePic =
-                    'http://dev2.thebetatest.com/' + el.profile_pic;
+                    'https://api.matchelitemuslim.com/' + el.profile_pic;
                   // console.log('profilepic', profilePic);
 
                   return (
@@ -645,7 +906,7 @@ export default class HomeCmp extends PureComponent {
                             />
                           </View>
                           <View>
-                            <Text style={styles.vipAge}>{el.Age} years</Text>
+                            <Text style={styles.vipAge}>{el.Age} yeyyyars</Text>
                           </View>
                           <View style={{flexDirection: 'row'}}>
                             <Image
@@ -663,7 +924,7 @@ export default class HomeCmp extends PureComponent {
                               style={{width: 20, height: 16}}
                             />
                           </View>
-                          {el.education ? (
+                          {/* {el.education ? (
                             <View style={styles.vipEduView}>
                               <Text style={styles.vipDrakTxt}>Education: </Text>
                               <Text style={styles.vipLighTxt}>
@@ -679,7 +940,7 @@ export default class HomeCmp extends PureComponent {
                                 {el.religious}{' '}
                               </Text>
                             </View>
-                          ) : null}
+                          ) : null} */}
 
                           <View
                             style={{
@@ -739,16 +1000,8 @@ export default class HomeCmp extends PureComponent {
     );
   };
   renderFlatListData = (item, index) => {
-    let isFriend = {
-      wish_list: false,
-      block: false,
-      interest_to: false,
-      interest_from: false,
-    };
-    this.isUserAlreadyFriend(item.item.id, setFriend);
-    const setFriend = friend => {
-      isFriend = friend;
-    };
+    let codeNumber = this.isUserAlreadyFriend(item.item.id);
+    console.log('HMMMMMMM', codeNumber);
     return (
       <TouchableOpacity
         style={styles.reglarUserView}
@@ -769,7 +1022,9 @@ export default class HomeCmp extends PureComponent {
                 <Image
                   resizeMode="contain"
                   source={{
-                    uri: 'http://dev2.thebetatest.com/' + item.item.profile_pic,
+                    uri:
+                      'https://api.matchelitemuslim.com/' +
+                      item.item.profile_pic,
                   }}
                   defaultSource={require('../../assets/noImage.png')}
                   style={styles.regularImageDimension}
@@ -827,13 +1082,13 @@ export default class HomeCmp extends PureComponent {
                 <View style={styles.socialView}>
                   {/* {this.addUser()} */}
                   {/* {this.addUser(item.item.id)} */}
-                  {isFriend.interest_from == 'send' &&
+                  {/* {isFriend.interest_from == 'send' &&
                   isFriend.interest_to == 'send'
                     ? this.whatsApp(item.item.id)
                     : this.addUser(
                         item.item.id,
                         isFriend.interest_from == 'send',
-                      )}
+                      )} */}
                 </View>
               </View>
             </View>
@@ -862,7 +1117,14 @@ export default class HomeCmp extends PureComponent {
                 return {...el};
               }
             })}
-            renderItem={this.renderFlatListData}
+            renderItem={(item, index) => (
+              <RenderFlatListData
+                item={item}
+                index={index}
+                {...this.props}
+                addUser={this.addUser}
+              />
+            )}
           />
           <Toast ref={ref => Toast.setRef(ref)} />
 

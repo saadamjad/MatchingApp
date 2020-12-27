@@ -65,7 +65,7 @@ export default class HomeCmp extends PureComponent {
     // this.setState({showSpinner: true});
     let URL;
 
-    URL = 'http://dev2.thebetatest.com/api/allusers?page=' + i;
+    URL = 'https://api.matchelitemuslim.com/api/allusers?page=' + i;
     const user = await AsyncStorage.getItem('userData');
     const access_token = JSON.parse(user).access_token;
     // console.log(access_token)
@@ -291,7 +291,7 @@ export default class HomeCmp extends PureComponent {
                             resizeMode="contain"
                             source={{
                               uri:
-                                'http://dev2.thebetatest.com/' +
+                                'https://api.matchelitemuslim.com/' +
                                 item.profile_pic,
                             }}
                             defaultSource={require('../../assets/noImage.png')}

@@ -59,12 +59,12 @@ export default class ProfileCmp extends Component {
       // userData: {}
       profileImage: '',
       profilePic: [],
-      imageee: 'http://dev2.thebetatest.com/uploads/woman.png',
+      imageee: 'https://api.matchelitemuslim.com/uploads/woman.png',
       imagetest: [
         'https://source.unsplash.com/1024x768/?water',
-        'http://dev2.thebetatest.com/uploads/woman.png',
+        'https://api.matchelitemuslim.com/uploads/woman.png',
         'https://source.unsplash.com/1024x768/?water',
-        'http://dev2.thebetatest.com/uploads/woman.png',
+        'https://api.matchelitemuslim.com/uploads/woman.png',
       ],
     };
   }
@@ -91,7 +91,7 @@ export default class ProfileCmp extends Component {
     this.setState({
       data: getVipUserDataFromParams,
       userDataShow: true,
-      profilePic: `http://dev2.thebetatest.com/${pic1}`,
+      profilePic: `https://api.matchelitemuslim.com/${pic1}`,
     });
     this._GetLoggedInValue(getVipUserDataFromParams);
   }
@@ -137,7 +137,7 @@ export default class ProfileCmp extends Component {
     const data = {from: loggedInUser, to: vipUserId};
     console.log(data);
 
-    const URL = 'http://dev2.thebetatest.com/api/fav-int';
+    const URL = 'https://api.matchelitemuslim.com/api/fav-int';
 
     axios.post(URL, data, headers).then(
       response => {
@@ -747,7 +747,7 @@ export default class ProfileCmp extends Component {
       },
     };
     const data = {fav_user_id: this.state.data.id};
-    const URL = 'http://dev2.thebetatest.com/api/addtowishlist';
+    const URL = 'https://api.matchelitemuslim.com/api/addtowishlist';
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
@@ -799,7 +799,7 @@ export default class ProfileCmp extends Component {
       fav_user_id: this.state.data.id,
       user_id: JSON.parse(user).user.id,
     };
-    const URL = 'http://dev2.thebetatest.com/api/removetowishlist';
+    const URL = 'https://api.matchelitemuslim.com/api/removetowishlist';
     axios.post(URL, data, header).then(
       resposne => {
         this.setState({showSpinner: false});
@@ -854,7 +854,7 @@ export default class ProfileCmp extends Component {
     // console.log("BHAIJAN LET SEE!!", data)
     console.log('data: ', data);
 
-    const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    const URL = 'https://api.matchelitemuslim.com/api/send-interest';
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
@@ -914,7 +914,7 @@ export default class ProfileCmp extends Component {
     //   from: userData.user.id,
     //   status: 'deny',
     // };
-    // const URL = 'http://dev2.thebetatest.com/api/deny-interest';
+    // const URL = 'https://api.matchelitemuslim.com/api/deny-interest';
     // axios.post(URL, data, headers).then(
     //   resposne => {
     //     this.setState({showSpinner: false});
@@ -1093,7 +1093,7 @@ export default class ProfileCmp extends Component {
       block_by: loggedInUser,
       block_to: vipUserId,
     };
-    const URL = 'http://dev2.thebetatest.com/api/block-user';
+    const URL = 'https://api.matchelitemuslim.com/api/block-user';
     axios.post(URL, data, headers).then(
       resposne => {
         let status = resposne.data.status;
@@ -1134,7 +1134,7 @@ export default class ProfileCmp extends Component {
       block_by: loggedInUser,
       block_to: vipUserId,
     };
-    const URL = 'http://dev2.thebetatest.com/api/unblock-user';
+    const URL = 'https://api.matchelitemuslim.com/api/unblock-user';
     axios.post(URL, data, headers).then(
       resposne => {
         let status = resposne.data.status;
@@ -1165,7 +1165,7 @@ export default class ProfileCmp extends Component {
       },
     };
 
-    const URL = 'http://dev2.thebetatest.com/api/report-reasons';
+    const URL = 'https://api.matchelitemuslim.com/api/report-reasons';
     var array = [];
     axios.get(URL, headers).then(
       response => {
@@ -1203,7 +1203,7 @@ export default class ProfileCmp extends Component {
       send_by: loggedInUser,
       suspect_id: vipUserId,
     };
-    const URL = 'http://dev2.thebetatest.com/api/send-report';
+    const URL = 'https://api.matchelitemuslim.com/api/send-report';
     axios.post(URL, data, headers).then(
       resposne => {
         let status = resposne.data.status;

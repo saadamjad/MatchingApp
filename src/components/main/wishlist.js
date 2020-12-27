@@ -7,7 +7,7 @@ import {AsyncStorage} from 'react-native';
 import axios from 'axios';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 // import { ScrollView } from 'react-native-gesture-handler';
-const URL = 'http://dev2.thebetatest.com/api/getwishlist';
+const URL = 'https://api.matchelitemuslim.com/api/getwishlist';
 
 export default class ChatCmp extends Component {
   // static navigationOptions ={
@@ -69,7 +69,7 @@ export default class ChatCmp extends Component {
     // const data = {from: JSON.parse(user).user.id, to: this.state.data.id};
     // console.log(data);
 
-    const URL = 'http://dev2.thebetatest.com/api/fav-int';
+    const URL = 'https://api.matchelitemuslim.com/api/fav-int';
 
     return axios.post(URL, data, headers).then(
       response => {
@@ -148,7 +148,7 @@ export default class ChatCmp extends Component {
   };
   _SendInterest = async (toID, fromID) => {
     console.log('_SendInterest', 'toId', toID, 'fromId', fromID);
-    const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    const URL = 'https://api.matchelitemuslim.com/api/send-interest';
     let access_token = this.state.userData.access_token;
     console.log('access_token', access_token);
 
@@ -189,7 +189,8 @@ export default class ChatCmp extends Component {
         <ScrollView>
           {this.state.wishList?.fav_users?.map((item, i) => {
             // console.log('item', item);
-            let profilePic = 'http://dev2.thebetatest.com/' + item.profile_pic;
+            let profilePic =
+              'https://api.matchelitemuslim.com/' + item.profile_pic;
             let toID = item.id;
             let fromID = this.state.userData.user.id;
 

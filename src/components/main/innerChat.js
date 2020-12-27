@@ -88,7 +88,7 @@ export default class InnerChatCmp extends Component {
       });
       axios
         .post(
-          `http://dev2.thebetatest.com/api/show-chat`,
+          `https://api.matchelitemuslim.com/api/show-chat`,
           {
             user_id: loggedInUserID,
             person_id: this.props.route.params.id,
@@ -138,7 +138,7 @@ export default class InnerChatCmp extends Component {
     if (this.props?.route?.params?.id) {
       axios
         .post(
-          `http://dev2.thebetatest.com/api/send-message`,
+          `https://api.matchelitemuslim.com/api/send-message`,
           {
             // from: loggedInUserID,
             // to: this.props.route.params.id,

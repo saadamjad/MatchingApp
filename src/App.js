@@ -124,8 +124,8 @@ export default class App extends React.Component {
 //               style={styles.imgSize}
 //               source={{
 //                 uri:
-//                   `http://dev2.thebetatest.com/${state.image}` &&
-//                   `http://dev2.thebetatest.com/${state.image}`,
+//                   `https://api.matchelitemuslim.com/${state.image}` &&
+//                   `https://api.matchelitemuslim.com/${state.image}`,
 //               }}
 //             />
 //           </View>

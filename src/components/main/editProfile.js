@@ -127,7 +127,7 @@ export default class ProfileCmp extends Component {
       this.setState({showSpinner: true});
       axios
         .post(
-          `http://dev2.thebetatest.com/api/update/personal/bio`,
+          `https://api.matchelitemuslim.com/api/update/personal/bio`,
           {
             id,
             your_self: text,
@@ -197,7 +197,7 @@ export default class ProfileCmp extends Component {
       this.setState({showSpinner: true});
       axios
         .post(
-          `http://dev2.thebetatest.com/api/update/personal/details`,
+          `https://api.matchelitemuslim.com/api/update/personal/details`,
           {
             id,
             education,
@@ -297,7 +297,7 @@ export default class ProfileCmp extends Component {
       this.setState({showSpinner: true});
       axios
         .post(
-          `http://dev2.thebetatest.com/api/update/partner/detail`,
+          `https://api.matchelitemuslim.com/api/update/partner/detail`,
           {
             id,
             seeking_a: seeking,
@@ -1001,9 +1001,12 @@ export default class ProfileCmp extends Component {
     const loggedInUserID = userData.user.id;
     const access_token = userData.access_token;
     axios
-      .get(`http://dev2.thebetatest.com/api/singleuser/${loggedInUserID}`, {
-        headers: {Authorization: access_token},
-      })
+      .get(
+        `https://api.matchelitemuslim.com/api/singleuser/${loggedInUserID}`,
+        {
+          headers: {Authorization: access_token},
+        },
+      )
       .then(async res => {
         this.setState({showSpinner: false});
         console.log('res', res.data);
@@ -1143,7 +1146,7 @@ export default class ProfileCmp extends Component {
     const loggedInUserID = userData.user.id;
     const access_token = userData.access_token;
     axios
-      .get('http://dev2.thebetatest.com/api/hobbies', {
+      .get('https://api.matchelitemuslim.com/api/hobbies', {
         headers: {Authorization: access_token},
       })
       .then(async res => {
@@ -1183,7 +1186,7 @@ export default class ProfileCmp extends Component {
     const loggedInUserID = userData.user.id;
     const access_token = userData.access_token;
     axios
-      .get('http://dev2.thebetatest.com/api/qualities', {
+      .get('https://api.matchelitemuslim.com/api/qualities', {
         headers: {Authorization: access_token},
       })
       .then(async res => {

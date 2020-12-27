@@ -28,8 +28,8 @@ export default class SigninCmp extends Component {
       isEmaiForm: true,
       cca2: 'PK',
       phone: '',
-      email: '',
-      password: '',
+      email: 'saad@gmail.com',
+      password: '12345678',
       type: 'email',
       showSpinner: false,
       showAlert: false,
@@ -115,7 +115,7 @@ export default class SigninCmp extends Component {
         type: this.state.type,
       };
       axios
-        .post('http://dev2.thebetatest.com/api/login-post', data)
+        .post('https://api.matchelitemuslim.com/api/login-post', data)
         .then(async res => {
           this.setState({showSpinner: false});
           console.log(res.data);

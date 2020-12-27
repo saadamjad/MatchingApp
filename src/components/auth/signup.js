@@ -81,7 +81,7 @@ export default class SignupCmp extends Component {
       email: this.state.email,
     };
     axios
-      .post('http://dev2.thebetatest.com/api/checkemail', data)
+      .post('https://api.matchelitemuslim.com/api/checkemail', data)
       .then(async res => {
         this.setState({showSpinner: false});
         console.log('res', res.data);

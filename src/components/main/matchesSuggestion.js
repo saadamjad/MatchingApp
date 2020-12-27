@@ -63,11 +63,11 @@ export default class MatchesCmp extends Component {
     const loggedInUserID = userData.user.id;
 
     // const loggedInUserID = userData.user.id;
-    // https://dev2.thebetatest.com/api/get-interest-users/131
+    // https://api.matchelitemuslim.com/api/get-interest-users/131
 
-    const URL = `https://dev2.thebetatest.com/api/matches/${loggedInUserID}`;
+    const URL = `https://api.matchelitemuslim.com/api/matches/${loggedInUserID}`;
     console.log('===================', URL);
-    const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
+    const SECONDURL = `https://api.matchelitemuslim.com/api/allusers`;
 
     // let access_token = userData.access_token;
 
@@ -137,7 +137,7 @@ export default class MatchesCmp extends Component {
     });
     axios
       .post(
-        `https://dev2.thebetatest.com/api/deny-interest`,
+        `https://api.matchelitemuslim.com/api/deny-interest`,
         {
           toId: loggedInUserID,
           fromId: id,
@@ -182,7 +182,7 @@ export default class MatchesCmp extends Component {
     });
     axios
       .post(
-        `https://dev2.thebetatest.com/api/accept-interest`,
+        `https://api.matchelitemuslim.com/api/accept-interest`,
         {
           toId: loggedInUserID,
           fromId: id,
@@ -246,7 +246,7 @@ export default class MatchesCmp extends Component {
                   this.props.navigation.navigate('Profile1', {
                     data: item,
                     profilePic:
-                      'http://dev2.thebetatest.com/' + item.profile_pic,
+                      'https://api.matchelitemuslim.com/' + item.profile_pic,
                   })
                 }>
                 <View style={styles.reglarUserView}>
@@ -258,14 +258,14 @@ export default class MatchesCmp extends Component {
                             this.props.navigation.navigate('Profile1', {
                               data: item,
                               profilePic:
-                                'http://dev2.thebetatest.com/' +
+                                'https://api.matchelitemuslim.com/' +
                                 item.profile_pic,
                             })
                           }>
                           <Image
                             source={{
                               uri:
-                                'http://dev2.thebetatest.com/' +
+                                'https://api.matchelitemuslim.com/' +
                                 item.profile_pic,
                             }}
                             defaultSource={require('../../assets/noImage.png')}

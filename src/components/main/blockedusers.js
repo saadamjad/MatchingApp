@@ -61,9 +61,9 @@ export default class MatchesCmp extends Component {
     console.log('getData index: ', i);
     let URL;
     if (i == undefined) {
-      URL = 'http://dev2.thebetatest.com/api/allusers';
+      URL = 'https://api.matchelitemuslim.com/api/allusers';
     } else {
-      URL = 'http://dev2.thebetatest.com/api/allusers?page=' + i;
+      URL = 'https://api.matchelitemuslim.com/api/allusers?page=' + i;
     }
 
     const user = await AsyncStorage.getItem('userData');
@@ -113,7 +113,7 @@ export default class MatchesCmp extends Component {
       from: id,
       status: 'sent',
     };
-    const URL = 'http://dev2.thebetatest.com/api/send-interest';
+    const URL = 'https://api.matchelitemuslim.com/api/send-interest';
     axios.post(URL, data, headers).then(
       resposne => {
         this.setState({showSpinner: false});
@@ -191,8 +191,8 @@ export default class MatchesCmp extends Component {
     const loggedInUserID = userData.user.id;
 
     // const loggedInUserID = userData.user.id;
-    const URL = `https://dev2.thebetatest.com/api/get-interest-users/${loggedInUserID}`;
-    const SECONDURL = `https://dev2.thebetatest.com/api/allusers`;
+    const URL = `https://api.matchelitemuslim.com/api/get-interest-users/${loggedInUserID}`;
+    const SECONDURL = `https://api.matchelitemuslim.com/api/allusers`;
 
     // let access_token = userData.access_token;
 
@@ -400,14 +400,14 @@ const styles = {
 //                               this.props.navigation.navigate('Profile1', {
 //                                 data: item,
 //                                 profilePic:
-//                                   'http://dev2.thebetatest.com/' +
+//                                   'https://api.matchelitemuslim.com/' +
 //                                   item.profile_pic,
 //                               })}
 //                             }>
 //                             <Image
 //                               source={{
 //                                 uri:
-//                                   'http://dev2.thebetatest.com/' +
+//                                   'https://api.matchelitemuslim.com/' +
 //                                   item.profile_pic,
 //                               }}
 //                               defaultSource={require('../../assets/noImage.png')}
