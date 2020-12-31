@@ -190,11 +190,11 @@ android {
 }
 
 dependencies {
-    // compile project(':tipsi-stripe')
-//     compile (project(':tipsi-stripe')) {
-//     exclude group: 'com.google.android.gms'
-//     exclude group: 'com.google.firebase'
-// }
+    compile (project(':tipsi-stripe')) {
+    exclude group: 'com.google.android.gms'
+    exclude group: 'com.google.firebase'
+}
+//  compile project(':tipsi-stripe')
     
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
