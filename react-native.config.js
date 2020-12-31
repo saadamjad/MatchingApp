@@ -1,10 +1,10 @@
-// module.exports = {
-//   dependencies: {
-//     'tipsi-stripe': {
-//       platforms: {
-//         android: null,
-//         ios: null,
-//       },
-//     },
-//   },
-// };
+module.exports = {
+  dependencies: {
+    'tipsi-stripe': {
+      platforms: {
+        android: null,
+        ios: null,
+      },
+    },
+  },
+};
