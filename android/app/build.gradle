@@ -128,11 +128,12 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.matchelitemuslim"
+        applicationId "com.matchelitemuslim"    
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -190,6 +191,11 @@ android {
 
 dependencies {
     // compile project(':tipsi-stripe')
+//     compile (project(':tipsi-stripe')) {
+//     exclude group: 'com.google.android.gms'
+//     exclude group: 'com.google.firebase'
+// }
+    
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
