@@ -22,7 +22,7 @@ stripe.setOptions({
 const App = props => {
   useEffect(() => {
     // addFriend();
-    sendData();
+    // sendData();
   }, []);
   let amount = props.route?.params?.amount;
   const [state, setState] = useState({
@@ -33,25 +33,32 @@ const App = props => {
     cvc: '',
   });
   const sendData = async () => {
+    console.log('helo beta ', state);
+    let month = Number(state.month);
+    let year = Number(state.year);
     const options = {
-      number: '4242424242424242',
-      expMonth: 11,
-      expYear: 2022,
-      cvc: '223',
+      number: '4242 4242 4242 4242',
+      expMonth: month,
+      expYear: year,
+      cvc: state.cvc,
       // optional
-      name: 'Test User',
+      name: state.cardHolderName,
       currency: 'usd',
-      addressLine1: '123 Test Street',
-      addressLine2: 'Apt. 5',
-      addressCity: 'Test City',
-      addressState: 'Test State',
-      addressCountry: 'Test Country',
-      addressZip: '55555',
     };
 
-    const token = await stripe.createTokenWithCard(options);
-    console.log('token agay beta ', token);
-    addFriend(token.tokenId);
+    stripe
+      .createTokenWithCard(options)
+      .then(res => {
+        console.log('res', res);
+        props.navigation.navigate('Signup', {
+          amount: 29,
+          stipePaymentToken: res.tokenId,
+          // email
+        });
+      })
+      .catch(error => {
+        console.log('error=', error);
+      });
   };
 
   const addFriend = async token => {
@@ -306,7 +313,8 @@ const App = props => {
             justifyContent: 'center',
             marginVertical: 10,
             elevation: 4,
-          }}>
+          }}
+          onPress={() => props.navigation.goBack()}>
           <Text
             style={{
               color: '#FFF',

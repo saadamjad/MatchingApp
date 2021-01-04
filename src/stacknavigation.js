@@ -31,6 +31,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Allfriend from './components/main/allfriends';
 import updatepassword from './components/auth/updatepassword';
 import SideMenuNavigator from './drawernavigation';
+import payment from './components/main/payment';
 
 import Bottomtab from './bottomtab';
 import {toHtml} from '@fortawesome/fontawesome-svg-core';
@@ -61,6 +62,11 @@ function AuthStack() {
       <StackAuth.Screen
         name="Signup"
         component={SignupCmp}
+        options={navOptionHandler}
+      />
+      <StackAuth.Screen
+        name="payment"
+        component={payment}
         options={navOptionHandler}
       />
       <StackAuth.Screen

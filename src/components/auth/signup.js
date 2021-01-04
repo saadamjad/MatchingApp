@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   CheckBox,
+  AsyncStorage,
   Picker,
   ScrollView,
   BackHandler,
@@ -16,14 +17,9 @@ import {
 import {colors, images} from '../../constants/theme';
 
 import axios from 'axios';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Dialog from 'react-native-dialog';
-import Toast from 'react-native-toast-message';
-import CountryPicker from 'react-native-country-picker-modal';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {Header} from '../common';
 
-import {EventRegister} from 'react-native-event-listeners';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMale, faFemale} from '@fortawesome/free-solid-svg-icons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -43,8 +39,9 @@ export default class SignupCmp extends Component {
       email: '',
       code: '',
       filledCode: '',
+      stipePaymentToken: '',
+      amount: '',
     };
-    // this.handleBackButton = this.handleBackButton.bind(this);
   }
 
   updateCountry = country => {
@@ -60,23 +57,14 @@ export default class SignupCmp extends Component {
 
   componentDidMount() {
     console.log(this.state.step);
-    // BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    console.log('helo beta params lelo', this.props?.route?.params?.amount);
+    let amount = this.props?.route?.params?.amount;
+    let stipePaymentToken = this.props?.route?.params?.stipePaymentToken;
+    this.setState({
+      amount: amount,
+      stipePaymentToken: stipePaymentToken,
+    });
   }
-
-  componentWillUnmount() {
-    // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  // handleBackButton() {
-  //   console.log('before: ', this.state.step);
-  //   if (this.state.step != 0)
-  //     this.setState({
-  //       step: this.state.step - 1,
-  //     });
-  //   else this.props.navigation.pop();
-
-  //   return true;
-  // }
 
   _Signup = () => {
     // this.setState({showSpinner: true});
@@ -111,6 +99,50 @@ export default class SignupCmp extends Component {
           errorTitle: 'Error!!',
         });
       });
+  };
+  addFriend = async token => {
+    // const user = await AsyncStorage.getItem('userData');
+    // const userData = JSON.parse(user);
+    // console.log('beta check tw kro ', userData);
+    // // let headers = {
+    // //   headers: {
+    // //     Authorization: userData.access_token,
+    // //   },
+    // // };
+    const data = {
+      email: this.state.email,
+      password: this.state.password,
+      FirstName: this.state.firstName,
+      Age: this.state.age,
+      Gender: this.state.gender,
+      country_id: '1',
+      state_id: '1',
+      city_id: '1',
+      user_type: 'n',
+      stipeToken: this.state.stipePaymentToken,
+      profile_pic:
+        'https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg',
+    };
+    console.log('beta data check krlo', data);
+    const URL = 'https://api.matchelitemuslim.com/api/register-final';
+    // const URL = `https://api.matchelitemuslim.com/api/register-final?email=${
+    //   data.email
+    // }&type=email&password=${data.password}&FirstName=${data.FirstName}&Age=${
+    //   data.Age
+    // }&Gender=${data.Gender}&country_id=${data.country_id}&state_id=${
+    //   data.state_id
+    // }&city_id=${data.city_id}&profile_pic=${data.profile_pic}&user_type=${
+    //   data.user_type
+    // }&payment_id=${data.stipeToken}`;
+    axios.post(URL, data).then(
+      resposne => {
+        console.log('api response ', resposne.data);
+      },
+      error => {
+        // this.setState({showSpinner: false});
+        console.log('error', error);
+      },
+    );
   };
 
   header() {
@@ -448,7 +480,9 @@ export default class SignupCmp extends Component {
             </View>
 
             <View>
-              <TouchableOpacity style={styles.sendBtn} onPress={this.signup}>
+              <TouchableOpacity
+                style={styles.sendBtn}
+                onPress={() => this.addFriend()}>
                 <Text style={styles.signUpBtnTxt}>Sign up</Text>
               </TouchableOpacity>
             </View>

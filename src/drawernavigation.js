@@ -150,11 +150,11 @@ const CustomDrawerContent = props => {
                 name: 'YouShowedinterest',
                 icon: <Fontisto name="pinterest" size={15} />,
               },
-              {
-                title: 'Subscription',
-                name: 'SubscribePlanStack',
-                icon: <Fontisto name="persons" size={15} />,
-              },
+              // {
+              //   title: 'Subscription',
+              //   name: 'SubscribePlanStack',
+              //   icon: <Fontisto name="persons" size={15} />,
+              // },
               {
                 title: 'FAQS',
                 name: 'FaqStack',
@@ -425,7 +425,7 @@ const SideMenuNavigator = () => {
         component={interestedPeopleInYou}
       />
       <Drawer.Screen name="YouShowedinterest" component={YouShowedinterest} />
-      <Drawer.Screen name="SubscribePlanStack" component={SubscribePlanStack} />
+      {/* <Drawer.Screen name="SubscribePlanStack" component={SubscribePlanStack} /> */}
       <Drawer.Screen name="FaqStack" component={FaqStack} />
       <Drawer.Screen name="AboutStack" component={AboutStack} />
     </Drawer.Navigator>

@@ -301,7 +301,7 @@ export default class HomeCmp extends PureComponent {
 
   componentDidMount() {
     this._UserStatistic();
-    this.getData(10);
+    this.getData();
     this.getVipData();
     this.getBlockData();
     console.log('chal gya');

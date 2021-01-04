@@ -11,7 +11,7 @@ export default class subscriptionplans extends Component {
     return (
       <SafeAreaView style={{flex: 1}}>
         <Header
-          name={'Subscription Plans'}
+          name={'Subscription Plansss'}
           navigation={this.props.navigation}
           search={false}
           drawer={false}
@@ -22,7 +22,7 @@ export default class subscriptionplans extends Component {
               <Text style={styles.price}>$29</Text>
               <Text style={styles.sub}>3 Months Introductory Offer</Text>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Signup')}
+                onPress={() => this.props.navigation.navigate('payment')}
                 style={styles.btn}>
                 <Text style={styles.btnTxt}>SELECT</Text>
               </TouchableOpacity>
@@ -34,7 +34,8 @@ export default class subscriptionplans extends Component {
               <Text style={styles.price}>$79</Text>
               <Text style={styles.sub}>6 Months VIP Professional User</Text>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Signup')}
+                // onPress={() => this.props.navigation.navigate('Signup')}
+                onPress={() => this.props.navigation.navigate('payment')}
                 style={styles.btn}>
                 <Text style={styles.btnTxt}>SELECT</Text>
               </TouchableOpacity>
@@ -47,7 +48,8 @@ export default class subscriptionplans extends Component {
               <Text style={styles.price}>$149</Text>
               <Text style={styles.sub}>12 Months VIP Professional User</Text>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Signup')}
+                // onPress={() => this.props.navigation.navigate('Signup')}
+                onPress={() => this.props.navigation.navigate('payment')}
                 style={styles.btn}>
                 <Text style={styles.btnTxt}>SELECT</Text>
               </TouchableOpacity>
