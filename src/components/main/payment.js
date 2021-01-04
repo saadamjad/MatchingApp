@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,92 @@ import {
   TouchableOpacity,
   Button,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {Header} from '../common';
+import axios from 'axios';
+
+import stripe from 'tipsi-stripe';
+stripe.setOptions({
+  publishableKey: 'pk_test_7bD8okAzqCQyHl2frPM4WFkB',
+  merchantId: 'MERCHANT_ID', // Optional
+  androidPayMode: 'test', // Android only
+});
 
 const App = props => {
+  useEffect(() => {
+    // addFriend();
+    sendData();
+  }, []);
+  let amount = props.route?.params?.amount;
+  const [state, setState] = useState({
+    cardHolderName: '',
+    cardNumber: '',
+    year: '',
+    month: '',
+    cvc: '',
+  });
+  const sendData = async () => {
+    const options = {
+      number: '4242424242424242',
+      expMonth: 11,
+      expYear: 2022,
+      cvc: '223',
+      // optional
+      name: 'Test User',
+      currency: 'usd',
+      addressLine1: '123 Test Street',
+      addressLine2: 'Apt. 5',
+      addressCity: 'Test City',
+      addressState: 'Test State',
+      addressCountry: 'Test Country',
+      addressZip: '55555',
+    };
+
+    const token = await stripe.createTokenWithCard(options);
+    console.log('token agay beta ', token);
+    addFriend(token.tokenId);
+  };
+
+  const addFriend = async token => {
+    const user = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(user);
+    // console.log('user', userData.user.id);
+    let headers = {
+      headers: {
+        Authorization: userData.access_token,
+      },
+    };
+    const data = {
+      amount: amount,
+      stripeToken: 'sk_test_pUCRddWBVRQdOmUrE9DQJU0I',
+      email: 'saad@gmail.com',
+      phone: '223323232',
+      password: '123554',
+      verification_code: '1231',
+      verify: '1',
+      FirstName: 'saad',
+      UserName: 'saad',
+      Age: 20,
+      Gender: 'on',
+      country_id: '1',
+      state_id: '1',
+      city_id: '1',
+      isactive: '1',
+      profile_pic:
+        'https://i.pinimg.com/564x/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg',
+    };
+    const URL = 'https://api.matchelitemuslim.com/api/payment';
+    axios.post(URL, data, headers).then(
+      resposne => {
+        console.log('api response ', resposne.data);
+      },
+      error => {
+        // this.setState({showSpinner: false});
+        console.log('error', error);
+      },
+    );
+  };
   return (
     <View style={{flex: 1, backgroundColor: '#FFF'}}>
       <Header
@@ -41,6 +122,9 @@ const App = props => {
             placeholder="Name on Card"
             placeholderTextColor="#000"
             style={{width: '100%', marginLeft: 15}}
+            onChangeText={text => {
+              setState({...state, cardHolderName: text});
+            }}
           />
         </View>
 
@@ -62,6 +146,9 @@ const App = props => {
             placeholderTextColor="#000"
             keyboardType="number-pad"
             style={{width: '100%', marginLeft: 15}}
+            onChangeText={text => {
+              setState({...state, cardNumber: text});
+            }}
           />
         </View>
         {/* ==========Cards Images Row========== */}
@@ -126,7 +213,6 @@ const App = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // zIndex: 10000,
           }}>
           <TextInput
             placeholder="Year"
@@ -139,6 +225,9 @@ const App = props => {
               backgroundColor: 'white',
             }}
             maxLength={4}
+            onChangeText={text => {
+              setState({...state, year: text});
+            }}
           />
           <TextInput
             placeholder="Month"
@@ -151,6 +240,10 @@ const App = props => {
               backgroundColor: 'white',
             }}
             maxLength={4}
+            onChangeText={text => {
+              setState({...state, month: text});
+            }}
+
             // keyboardType={'phone-pad'}
           />
         </View>
@@ -172,6 +265,9 @@ const App = props => {
             placeholderTextColor="#000"
             keyboardType="number-pad"
             style={{width: '80%'}}
+            onChangeText={text => {
+              setState({...state, cvc: text});
+            }}
           />
         </View>
 
@@ -187,7 +283,8 @@ const App = props => {
             justifyContent: 'center',
             marginVertical: 15,
             elevation: 4,
-          }}>
+          }}
+          onPress={() => sendData()}>
           <Text
             style={{
               color: '#FFF',

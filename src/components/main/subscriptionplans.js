@@ -1,22 +1,34 @@
 import React, {Component} from 'react';
-import {View, Text, SafeAreaView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 import {colors, images} from '../../constants/theme';
 
 import {Header} from '../common';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 
 export default class subscriptionplans extends Component {
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <Header
           name={'Subscription Plans'}
           navigation={this.props.navigation}
           search={true}
         />
         <ScrollView style={styles.cont}>
-          <View style={styles.inviteFriends}>
+          <TouchableOpacity
+            style={styles.inviteFriends}
+            onPress={() =>
+              this.props.navigation.navigate('Payment', {
+                amount: 29,
+              })
+            }>
             <View style={styles.txtView}>
               <Text style={styles.price}>$29</Text>
               <Text style={styles.sub}>3 Months Introductory Offer </Text>
@@ -27,8 +39,14 @@ export default class subscriptionplans extends Component {
               </TouchableOpacity>
               <Text style={styles.readdMore}>Read More</Text>
             </View>
-          </View>
-          <View style={styles.inviteFriends}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.inviteFriends}
+            onPress={() =>
+              this.props.navigation.navigate('Payment', {
+                amount: 29,
+              })
+            }>
             <View style={styles.txtView1}>
               <Text style={styles.price}>$79</Text>
               <Text style={styles.sub}>6 Months VIP Professional User</Text>
@@ -40,19 +58,29 @@ export default class subscriptionplans extends Component {
               <Text style={styles.readdMore}>Read More</Text>
             </View>
             <Text style={styles.widget}>Most Popular</Text>
-          </View>
-          <View style={[styles.inviteFriends, styles.mb1]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.inviteFriends, styles.mb1]}
+            onPress={() =>
+              this.props.navigation.navigate('Payment', {
+                amount: 79,
+              })
+            }>
             <View style={styles.txtView2}>
               <Text style={styles.price}>$149</Text>
               <Text style={styles.sub}>12 Months VIP Professional User</Text>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Payment')}
+                onPress={() =>
+                  this.props.navigation.navigate('Payment', {
+                    amount: 149,
+                  })
+                }
                 style={styles.btn}>
                 <Text style={styles.btnTxt}>SELECT</Text>
               </TouchableOpacity>
               <Text style={styles.readdMore}>Read More</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
     );

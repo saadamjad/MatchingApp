@@ -11,6 +11,7 @@ import {
   ScrollView,
   BackHandler,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 import {colors, images} from '../../constants/theme';
 
@@ -20,17 +21,19 @@ import Dialog from 'react-native-dialog';
 import Toast from 'react-native-toast-message';
 import CountryPicker from 'react-native-country-picker-modal';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import {Header} from '../common';
 
 import {EventRegister} from 'react-native-event-listeners';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMale, faFemale} from '@fortawesome/free-solid-svg-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {height: deviceHeight, width: deviceWidth} = Dimensions.get('screen');
 export default class SignupCmp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: 1,
       isEmaiForm: true,
       country: '',
       state: '',
@@ -38,11 +41,14 @@ export default class SignupCmp extends Component {
       gender: 'm',
       cca2: 'PK',
       email: '',
+      code: '',
+      filledCode: '',
     };
-    this.handleBackButton = this.handleBackButton.bind(this);
+    // this.handleBackButton = this.handleBackButton.bind(this);
   }
 
   updateCountry = country => {
+    console.log('this.state.country', this.state.country);
     this.setState({country});
   };
   updateState = state => {
@@ -61,32 +67,34 @@ export default class SignupCmp extends Component {
     // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
-  handleBackButton() {
-    console.log('before: ', this.state.step);
-    if (this.state.step != 0)
-      this.setState({
-        step: this.state.step - 1,
-      });
-    else this.props.navigation.pop();
+  // handleBackButton() {
+  //   console.log('before: ', this.state.step);
+  //   if (this.state.step != 0)
+  //     this.setState({
+  //       step: this.state.step - 1,
+  //     });
+  //   else this.props.navigation.pop();
 
-    return true;
-  }
+  //   return true;
+  // }
 
   _Signup = () => {
-    this.setState({showSpinner: true});
+    // this.setState({showSpinner: true});
 
     console.log('signup');
     let email = this.state.email;
     let data = {
       email: this.state.email,
+      type: 'email',
+      country_code: '+92',
     };
     axios
-      .post('https://api.matchelitemuslim.com/api/checkemail', data)
+      .post('https://api.matchelitemuslim.com/api/register-stepone', data)
       .then(async res => {
-        this.setState({showSpinner: false});
+        // this.setState({showSpinner: false});
         console.log('res', res.data);
         if (res.data.status) {
-          this.setState({step: 1});
+          this.setState({code: res.data.code, step: 1});
         } else
           this.setState({
             showAlert: true,
@@ -182,107 +190,47 @@ export default class SignupCmp extends Component {
     if (this.state.step == 0) {
       return (
         <View style={styles.getStarted}>
-          {this.state.isEmaiForm == true ? (
-            <View style={styles.EmailView}>
-              <Text style={[styles.signUpLabel, styles.mb2]}>
-                Sign Up With Email
-              </Text>
-              <View style={[styles.inputFldView, styles.mb1]}>
-                <Image source={images.emailColorIcon} />
-                <TextInput
-                  placeholder="Email"
-                  placeholderTextColor="#000"
-                  keyboardType="email-address"
-                  style={styles.inputFld}
-                  onChangeText={text =>
-                    this.setState({email: text}, console.log('email', text))
-                  }
-                />
-              </View>
-              <View style={styles.agreedView}>
-                <CheckBox style={styles.checkbox} />
-                <Text style={styles.agreedTxt}>
-                  I agree to the{' '}
-                  <Text style={styles.agreedtxtSelected}>Privacy Policy</Text>{' '}
-                  and{' '}
-                  <Text style={styles.agreedtxtSelected}>
-                    Terms and Conditions.
-                  </Text>
+          <View style={styles.EmailView}>
+            <Text style={[styles.signUpLabel, styles.mb2]}>
+              Sign Up With Email
+            </Text>
+            <View style={[styles.inputFldView, styles.mb1]}>
+              <Image source={images.emailColorIcon} />
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="#000"
+                keyboardType="email-address"
+                style={styles.inputFld}
+                onChangeText={text => this.setState({email: text})}
+              />
+            </View>
+            <View style={styles.agreedView}>
+              <CheckBox style={styles.checkbox} />
+              <Text style={styles.agreedTxt}>
+                I agree to the{' '}
+                <Text style={styles.agreedtxtSelected}>Privacy Policy</Text> and{' '}
+                <Text style={styles.agreedtxtSelected}>
+                  Terms and Conditions.
                 </Text>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={styles.signUpBtn}
-                  onPress={() => {
-                    this._Signup();
-                  }}>
-                  <Text style={styles.signUpBtnTxt}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
-              {/* <View>
+              </Text>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={styles.signUpBtn}
+                onPress={() => {
+                  this.state.email == ''
+                    ? alert('kindly enter Email')
+                    : this._Signup();
+                }}>
+                <Text style={styles.signUpBtnTxt}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+            {/* <View>
                   <TouchableOpacity onPress={()=>{ this.setState({ isEmaiForm:false }) }}>
                     <Text style={[styles.registerWith, styles.mb2 ]}>Register with phone number</Text>
                   </TouchableOpacity>
                 </View> */}
-            </View>
-          ) : (
-            <View style={styles.PhoneView}>
-              <Text style={[styles.signUpLabel, styles.mb2]}>
-                Sign Up With Phone
-              </Text>
-              <View style={styles.inputFldView}>
-                <CountryPicker
-                  withAlphaFilter={true}
-                  withCallingCode={true}
-                  withFilter={true}
-                  countryCode={this.state.cca2}
-                  onSelect={value => {
-                    this.setState({
-                      cca2: value.cca2,
-                    });
-                  }}
-                  cca2={this.state.cca2}
-                  translation="eng"
-                />
-                <TextInput
-                  keyboardType="phone-pad"
-                  placeholder="Phone"
-                  placeholderTextColor="#000"
-                  style={styles.inputFld}
-                />
-              </View>
-              <View style={styles.agreedView}>
-                <CheckBox style={styles.checkbox} />
-                <Text style={styles.agreedTxt}>
-                  I agree to the{' '}
-                  <Text style={styles.agreedtxtSelected}>Privacy Policy</Text>{' '}
-                  and{' '}
-                  <Text style={styles.agreedtxtSelected}>
-                    Terms and Conditions.
-                  </Text>
-                </Text>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={styles.signUpBtn}
-                  onPress={() => {
-                    this.setState({step: 1});
-                  }}>
-                  <Text style={styles.signUpBtnTxt}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({isEmaiForm: true});
-                  }}>
-                  <Text style={[styles.registerWith, styles.mb2]}>
-                    Register with Email
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+          </View>
         </View>
       );
     }
@@ -294,23 +242,30 @@ export default class SignupCmp extends Component {
         <View style={styles.verification}>
           <View style={styles.verificationBox}>
             <Text style={styles.code}>Enter Code</Text>
-            <View>
+            {/* <Text style={styles.code}> {this.state.code} </Text> */}
+            <View style={{marginVertical: 25}}>
               <OTPInputView
-                style={{height: 50, borderColor: colors.dark}}
+                style={{height: 50, borderColor: colors.dark, borderRadius: 20}}
                 pinCount={4}
                 autoFocusOnLoad
                 codeInputFieldStyle={styles.underlineStyleBase}
                 codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                onCodeFilled={code => {
-                  console.log(`Code is ${code}, you are good to go!`);
-                }}
+                onCodeFilled={code =>
+                  this.setState({
+                    filledCode: code,
+                  })
+                }
               />
             </View>
             <View>
               <TouchableOpacity
                 style={styles.sendBtn}
                 onPress={() => {
-                  this.setState({step: 2});
+                  if (this.state.filledCode == this.state.code) {
+                    this.setState({step: 2});
+                  } else {
+                    alert('code doesn"t Matched');
+                  }
                 }}>
                 <Text style={styles.signUpBtnTxt}>Send</Text>
               </TouchableOpacity>
@@ -337,7 +292,7 @@ export default class SignupCmp extends Component {
           <Text style={[styles.signUpSubLabel, {marginBottom: 15}]}>
             Minded Muslim Singles
           </Text>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={[styles.inputFldView, styles.mb2]}>
               <TextInput
                 placeholder="First Name"
@@ -358,7 +313,6 @@ export default class SignupCmp extends Component {
                 <Text>Select Gender</Text>
               </View>
               <View style={styles.genderIcons}>
-                {/* <TouchableOpacity style={styles.mr5} onPress={()=>{ this.setState({ gender:'m' }) }}> */}
                 <TouchableOpacity
                   style={
                     this.state.gender == 'm'
@@ -373,9 +327,7 @@ export default class SignupCmp extends Component {
                     color={this.state.gender == 'm' ? '#fff' : '#ff1822'}
                     size={28}
                   />
-                  {/* <Image style={styles.genderIconDimension} source={ this.state.gender == 'm' ? images.maleSIcon : images.maleIIcon } /> */}
                 </TouchableOpacity>
-                {/* <TouchableOpacity onPress={()=>{ this.setState({ gender:'f' }) }}> */}
                 <TouchableOpacity
                   style={
                     this.state.gender == 'f'
@@ -385,7 +337,6 @@ export default class SignupCmp extends Component {
                   onPress={() => {
                     this.setState({gender: 'f'});
                   }}>
-                  {/* <Image style={styles.fgenderIconDimension} source={ this.state.gender == 'f' ? images.femaleSIcon : images.femaleIIcon } /> */}
                   <FontAwesomeIcon
                     icon={faFemale}
                     color={this.state.gender == 'f' ? '#fff' : '#ff1822'}
@@ -427,12 +378,16 @@ export default class SignupCmp extends Component {
               />
             </View>
             <View style={[styles.inputFldView, styles.mb2]}>
+              {console.log('this.state.country', this.state.country)}
               <Picker
                 style={{height: 50, width: 280}}
                 selectedValue={this.state.country}
                 onValueChange={this.updateCountry}>
                 <Picker.Item label="Country" value="Country" />
                 <Picker.Item label="Pakistan" value="Pakistan" />
+                <Picker.Item label="USA" value="USA" />
+                <Picker.Item label="china" value="china" />
+                <Picker.Item label="KSA" value="KSA" />
               </Picker>
               <Text style={styles.text}>{this.state.user}</Text>
             </View>
@@ -443,6 +398,7 @@ export default class SignupCmp extends Component {
                 onValueChange={this.updateState}>
                 <Picker.Item label="State" value="State" />
                 <Picker.Item label="Sindh" value="Sindh" />
+                <Picker.Item label="Balochistan" value="Balochistan" />
               </Picker>
             </View>
 
@@ -453,6 +409,7 @@ export default class SignupCmp extends Component {
                 onValueChange={this.updateCity}>
                 <Picker.Item label="City" value="City" />
                 <Picker.Item label="Karachi" value="Karachi" />
+                <Picker.Item label="Hyderabad" value="Hyderabad" />
               </Picker>
             </View>
 
@@ -502,7 +459,7 @@ export default class SignupCmp extends Component {
   }
 
   signup = () => {
-    EventRegister.emit('isLoggedIn', 'Main');
+    // EventRegister.emit('isLoggedIn', 'Main');
   };
 
   handleCancel() {
@@ -511,35 +468,49 @@ export default class SignupCmp extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.separator} />
-        {this.header()}
-        {this.getStarted()}
-        {this.verification()}
-        {this.signUp()}
-        <StatusBar translucent backgroundColor="transparent" />
-
-        <View style={styles.horizontal}>
-          <Spinner
-            textContent={'Loading...'}
-            animation="fade"
-            textStyle={styles.spinnerTextStyle}
-            visible={this.state.showSpinner}
-          />
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{height: 60, borderWidth: 0}}>
+          <TouchableOpacity
+            style={{
+              height: 60,
+              width: 60,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => this.props.navigation.goBack()}>
+            <AntDesign name="arrowleft" size={20} color={'black'} />
+          </TouchableOpacity>
         </View>
-        <Dialog.Container visible={this.state.showAlert}>
-          <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
-          <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
-          <Dialog.Button
-            color="#58c4b7"
-            bold
-            label="Okay"
-            onPress={this.handleCancel.bind(this)}
-          />
-        </Dialog.Container>
+        <View style={styles.container}>
+          <View style={styles.separator} />
+          {this.header()}
+          {this.getStarted()}
+          {this.verification()}
+          {this.signUp()}
+          <StatusBar translucent backgroundColor="transparent" />
 
-        <Toast ref={ref => Toast.setRef(ref)} />
-      </View>
+          {/* <View style={styles.horizontal}>
+            <Spinner
+              textContent={'Loading...'}
+              animation="fade"
+              textStyle={styles.spinnerTextStyle}
+              visible={this.state.showSpinner}
+            />
+          </View>
+          <Dialog.Container visible={this.state.showAlert}>
+            <Dialog.Title>{this.state.errorTitle}</Dialog.Title>
+            <Dialog.Description>{this.state.errorMsg}</Dialog.Description>
+            <Dialog.Button
+              color="#58c4b7"
+              bold
+              label="Okay"
+              onPress={this.handleCancel.bind(this)}
+            />
+          </Dialog.Container> */}
+
+          {/* <Toast ref={ref => Toast.setRef(ref)} /> */}
+        </View>
+      </SafeAreaView>
     );
   }
 }
@@ -550,6 +521,7 @@ const styles = {
     paddingLeft: 30,
     paddingTop: 30,
     marginTop: 10,
+    backgroundColor: 'white',
   },
   headerView: {
     flex: 1,
@@ -673,10 +645,14 @@ const styles = {
   sendBtn: {
     // width:deviceWidth-60,
     backgroundColor: '#ff1822',
-    padding: 10,
     borderRadius: 30,
-    marginTop: 10,
-    marginBottom: 20,
+    width: '75%',
+    alignSelf: 'center',
+    padding: 10,
+
+    marginVertical: 20,
+    // marginTop: 10,
+    // marginBottom: 20,
   },
   signUpBtnTxt: {
     textAlign: 'center',
@@ -733,10 +709,12 @@ const styles = {
     color: colors.dark,
     borderColor: colors.dark,
     fontSize: 18,
+    borderRadius: 10,
   },
 
   underlineStyleHighLighted: {
-    borderColor: '#000',
+    borderColor: 'red',
+    borderWidth: 1,
   },
 
   signp: {

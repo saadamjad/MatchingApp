@@ -190,7 +190,9 @@ android {
 }
 
 dependencies {
-    compile (project(':tipsi-stripe')) {
+    implementation 'com.android.support:design:27.1.0'
+    compile (project(':tipsi-stripe'))
+     {
     exclude group: 'com.google.android.gms'
     exclude group: 'com.google.firebase'
 }
