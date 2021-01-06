@@ -1,6 +1,0 @@
-- Search list of freelancing website  and Analysize which one is best.
-- go to the freelancer.com  & people https://www.peopleperhour.com/ 
-- search and analize how to take work and how to do work etc ( do proper research  )
-- Creat accounts on both website for designers 
-
-
